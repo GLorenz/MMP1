@@ -63,8 +63,8 @@
     <Compile Include="Scripts\Network\InputHandler.cs" />
     <Compile Include="Scripts\Network\Player.cs" />
     <Compile Include="Scripts\Intermediate\Initializer.cs" />
-    <Compile Include="Scripts\Network\Server.cs" />
     <Compile Include="Scripts\Network\Serializer.cs" />
+    <Compile Include="Scripts\Network\ServerConnector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
