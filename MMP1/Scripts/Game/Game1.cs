@@ -1,83 +1,111 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
-namespace MMP1
+public class Game1 : Game
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-    public class Game1 : Game
+    public int windowWidth;
+    public int windowHeight;
+    GraphicsDeviceManager graphics;
+    SpriteBatch spriteBatch;
+
+    Texture2D redTex, greenTex;
+    Rectangle redRect, greenRect;
+    string redUID = "red";
+    string greenUID = "green";
+
+    List<Player> players;
+
+    public Game1()
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        
-        public Game1()
+        graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+
+        players = new List<Player>();
+    }
+    protected override void Initialize()
+    {
+        // setting up display size here, since graphics aren't initialized in constructor
+        windowWidth = GraphicsDevice.DisplayMode.Width;
+        windowHeight = GraphicsDevice.DisplayMode.Height;
+        Window.IsBorderless = false;
+        Window.Position = new Point(50,50);
+        graphics.PreferredBackBufferWidth = windowWidth - 100;
+        graphics.PreferredBackBufferHeight = windowHeight - 100;
+        IsMouseVisible = true;
+        graphics.ApplyChanges();
+
+        base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
+        spriteBatch = new SpriteBatch(GraphicsDevice);
+        redTex = Content.Load<Texture2D>("red");
+        greenTex = Content.Load<Texture2D>("green");
+
+        redRect = new Rectangle(100, 100, redTex.Width, redTex.Height);
+        greenRect = new Rectangle(100, 200, greenTex.Width, greenTex.Height);
+        CreatePlayers();
+    }
+
+    protected void CreatePlayers()
+    {
+        Player pRalph = new Player("Ralph");
+        Player pLucie = new Player("Lucie");
+        players.Add(pRalph);
+        players.Add(pLucie);
+
+        Meeple meepleRed = new Meeple(pRalph, redUID, redRect, redTex);
+        Meeple meepleGreen = new Meeple(pLucie, greenUID, greenRect, greenTex);
+
+        Board.Instance().AddElement(meepleRed);
+        Board.Instance().AddElement(meepleGreen);
+    }
+    
+    protected override void UnloadContent()
+    {
+        // TODO: Unload any non ContentManager content here
+        /*foreach(Player p in players)
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            p.client.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+            p.client.socket.Close();
+        }*/
+    }
+    
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
+
+        if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+        {
+            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(redUID), Mouse.GetState().Position);
+            //Input input = new Input("Move", redUID, Mouse.GetState().Position.X+","+Mouse.GetState().Position.Y, false);
+            Player.local.HandleInput(mcmd, true);
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
+        base.Update(gameTime);
+    }
+
+    protected override void Draw(GameTime gameTime)
+    {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+        spriteBatch.Begin();
+
+        foreach(BoardElement element in Board.Instance().boardElements)
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
+            spriteBatch.Draw(element.texture, element.Position, Color.White);
         }
+        spriteBatch.End();
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+        base.Draw(gameTime);
+    }
 
-            // TODO: use this.Content to load your game content here
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
-        }
+    public static void Main()
+    {
+        using (var game = new Game1())
+            game.Run();
     }
 }

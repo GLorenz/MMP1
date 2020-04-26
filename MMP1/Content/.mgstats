@@ -1,0 +1,3 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"D:/FH/MMP1/MMP1_repo/MMP1/Content/green.png","D:/FH/MMP1/MMP1_repo/MMP1/bin/DesktopGL/AnyCPU/Debug/Content/green.xnb","TextureProcessor","Texture2DContent",198,10085,0,013994
+"D:/FH/MMP1/MMP1_repo/MMP1/Content/red.png","D:/FH/MMP1/MMP1_repo/MMP1/bin/DesktopGL/AnyCPU/Debug/Content/red.xnb","TextureProcessor","Texture2DContent",193,10085,0,1050044

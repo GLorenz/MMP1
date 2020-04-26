@@ -8,5 +8,6 @@ public abstract class MovingBoardElement : BoardElement
     public void MoveTo(Point position)
     {
         this.position.X = position.X;
+        this.position.Y = position.Y;
     }
 }

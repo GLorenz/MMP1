@@ -54,7 +54,14 @@ public class GameServer
         while (socket.Connected && shouldRun)
         {
             byte[] buffer = new byte[bufferSize];
-            socket.Receive(buffer);
+            try
+            {
+                socket.Receive(buffer);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             // distribute data to all other sockets
             sockets.ForEach(s =>
@@ -102,10 +109,17 @@ public class GameServer
         while (shouldRun && acceptNewSockets)
         {
             //blocking until there is a client
-            Socket sock = server.AcceptSocket();
-            Console.WriteLine("Accepted new Socket!");
-            // if new is accepted, add to list and listen to it
-            AddSocket(sock);
+            try
+            {
+                Socket sock = server.AcceptSocket();
+                Console.WriteLine("Accepted new Socket!");
+                // if new is accepted, add to list and listen to it
+                AddSocket(sock);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         server.Stop();

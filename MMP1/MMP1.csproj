@@ -51,6 +51,7 @@
     <Compile Include="Scripts\Game\Meeple.cs" />
     <Compile Include="Scripts\Game\MovingBoardElement.cs" />
     <Compile Include="Scripts\Game\NonMovingBoardElement.cs" />
+    <Compile Include="Scripts\Interfaces\IInputCommand.cs" />
     <Compile Include="Scripts\Interfaces\IInputObservable.cs" />
     <Compile Include="Scripts\Interfaces\IInputObserver.cs" />
     <Compile Include="Scripts\Interfaces\IObservable.cs" />
@@ -123,10 +124,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\Meeples\green.png" />
-    <Content Include="Content\Meeples\red.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

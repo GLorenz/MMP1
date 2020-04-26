@@ -9,7 +9,9 @@ public class Board
         if (boardInst == null) { boardInst = new Board(); }
         return boardInst;
     }
-    private Board() { }
+    private Board() {
+        boardElements = new List<BoardElement>();
+    }
 
     public List<BoardElement> boardElements { get; private set; }
 
