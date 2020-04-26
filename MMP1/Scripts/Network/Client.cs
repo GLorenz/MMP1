@@ -1,15 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 public class Client : IInputObservable
 {
+    public static readonly int bufferSize = 1024;
+
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
+    // private ManualResetEvent resetEvent;
 
     public Client()
     {
         observers = new List<IObserver>();
+        // resetEvent = new ManualResetEvent(false);
     }
 
     public bool Connect()
@@ -19,6 +25,14 @@ public class Client : IInputObservable
         if (serverSock.Connected)
         {
             this.socket = serverSock;
+
+            // synchonosly in own thread:
+            new Thread(() => ListenToSocket()).Start();
+
+            // asynchonosly:
+            // ReadStateObject state = new ReadStateObject();
+            // state.socket = socket;
+            // socket.BeginReceive(state.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), state);
         }
         return serverSock.Connected;
     }
@@ -28,9 +42,29 @@ public class Client : IInputObservable
          socket.Send(Serializer.SerializeInput(input));
     }
 
-    public void Receive(byte[] data)
+    public void OnReceive(byte[] data)
     {
         notifyObservers(Serializer.Deserialize(data));
+    }
+
+    // runs in own thread
+    private void ListenToSocket()
+    {
+        byte[] buffer = new byte[bufferSize];
+        while(socket.Connected)
+        {
+            socket.Receive(buffer);
+            OnReceive(buffer);
+        }
+    }
+
+    // asynchornos callback
+    private void ReceiveCallback(IAsyncResult ar)
+    {
+        ReadStateObject state = (ReadStateObject)ar.AsyncState;
+        int read = state.socket.EndReceive(ar);
+        OnReceive(state.buffer);
+        socket.BeginReceive(state.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), state);
     }
 
     // observer methods
@@ -61,5 +95,11 @@ public class Client : IInputObservable
                 o.update();
             }
         });
+    }
+
+    public class ReadStateObject
+    {
+        public Socket socket = null;
+        public byte[] buffer = new byte[bufferSize];
     }
 }

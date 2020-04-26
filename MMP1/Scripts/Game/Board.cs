@@ -11,10 +11,15 @@ public class Board
     }
     private Board() { }
 
-    private List<BoardElement> boardElements { get; set; }
+    public List<BoardElement> boardElements { get; private set; }
 
-    public BoardElement FindByIdentifier(string identifier)
+    public void AddElement(BoardElement element)
     {
-        return boardElements.Find(e => e.UID.Equals(identifier));
+        boardElements.Add(element);
+    }
+
+    public BoardElement FindByUID(string UID)
+    {
+        return boardElements.Find(e => e.UID.Equals(UID));
     }
 }

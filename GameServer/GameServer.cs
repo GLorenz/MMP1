@@ -11,8 +11,10 @@ public class GameServer
         GameServer server = new GameServer();
         server.Start();
 
+        Console.Write("> ");
         string input = Console.ReadLine();
         if(input.ToLower().Trim().Equals("stop")) { server.Stop(); }
+        else { Console.WriteLine("unrecognised"); }
     }
 
     public static readonly IPAddress listenerIp = IPAddress.Any;
@@ -95,6 +97,7 @@ public class GameServer
         TcpListener server = new TcpListener(listenerIp, port);
         server.AllowNatTraversal(true);
         server.Start();
+        Console.WriteLine("Started Game Server!");
 
         while (shouldRun && acceptNewSockets)
         {
@@ -106,6 +109,7 @@ public class GameServer
         }
 
         server.Stop();
+        Console.WriteLine("Stopped Server");
     }
 
     private static bool IsHelloRequestPackage(byte[] bytes)

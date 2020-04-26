@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 public class MoveCommand : ICommand
 {
     MovingBoardElement element;
-    Vector2 moveTo;
+    Point moveTo;
 
-    public MoveCommand(MovingBoardElement element, Vector2 moveTo)
+    public MoveCommand(MovingBoardElement element, Point moveTo)
     {
         this.element = element;
         this.moveTo = moveTo;
