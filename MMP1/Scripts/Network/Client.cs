@@ -6,7 +6,7 @@ using System.Threading;
 
 public class Client : IInputObservable
 {
-    public static readonly int bufferSize = 1024;
+    public static readonly int bufferSize = 2048;
 
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
@@ -39,17 +39,20 @@ public class Client : IInputObservable
 
     public void Share(Input input)
     {
-         socket.Send(Serializer.SerializeInput(input));
+        socket.Send(Serializer.SerializeInput(input));
     }
 
     public void OnReceive(byte[] data)
     {
-        notifyObservers(Serializer.Deserialize(data));
+        Input input = Serializer.Deserialize(data);
+        input.shouldShare = false;
+        notifyObservers(input);
     }
 
     // runs in own thread
     private void ListenToSocket()
     {
+        Console.WriteLine("client listening to socket");
         byte[] buffer = new byte[bufferSize];
         while(socket.Connected)
         {

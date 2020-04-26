@@ -53,15 +53,15 @@ public class Game1 : Game
     protected void CreatePlayers()
     {
         Player pRalph = new Player("Ralph");
-        Player pLucie = new Player("Lucie");
+        //Player pLucie = new Player("Lucie");
         players.Add(pRalph);
-        players.Add(pLucie);
+        //players.Add(pLucie);
 
         Meeple meepleRed = new Meeple(pRalph, redUID, redRect, redTex);
-        Meeple meepleGreen = new Meeple(pLucie, greenUID, greenRect, greenTex);
+        //Meeple meepleGreen = new Meeple(pLucie, greenUID, greenRect, greenTex);
 
         Board.Instance().AddElement(meepleRed);
-        Board.Instance().AddElement(meepleGreen);
+        //Board.Instance().AddElement(meepleGreen);
     }
     
     protected override void UnloadContent()
@@ -73,18 +73,21 @@ public class Game1 : Game
             p.client.socket.Close();
         }*/
     }
-    
+
+    bool pressHandled;
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+        if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
         {
             MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(redUID), Mouse.GetState().Position);
             //Input input = new Input("Move", redUID, Mouse.GetState().Position.X+","+Mouse.GetState().Position.Y, false);
             Player.local.HandleInput(mcmd, true);
+            pressHandled = true;
         }
+        else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) { pressHandled = false; }
 
         base.Update(gameTime);
     }

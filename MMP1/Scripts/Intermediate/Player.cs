@@ -18,11 +18,13 @@ public class Player : IInputObserver
 
         bool connected = client.Connect();
         Console.WriteLine("Connecting player {0}, Status: {1}", name, connected);
+        client.AddObserver(this);
         local = this;
     }
 
     public void HandleInput(Input input)
     {
+        Console.WriteLine(name + " handling input of type: " + input.typeName);
         InputHandler.HandleLocalInput(input);
         if (input.shouldShare)
         {

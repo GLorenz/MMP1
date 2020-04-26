@@ -56,18 +56,22 @@ public class GameServer
             byte[] buffer = new byte[bufferSize];
             try
             {
+                Console.WriteLine("...");
                 socket.Receive(buffer);
+                Console.WriteLine("received bytes on socket");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
 
+            Console.WriteLine("distributing bytes");
             // distribute data to all other sockets
             sockets.ForEach(s =>
             {
                 if (s != socket)
                 {
+                    Console.WriteLine("sending bytes to another socket");
                     s.Send(buffer);
                 }
             });
