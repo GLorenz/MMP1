@@ -1,11 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-public class Meeple : MovingBoardElement
+public class Meeple : GhostMeeple
 {
-    private Player player;
+    public Player player { get; protected set; }
 
-    public Meeple(Player player, string UID, Rectangle position, Texture2D texture) : base(UID, position, texture)
+    public Meeple(Player player, Rectangle position, Texture2D texture, int UID = 0) : base(player, position, texture, UID)
     {
         this.player = player;
     }

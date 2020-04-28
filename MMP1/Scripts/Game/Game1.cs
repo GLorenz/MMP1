@@ -1,28 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 public class Game1 : Game
 {
+    public enum NetworkType { Online, Offline }
+    public static NetworkType networkType = NetworkType.Online;
+
     public int windowWidth;
     public int windowHeight;
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
+    SpriteFont oldenburgFont;
 
-    Texture2D redTex, greenTex;
-    Rectangle redRect, greenRect;
-    string redUID = "red";
-    string greenUID = "green";
+    readonly string[] texNames = new string[] { "red", "green" };
+    Meeple[] meeps;
 
-    List<Player> players;
+    bool pressHandled;
+
+    // c# says no, when using class without generics, and a simple downcast isn't possible :(
+    GenericBoardElementHolder<BoardElement> boardElements;
 
     public Game1()
     {
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
+        boardElements = Board.Instance();
 
-        players = new List<Player>();
+        meeps = new Meeple[1];
     }
     protected override void Initialize()
     {
@@ -42,39 +49,43 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
-        redTex = Content.Load<Texture2D>("red");
-        greenTex = Content.Load<Texture2D>("green");
+        TextureResources.contentManager = Content;
 
-        redRect = new Rectangle(100, 100, redTex.Width, redTex.Height);
-        greenRect = new Rectangle(100, 200, greenTex.Width, greenTex.Height);
-        CreatePlayers();
+        TextureResources.AddAll(texNames);
+
+        oldenburgFont = Content.Load<SpriteFont>("fonts/arial_16_bold");
+
+        CreatePlayer();
+        CreateMeeples();
     }
 
-    protected void CreatePlayers()
+    protected void CreatePlayer()
     {
         Player pRalph = new Player("Ralph");
-        //Player pLucie = new Player("Lucie");
-        players.Add(pRalph);
-        //players.Add(pLucie);
+        PlayerManager.Instance().SetLocal(pRalph);
 
-        Meeple meepleRed = new Meeple(pRalph, redUID, redRect, redTex);
-        //Meeple meepleGreen = new Meeple(pLucie, greenUID, greenRect, greenTex);
+        CreateGhostPlayerCommand ghostCmd = new CreateGhostPlayerCommand(pRalph);
+        PlayerManager.Instance().local.OnlyShare(ghostCmd);
+    }
 
-        Board.Instance().AddElement(meepleRed);
-        //Board.Instance().AddElement(meepleGreen);
+    protected void CreateMeeples()
+    {
+        for (int i = 0; i < meeps.Length; i++)
+        {
+            Texture2D redTex = TextureResources.Get(texNames[new Random().Next(texNames.Length)]);
+            meeps[i] = new Meeple(PlayerManager.Instance().local, new Rectangle(100 * i, 100, redTex.Width, redTex.Height), redTex);
+            boardElements.AddElement(meeps[i]);
+
+            CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(meeps[i]);
+            PlayerManager.Instance().local.OnlyShare(meepCmd);
+        }
     }
     
     protected override void UnloadContent()
     {
         // TODO: Unload any non ContentManager content here
-        /*foreach(Player p in players)
-        {
-            p.client.socket.Shutdown(System.Net.Sockets.SocketShutdown.Both);
-            p.client.socket.Close();
-        }*/
     }
-
-    bool pressHandled;
+    
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -82,9 +93,8 @@ public class Game1 : Game
 
         if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
         {
-            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(redUID), Mouse.GetState().Position);
-            //Input input = new Input("Move", redUID, Mouse.GetState().Position.X+","+Mouse.GetState().Position.Y, false);
-            Player.local.HandleInput(mcmd, true);
+            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(meeps[0].UID), Mouse.GetState().Position);
+            PlayerManager.Instance().local.HandleInput(mcmd, true);
             pressHandled = true;
         }
         else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) { pressHandled = false; }
@@ -97,9 +107,10 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         spriteBatch.Begin();
 
-        foreach(BoardElement element in Board.Instance().boardElements)
+        foreach(BoardElement element in boardElements.boardElements)
         {
             spriteBatch.Draw(element.texture, element.Position, Color.White);
+            spriteBatch.DrawString(oldenburgFont, "Enemys " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
         }
         spriteBatch.End();
 
@@ -110,5 +121,11 @@ public class Game1 : Game
     {
         using (var game = new Game1())
             game.Run();
+    }
+
+    protected override void OnExiting(object sender, EventArgs args)
+    {
+        PlayerManager.Instance().local.DisconnectClient();
+        base.OnExiting(sender, args);
     }
 }

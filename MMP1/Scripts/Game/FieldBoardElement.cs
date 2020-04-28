@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class FieldBoardElement : NonMovingBoardElement
 {
-    public FieldBoardElement(string UID, Rectangle position, Texture2D texture) : base(UID, position, texture)
+    public FieldBoardElement(Rectangle position, Texture2D texture, int UID = 0) : base(position, texture, UID)
     {
 
     }

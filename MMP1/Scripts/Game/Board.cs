@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-
-public class Board
+public class Board : GenericBoardElementHolder<BoardElement>
 {
     private static Board boardInst;
     public static Board Instance()
@@ -9,19 +6,8 @@ public class Board
         if (boardInst == null) { boardInst = new Board(); }
         return boardInst;
     }
-    private Board() {
-        boardElements = new List<BoardElement>();
-    }
 
-    public List<BoardElement> boardElements { get; private set; }
-
-    public void AddElement(BoardElement element)
-    {
-        boardElements.Add(element);
-    }
-
-    public BoardElement FindByUID(string UID)
-    {
-        return boardElements.Find(e => e.UID.Equals(UID));
+    public Board() : base() {
+        
     }
 }

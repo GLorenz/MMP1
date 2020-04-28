@@ -10,12 +10,12 @@ public class Client : IInputObservable
 
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
-    // private ManualResetEvent resetEvent;
+    ReadStateObject readStateObj;
 
     public Client()
     {
         observers = new List<IObserver>();
-        // resetEvent = new ManualResetEvent(false);
+        readStateObj = new ReadStateObject();
     }
 
     public bool Connect()
@@ -26,31 +26,60 @@ public class Client : IInputObservable
         {
             this.socket = serverSock;
 
-            // synchonosly in own thread:
-            new Thread(() => ListenToSocket()).Start();
-
             // asynchonosly:
-            // ReadStateObject state = new ReadStateObject();
-            // state.socket = socket;
-            // socket.BeginReceive(state.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), state);
+            ListenForNext();
         }
         return serverSock.Connected;
     }
 
-    public void Share(Input input)
+    public void Disconnect()
+    {
+        if(socket != null)
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+        }
+    }
+
+    public void Share(SerializableCommand input)
     {
         socket.Send(Serializer.SerializeInput(input));
     }
 
     public void OnReceive(byte[] data)
     {
-        Input input = Serializer.Deserialize(data);
-        input.shouldShare = false;
-        notifyObservers(input);
+        SerializableCommand input = Serializer.Deserialize(data);
+        if (input != null)
+        {
+            input.shouldShare = false;
+            notifyObservers(input);
+        }
     }
 
-    // runs in own thread
-    private void ListenToSocket()
+    public void ListenForNext()
+    {
+        if (socket != null && socket.Connected)
+        {
+            readStateObj.Reset();
+            readStateObj.socket = socket;
+            socket.BeginReceive(readStateObj.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), readStateObj);
+        }
+    }
+
+    // asynchornos callback
+    private void ReceiveCallback(IAsyncResult ar)
+    {
+        ReadStateObject state = (ReadStateObject)ar.AsyncState;
+        if (socket != null && socket.Connected)
+        {
+            int read = state.socket.EndReceive(ar);
+            OnReceive(state.buffer);
+            ListenForNext();
+        }
+    }
+
+// runs in own thread
+    /*private void ListenToSocket()
     {
         Console.WriteLine("client listening to socket");
         byte[] buffer = new byte[bufferSize];
@@ -59,17 +88,7 @@ public class Client : IInputObservable
             socket.Receive(buffer);
             OnReceive(buffer);
         }
-    }
-
-    // asynchornos callback
-    private void ReceiveCallback(IAsyncResult ar)
-    {
-        ReadStateObject state = (ReadStateObject)ar.AsyncState;
-        int read = state.socket.EndReceive(ar);
-        OnReceive(state.buffer);
-        socket.BeginReceive(state.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), state);
-    }
-
+    }*/
     // observer methods
     public void AddObserver(IObserver observer)
     {
@@ -86,7 +105,7 @@ public class Client : IInputObservable
         observers.ForEach(o => o.update());
     }
 
-    public void notifyObservers(Input input)
+    public void notifyObservers(SerializableCommand input)
     {
         observers.ForEach(o => {
             if(o is IInputObserver)
@@ -104,5 +123,11 @@ public class Client : IInputObservable
     {
         public Socket socket = null;
         public byte[] buffer = new byte[bufferSize];
+
+        public void Reset()
+        {
+            socket = null;
+            buffer = new byte[bufferSize];
+        }
     }
 }

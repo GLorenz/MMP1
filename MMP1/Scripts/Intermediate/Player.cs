@@ -1,43 +1,64 @@
 using System;
 
-public class Player : IInputObserver
+public class Player : GhostPlayer, IInputObserver
 {
-    public static Player local;
-
-    public string name { get; private set; }
     public Client client { get; private set; }
 
-    public Player(string name) : this(name, new Client()) {
-        
-    }
+    public Player(string name, int hash = 0) : this(name, new Client(), hash) { }
 
-    public Player(string name, Client client)
+    public Player(string name, Client client, int hash = 0) : base (name, hash)
     {
-        this.name = name;
         this.client = client;
-
-        bool connected = client.Connect();
-        Console.WriteLine("Connecting player {0}, Status: {1}", name, connected);
-        client.AddObserver(this);
-        local = this;
+        ConnectClient();
     }
 
-    public void HandleInput(Input input)
+    private void ConnectClient()
     {
-        Console.WriteLine(name + " handling input of type: " + input.typeName);
-        InputHandler.HandleLocalInput(input);
-        if (input.shouldShare)
+        bool connected = false;
+        if (Game1.networkType == Game1.NetworkType.Online)
         {
-            client.Share(input);
+            connected = client.Connect();
+            client.AddObserver(this);
+        }
+        Console.WriteLine("Connecting player {0}, Status: {1}", name, connected);
+    }
+
+    public void DisconnectClient()
+    {
+        if(client != null)
+        {
+            client.RemoveObserver(this);
+            client.Disconnect();
+            Console.WriteLine("Disconnected player {0}", name);
         }
     }
 
-    public void HandleInput(IInputCommand command, bool shouldShare)
+    public void HandleInput(SerializableCommand sCommand)
     {
-        HandleInput(command.ToInput(shouldShare));
+        Console.WriteLine(name + " handling input of type: " + sCommand.typeName);
+        CommandHandler.Handle(sCommand);
+        OnlyShare(sCommand);
     }
 
-    public void update(Input input)
+    public void OnlyShare(SerializableCommand sCommand)
+    {
+        if (Game1.networkType == Game1.NetworkType.Online && sCommand.shouldShare)
+        {
+            client.Share(sCommand);
+        }
+    }
+
+    public void OnlyShare(IToSerializableCommand command)
+    {
+        OnlyShare(command.ToSerializable(true));
+    }
+
+    public void HandleInput(IToSerializableCommand command, bool shouldShare)
+    {
+        HandleInput(command.ToSerializable(shouldShare));
+    }
+
+    public void update(SerializableCommand input)
     {
         HandleInput(input);
     }

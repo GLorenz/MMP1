@@ -3,5 +3,5 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class NonMovingBoardElement : BoardElement
 {
-    public NonMovingBoardElement(string UID, Rectangle position, Texture2D texture) : base(UID, position, texture) { }
+    public NonMovingBoardElement(Rectangle position, Texture2D texture, int UID = 0) : base(position, texture, UID) { }
 }

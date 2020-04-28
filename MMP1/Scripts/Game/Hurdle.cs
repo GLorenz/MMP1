@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class Hurdle : MovingBoardElement
 {
-    public Hurdle(string UID, Rectangle position, Texture2D texture) : base(UID, position, texture) { }
+    public Hurdle(Rectangle position, Texture2D texture, int UID = 0) : base(position, texture, UID) { }
 
     public override void OnClick()
     {

@@ -9,7 +9,7 @@ public class CommandQueue
     }
     private CommandQueue() { }
 
-    public void QueueCommand(ICommand command)
+    public void Queue(ICommand command)
     {
         //TODO: create Queue
         command.execute();

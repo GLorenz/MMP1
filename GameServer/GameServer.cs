@@ -30,11 +30,15 @@ public class GameServer
     private bool shouldRun;
     private bool acceptNewSockets;
 
+    private List<byte[]> history;
+
     public GameServer()
     {
         sockets = new List<Socket>();
         shouldRun = false;
         acceptNewSockets = true;
+
+        history = new List<byte[]>();
     }
 
     public void Start()
@@ -51,56 +55,63 @@ public class GameServer
 
     private void ListenToSocket(Socket socket)
     {
-        while (socket.Connected && shouldRun)
+        while (socket != null && socket.Connected && shouldRun)
         {
             byte[] buffer = new byte[bufferSize];
             try
             {
-                Console.WriteLine("...");
+                Console.WriteLine("Listening...");
                 socket.Receive(buffer);
-                Console.WriteLine("received bytes on socket");
+                history.Add(buffer);
+            
+                Console.WriteLine("distributing bytes to "+(sockets.Count-1)+" others");
+                // distribute data to all other sockets
+                for(int i = sockets.Count-1; i >= 0; i--)
+                {
+                    Socket s = sockets[i];
+                    if (s != socket)
+                    {
+                        if (!s.Connected) { RemoveSocket(s); }
+                        else
+                        {
+                            Console.WriteLine("sending bytes to another socket");
+                            s.Send(buffer);
+                        }
+                    }
+                }
+                if (sockets.Count <= 0)
+                {
+                    Console.WriteLine("clearing history");
+                    history.Clear();
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
-            Console.WriteLine("distributing bytes");
-            // distribute data to all other sockets
-            sockets.ForEach(s =>
-            {
-                if (s != socket)
-                {
-                    Console.WriteLine("sending bytes to another socket");
-                    s.Send(buffer);
-                }
-            });
-
-            /*if (IsHelloRequestPackage(buffer))
-            {
-                // answer the socket with hello response and terminate socket
-                socket.Send(helloResponsePacket);
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
-            }
-            else
-            {
-                // distribute data to all other sockets
-                sockets.ForEach(s =>
-                {
-                    if (s != socket)
-                    {
-                        s.Send(buffer);
-                    }
-                });
-            }*/
         }
     }
 
     private void AddSocket(Socket socket)
     {
         sockets.Add(socket);
+        // new player should get all previously sent data
+        foreach(byte[] command in history)
+        {
+            socket.Send(command);
+        }
         new Thread(() => ListenToSocket(socket)).Start();
+    }
+
+    private void RemoveSocket(Socket socket)
+    {
+        sockets.Remove(socket);
+        if(socket != null && socket.Connected)
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+            socket = null;
+        }
     }
 
     private void ListenForNewSockets()
