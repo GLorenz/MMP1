@@ -15,7 +15,7 @@ public class Game1 : Game
     SpriteBatch spriteBatch;
     SpriteFont oldenburgFont;
 
-    readonly string[] texNames = new string[] { "red", "green" };
+    readonly string[] texNames = new string[] { "img/red", "img/green" };
     Meeple[] meeps;
 
     bool pressHandled;

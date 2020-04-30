@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading;
 using System;
+using System.Threading.Tasks;
 
 public class GameServer
 {
@@ -55,34 +56,58 @@ public class GameServer
 
     private void ListenToSocket(Socket socket)
     {
+        ReadStateObject readStateObj = new ReadStateObject(socket);
+
         while (socket != null && socket.Connected && shouldRun)
         {
-            byte[] buffer = new byte[bufferSize];
+            readStateObj.Reset();
             try
             {
                 Console.WriteLine("Listening...");
-                socket.Receive(buffer);
-                history.Add(buffer);
-            
-                Console.WriteLine("distributing bytes to "+(sockets.Count-1)+" others");
-                // distribute data to all other sockets
-                for(int i = sockets.Count-1; i >= 0; i--)
+                socket.BeginReceive(readStateObj.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), readStateObj);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                // hold task until event is reset (happens when some message is received)
+                readStateObj.mre.WaitOne();
+            }
+        }
+    }
+
+    // asynchornos callback
+    private void ReceiveCallback(IAsyncResult ar)
+    {
+        ReadStateObject state = (ReadStateObject)ar.AsyncState;
+        int read = state.socket.EndReceive(ar);
+        if(read > 0)
+        {
+            OnSocketReceive(state);
+        }
+        else
+        {
+            RemoveSocket(state.socket);
+        }
+        state.mre.Set();
+    }
+
+    private void OnSocketReceive(ReadStateObject readState)
+    {
+        history.Add(readState.buffer);
+
+        // distribute data to all other sockets
+        for (int i = sockets.Count - 1; i >= 0; i--)
+        {
+            try
+            {
+                Socket s = sockets[i];
+                if (s.Connected && s != readState.socket)
                 {
-                    Socket s = sockets[i];
-                    if (s != socket)
-                    {
-                        if (!s.Connected) { RemoveSocket(s); }
-                        else
-                        {
-                            Console.WriteLine("sending bytes to another socket");
-                            s.Send(buffer);
-                        }
-                    }
-                }
-                if (sockets.Count <= 0)
-                {
-                    Console.WriteLine("clearing history");
-                    history.Clear();
+                    s.Send(readState.buffer);
+                    Console.WriteLine("sending bytes to another socket");
                 }
             }
             catch (Exception e)
@@ -100,17 +125,24 @@ public class GameServer
         {
             socket.Send(command);
         }
-        new Thread(() => ListenToSocket(socket)).Start();
+        new Task(() => ListenToSocket(socket)).Start();
     }
 
     private void RemoveSocket(Socket socket)
     {
-        sockets.Remove(socket);
-        if(socket != null && socket.Connected)
+        if(socket != null)
         {
+            sockets.Remove(socket);
+
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
-            socket = null;
+            Console.WriteLine("Socket Disconnected");
+
+            if (sockets.Count <= 0)
+            {
+                Console.WriteLine("clearing history");
+                history.Clear();
+            }
         }
     }
 
@@ -152,5 +184,25 @@ public class GameServer
             }
         }
         return true;
+    }
+
+    public class ReadStateObject
+    {
+        public Socket socket;
+        public ManualResetEvent mre;
+        public byte[] buffer;
+
+        public ReadStateObject(Socket socket)
+        {
+            this.socket = socket;
+            mre = new ManualResetEvent(false);
+        }
+
+        public void Reset()
+        {
+            //mre = new ManualResetEvent(false);
+            mre.Reset();
+            buffer = new byte[bufferSize];
+        }
     }
 }

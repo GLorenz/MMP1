@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Scripts\Foundation\IdSequence.cs" />
+    <Compile Include="Scripts\Foundation\UnitConvert.cs" />
     <Compile Include="Scripts\Game\GenericBoardElementHolder.cs" />
     <Compile Include="Scripts\Game\Board.cs" />
     <Compile Include="Scripts\Game\BoardElement.cs" />

@@ -19,9 +19,10 @@ public class CreateGhostMeepleCommand : IToSerializableCommand
 
     public SerializableCommand ToSerializable(bool shouldShare)
     {
+        Rectangle relRect = UnitConvert.ToScreenRelative(meeple.Position);
         string body = "";
         body += meeple.ghostPlayer.UID;
-        body += ";" + meeple.Position.X + "," + meeple.Position.Y + "," + meeple.Position.Width + "," + meeple.Position.Height;
+        body += ";" + relRect.X + "," + relRect.Y + "," + relRect.Width + "," + relRect.Height;
         body += ";" + TextureResources.Get(meeple.texture);
 
         return new SerializableCommand(name, meeple.UID, body, shouldShare);
@@ -36,7 +37,7 @@ public class CreateGhostMeepleCommand : IToSerializableCommand
 
             GhostPlayer ghostPlayer = PlayerManager.Instance().GetByUID(int.Parse(boardElProps[0]));
             string[] rectPosis = boardElProps[1].Split(',');
-            Rectangle rect = new Rectangle(int.Parse(rectPosis[0]), int.Parse(rectPosis[1]), int.Parse(rectPosis[2]), int.Parse(rectPosis[3]));
+            Rectangle rect = UnitConvert.ToAbsolute(new Rectangle(int.Parse(rectPosis[0]), int.Parse(rectPosis[1]), int.Parse(rectPosis[2]), int.Parse(rectPosis[3])));
             Texture2D texture = TextureResources.Get(boardElProps[2]);
 
             return new CreateGhostMeepleCommand(new GhostMeeple(ghostPlayer, rect, texture, sCommand.UID));

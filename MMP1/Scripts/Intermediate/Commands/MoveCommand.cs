@@ -20,7 +20,8 @@ public class MoveCommand : IToSerializableCommand
 
     public SerializableCommand ToSerializable(bool shouldShare)
     {
-        return new SerializableCommand(name, element.UID, moveTo.X + ";" + moveTo.Y, shouldShare);
+        Point relativeMoveTo = UnitConvert.ToScreenRelative(moveTo);
+        return new SerializableCommand(name, element.UID, relativeMoveTo.X + ";" + relativeMoveTo.Y, shouldShare);
     }
 
     public static MoveCommand FromInput(SerializableCommand sCommand)
@@ -29,7 +30,7 @@ public class MoveCommand : IToSerializableCommand
         {
             MovingBoardElement movingEl = (MovingBoardElement)Board.Instance().FindByUID(sCommand.UID);
             string[] positions = sCommand.body.Split(';');
-            Point moveTo = new Point(int.Parse(positions[0]), int.Parse(positions[1]));
+            Point moveTo = UnitConvert.ToAbsolute(new Point(int.Parse(positions[0]), int.Parse(positions[1])));
 
             return new MoveCommand(movingEl, moveTo);
         }
