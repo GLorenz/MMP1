@@ -48,12 +48,12 @@ public class Player : GhostPlayer, IInputObserver
         }
     }
 
-    public void OnlyShare(IToSerializableCommand command)
+    public void OnlyShare(INetworkCommand command)
     {
         OnlyShare(command.ToSerializable(true));
     }
 
-    public void HandleInput(IToSerializableCommand command, bool shouldShare)
+    public void HandleInput(INetworkCommand command, bool shouldShare)
     {
         HandleInput(command.ToSerializable(shouldShare));
     }

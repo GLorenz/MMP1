@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-public class CreateGhostMeepleCommand : IToSerializableCommand
+public class CreateGhostMeepleCommand : INetworkCommand
 {
     public const string name = "CrGMeep";
     GhostMeeple meeple;
@@ -23,12 +23,13 @@ public class CreateGhostMeepleCommand : IToSerializableCommand
         string body = "";
         body += meeple.ghostPlayer.UID;
         body += ";" + relRect.X + "," + relRect.Y + "," + relRect.Width + "," + relRect.Height;
-        body += ";" + TextureResources.Get(meeple.texture);
+        // not needing to communicate texture since it just gets claimed
+        // body += ";" + TextureResources.Get(meeple.texture);
 
         return new SerializableCommand(name, meeple.UID, body, shouldShare);
     }
 
-    public static CreateGhostMeepleCommand FromInput(SerializableCommand sCommand)
+    public static CreateGhostMeepleCommand FromSerializable(SerializableCommand sCommand)
     {
         try
         {
@@ -38,9 +39,9 @@ public class CreateGhostMeepleCommand : IToSerializableCommand
             GhostPlayer ghostPlayer = PlayerManager.Instance().GetByUID(int.Parse(boardElProps[0]));
             string[] rectPosis = boardElProps[1].Split(',');
             Rectangle rect = UnitConvert.ToAbsolute(new Rectangle(int.Parse(rectPosis[0]), int.Parse(rectPosis[1]), int.Parse(rectPosis[2]), int.Parse(rectPosis[3])));
-            Texture2D texture = TextureResources.Get(boardElProps[2]);
+            MeepleColor color = MeepleColorClaimer.Next();
 
-            return new CreateGhostMeepleCommand(new GhostMeeple(ghostPlayer, rect, texture, sCommand.UID));
+            return new CreateGhostMeepleCommand(new GhostMeeple(ghostPlayer, rect, color, sCommand.UID));
         }
         catch (InvalidCastException ice)
         {

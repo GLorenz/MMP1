@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 public class CommandHandler
 {
-    public delegate IToSerializableCommand GenerateFromInput(SerializableCommand sCommand);
+    public delegate INetworkCommand GenerateFromInput(SerializableCommand sCommand);
     public static void Handle(SerializableCommand seriCommand)
     {
         GenerateFromInput inputFunc = null;
@@ -13,10 +13,10 @@ public class CommandHandler
                 inputFunc = MoveCommand.FromInput;
                 break;
             case CreateGhostPlayerCommand.name:
-                inputFunc = CreateGhostPlayerCommand.FromInput;
+                inputFunc = CreateGhostPlayerCommand.FromSerializable;
                 break;
             case CreateGhostMeepleCommand.name:
-                inputFunc = CreateGhostMeepleCommand.FromInput;
+                inputFunc = CreateGhostMeepleCommand.FromSerializable;
                 break;
         }
 

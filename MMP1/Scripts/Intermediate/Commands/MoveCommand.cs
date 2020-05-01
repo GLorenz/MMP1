@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 
-public class MoveCommand : IToSerializableCommand
+public class MoveCommand : INetworkCommand
 {
     public const string name = "MV";
     MovingBoardElement element;

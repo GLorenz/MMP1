@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System;
 
-public class CreateGhostPlayerCommand : IToSerializableCommand
+public class CreateGhostPlayerCommand : INetworkCommand
 {
     public const string name = "CrGP";
     private GhostPlayer p;
@@ -21,7 +21,7 @@ public class CreateGhostPlayerCommand : IToSerializableCommand
         return new SerializableCommand(name, p.UID, p.name, shouldShare);
     }
 
-    public static CreateGhostPlayerCommand FromInput(SerializableCommand sCommand)
+    public static CreateGhostPlayerCommand FromSerializable(SerializableCommand sCommand)
     {
         GhostPlayer ghost = new GhostPlayer(sCommand.body, sCommand.UID);
         return new CreateGhostPlayerCommand(ghost);

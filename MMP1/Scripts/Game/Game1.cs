@@ -9,14 +9,14 @@ public class Game1 : Game
     public enum NetworkType { Online, Offline }
     public static NetworkType networkType = NetworkType.Online;
 
+    public static int playerCount = 4;
+    public static int meepleCount = 2;
+
     public int windowWidth;
     public int windowHeight;
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     SpriteFont oldenburgFont;
-
-    readonly string[] texNames = new string[] { "img/red", "img/green" };
-    Meeple[] meeps;
 
     bool pressHandled;
 
@@ -28,8 +28,6 @@ public class Game1 : Game
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         boardElements = Board.Instance();
-
-        meeps = new Meeple[1];
     }
     protected override void Initialize()
     {
@@ -51,7 +49,7 @@ public class Game1 : Game
         spriteBatch = new SpriteBatch(GraphicsDevice);
         TextureResources.contentManager = Content;
 
-        TextureResources.AddAll(texNames);
+        TextureResources.LoadDefault();
 
         oldenburgFont = Content.Load<SpriteFont>("fonts/arial_16_bold");
 
@@ -70,13 +68,13 @@ public class Game1 : Game
 
     protected void CreateMeeples()
     {
-        for (int i = 0; i < meeps.Length; i++)
+        MeepleColor color = MeepleColorClaimer.Next();
+        for (int i = 0; i < meepleCount; i++)
         {
-            Texture2D redTex = TextureResources.Get(texNames[new Random().Next(texNames.Length)]);
-            meeps[i] = new Meeple(PlayerManager.Instance().local, new Rectangle(100 * i, 100, redTex.Width, redTex.Height), redTex);
-            boardElements.AddElement(meeps[i]);
+            Meeple newMeep = new Meeple(PlayerManager.Instance().local, new Rectangle(100 * i, 100, 100, 100), color);
+            boardElements.AddElement(newMeep);
 
-            CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(meeps[i]);
+            CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(newMeep);
             PlayerManager.Instance().local.OnlyShare(meepCmd);
         }
     }
@@ -93,7 +91,7 @@ public class Game1 : Game
 
         if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
         {
-            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(meeps[0].UID), Mouse.GetState().Position);
+            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(PlayerManager.Instance().GetLocalMeeples()[0].UID), Mouse.GetState().Position);
             PlayerManager.Instance().local.HandleInput(mcmd, true);
             pressHandled = true;
         }

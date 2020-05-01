@@ -20,6 +20,18 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/arial_16_bold.spritefont
 
+#begin img/Background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/Background.png
+
 #begin img/Board.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -104,7 +116,7 @@
 /processorParam:TextureFormat=Color
 /build:img/PlayerWhite.png
 
-#begin img/PyramidPathsOnline.png
+#begin img/QM.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -114,9 +126,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/PyramidPathsOnline.png
+/build:img/QM.png
 
-#begin img/Questionmarkfield.png
+#begin img/QMLight.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -126,7 +138,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/Questionmarkfield.png
+/build:img/QMLight.png
 
 #begin img/red.png
 /importer:TextureImporter
@@ -139,4 +151,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:img/red.png
+
+#begin img/Title.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/Title.png
 

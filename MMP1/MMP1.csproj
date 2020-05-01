@@ -54,6 +54,8 @@
     <Compile Include="Scripts\Game\Lobby.cs" />
     <Compile Include="Scripts\Game\GhostMaple.cs" />
     <Compile Include="Scripts\Game\Meeple.cs" />
+    <Compile Include="Scripts\Game\MeepleColor.cs" />
+    <Compile Include="Scripts\Game\MeepleColorClaimer.cs" />
     <Compile Include="Scripts\Game\MovingBoardElement.cs" />
     <Compile Include="Scripts\Game\NonMovingBoardElement.cs" />
     <Compile Include="Scripts\Game\TextureResources.cs" />
