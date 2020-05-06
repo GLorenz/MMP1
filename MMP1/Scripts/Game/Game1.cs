@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 public class Game1 : Game
 {
-    public enum NetworkType { Online, Offline }
-    public static NetworkType networkType = NetworkType.Online;
+    public enum NetworkType { Online, Offline, Local }
+    public static NetworkType networkType = NetworkType.Offline;
 
     public static int playerCount = 4;
     public static int meepleCount = 2;
@@ -16,30 +16,33 @@ public class Game1 : Game
     public int windowHeight;
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
-    SpriteFont oldenburgFont;
+    // SpriteFont oldenburgFont;
 
     bool pressHandled;
 
     // c# says no, when using class without generics, and a simple downcast isn't possible :(
-    GenericBoardElementHolder<BoardElement> boardElements;
+    GenericBoardElementHolder<BoardElement> elementsHolder;
 
     public Game1()
     {
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
-        boardElements = Board.Instance();
+        elementsHolder = Board.Instance();
     }
     protected override void Initialize()
     {
         // setting up display size here, since graphics aren't initialized in constructor
-        windowWidth = GraphicsDevice.DisplayMode.Width;
-        windowHeight = GraphicsDevice.DisplayMode.Height;
+        windowWidth = GraphicsDevice.DisplayMode.Width - 100;
+        windowHeight = GraphicsDevice.DisplayMode.Height - 100;
         Window.IsBorderless = false;
         Window.Position = new Point(50,50);
-        graphics.PreferredBackBufferWidth = windowWidth - 100;
-        graphics.PreferredBackBufferHeight = windowHeight - 100;
+        graphics.PreferredBackBufferWidth = windowWidth;
+        graphics.PreferredBackBufferHeight = windowHeight;
         IsMouseVisible = true;
         graphics.ApplyChanges();
+
+        UnitConvert.screenWidth = windowWidth;
+        UnitConvert.screenHeight = windowHeight;
 
         base.Initialize();
     }
@@ -51,10 +54,44 @@ public class Game1 : Game
 
         TextureResources.LoadDefault();
 
-        oldenburgFont = Content.Load<SpriteFont>("fonts/arial_16_bold");
+        // oldenburgFont = Content.Load<SpriteFont>("fonts/arial_16_bold");
+        PlaceContent();
+    }
 
+    protected void PlaceContent()
+    {
+        SetupBoard();
         CreatePlayer();
         CreateMeeples();
+    }
+
+    protected void SetupBoard()
+    {
+        Texture2D background = TextureResources.Get("Background");
+        float backgroundAspectRatio = background.Width / (float)background.Height;
+        int backgroundWidth = windowWidth;
+        int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
+        int backgroundX = (windowWidth - backgroundWidth) / 2;
+        int backgroundY = (windowHeight - backgroundHeight) / 2;
+        FieldBoardElement backgroundBoardEl = new FieldBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, zPosition:-10);
+        Board.Instance().AddElement(backgroundBoardEl);
+
+        Texture2D boardTex = TextureResources.Get("Board");
+        float boardAspectRatio = boardTex.Width / (float)boardTex.Height;
+        int boardHeight = windowHeight;
+        int boardWidth = (int)(boardHeight * boardAspectRatio);
+        int boardX = (windowWidth - boardWidth) / 2;
+        int boardY = (windowHeight - boardHeight) / 2;
+        FieldBoardElement board = new FieldBoardElement(new Rectangle(boardX, boardY, boardWidth, boardHeight), boardTex, zPosition:-1);
+        Board.Instance().AddElement(board);
+
+        //todo: calculate level values out of board rect
+        PyramidLevel level0 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(270, 68)), UnitConvert.ToAbsolute(new Point(697, 874)), 7, true);
+        PyramidLevel level1 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(327, 170)), UnitConvert.ToAbsolute(new Point(641, 775)), 5, false, "green");
+        PyramidLevel level2 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(379, 270)), UnitConvert.ToAbsolute(new Point(586, 666)), 4, false);
+        Board.Instance().AddElement(level0.elements.ToArray());
+        Board.Instance().AddElement(level1.elements.ToArray());
+        Board.Instance().AddElement(level2.elements.ToArray());
     }
 
     protected void CreatePlayer()
@@ -72,7 +109,7 @@ public class Game1 : Game
         for (int i = 0; i < meepleCount; i++)
         {
             Meeple newMeep = new Meeple(PlayerManager.Instance().local, new Rectangle(100 * i, 100, 100, 100), color);
-            boardElements.AddElement(newMeep);
+            elementsHolder.AddElement(newMeep);
 
             CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(newMeep);
             PlayerManager.Instance().local.OnlyShare(meepCmd);
@@ -91,11 +128,17 @@ public class Game1 : Game
 
         if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
         {
-            MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(PlayerManager.Instance().GetLocalMeeples()[0].UID), Mouse.GetState().Position);
-            PlayerManager.Instance().local.HandleInput(mcmd, true);
+            /*MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(PlayerManager.Instance().GetLocalMeeples()[0].UID), Mouse.GetState().Position);
+            PlayerManager.Instance().local.HandleInput(mcmd, true);*/
+            Console.WriteLine(Mouse.GetState().Position);
+            Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
             pressHandled = true;
         }
-        else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) { pressHandled = false; }
+        else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) {
+            Console.WriteLine(Mouse.GetState().Position);
+            Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
+            pressHandled = false;
+        }
 
         base.Update(gameTime);
     }
@@ -103,12 +146,12 @@ public class Game1 : Game
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        spriteBatch.Begin();
+        spriteBatch.Begin(SpriteSortMode.BackToFront);
 
-        foreach(BoardElement element in boardElements.boardElements)
+        for (int i = 0; i < elementsHolder.boardElements.Count; i++)
         {
-            spriteBatch.Draw(element.texture, element.Position, Color.White);
-            spriteBatch.DrawString(oldenburgFont, "Enemys " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
+            spriteBatch.Draw(elementsHolder.boardElements[i].texture, elementsHolder.boardElements[i].Position, Color.White);
+            //spriteBatch.DrawString(oldenburgFont, "Enemys " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
         }
         spriteBatch.End();
 

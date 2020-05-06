@@ -5,10 +5,13 @@ public abstract class BoardElement
 {
     protected int uid;
     protected Rectangle position;
+    protected int zPosition;
+
     public virtual Rectangle Position { get { return position; } protected set { position = value; } }
     public virtual Texture2D texture { get; protected set; }
+    public virtual int ZPosition { get { return zPosition; } protected set { zPosition = value; } }
 
-    public BoardElement(Rectangle position, Texture2D texture, int uid = 0)
+    public BoardElement(Rectangle position, Texture2D texture, int zPosition = 0, int uid = 0)
     {
         this.Position = position;
         this.texture = texture;

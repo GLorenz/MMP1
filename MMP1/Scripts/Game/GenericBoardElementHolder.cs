@@ -15,9 +15,10 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
         boardElements = elements;
     }
 
-    public void AddElement(T_ELEM element)
+    public void AddElement(params T_ELEM[] elements)
     {
-        boardElements.Add(element);
+        boardElements.AddRange(elements);
+        boardElements.Sort((T_ELEM t1, T_ELEM t2) => t1.ZPosition.CompareTo(t2.ZPosition));
     }
 
     public void RemoveElement(T_ELEM element)

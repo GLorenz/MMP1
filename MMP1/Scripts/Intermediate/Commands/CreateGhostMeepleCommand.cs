@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 public class CreateGhostMeepleCommand : INetworkCommand
-{
+{   //todo: add zPositions to all commands
     public const string name = "CrGMeep";
     GhostMeeple meeple;
 
@@ -40,7 +40,7 @@ public class CreateGhostMeepleCommand : INetworkCommand
             string[] rectPosis = boardElProps[1].Split(',');
             Rectangle rect = UnitConvert.ToAbsolute(new Rectangle(int.Parse(rectPosis[0]), int.Parse(rectPosis[1]), int.Parse(rectPosis[2]), int.Parse(rectPosis[3])));
             MeepleColor color = MeepleColorClaimer.Next();
-
+            
             return new CreateGhostMeepleCommand(new GhostMeeple(ghostPlayer, rect, color, sCommand.UID));
         }
         catch (InvalidCastException ice)

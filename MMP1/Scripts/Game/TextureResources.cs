@@ -11,7 +11,7 @@ public class TextureResources
     public static List<Texture2D> textures = new List<Texture2D>();
 
     public static string imgDir = "img/";
-    public static string[] defaultNames = new string[] { "Background", "Board", "Play", "PlayerBlack", "PlayerGreen", "PlayerRed", "PlayerWhite", "QM", "QMLight", "Title" };
+    public static string[] defaultNames = new string[] { "red", "green", "Background", "Board", "Play", "PlayerBlack", "PlayerGreen", "PlayerRed", "PlayerWhite", "QM", "QMLight", "Title" };
 
     public static void LoadDefault()
     {

@@ -14,13 +14,13 @@ public class UnitConvert
     public static Point ToScreenRelative(Point absolute)
     {
         // multiplying first becuase no floating point division
-        return new Point(absolute.X * screenWidth / gameSpaceUnits, absolute.Y * screenHeight / gameSpaceUnits);
+        return new Point(absolute.X * gameSpaceUnits / screenWidth , absolute.Y * gameSpaceUnits / screenHeight);
     }
 
     public static Point ToAbsolute(Point relative)
     {
         // multiplying first becuase no floating point division
-        return new Point(relative.X * gameSpaceUnits / screenWidth, relative.Y * gameSpaceUnits / screenHeight);
+        return new Point(relative.X * screenWidth / gameSpaceUnits, relative.Y * screenHeight / gameSpaceUnits);
     }
 
     public static Rectangle ToScreenRelative(Rectangle absolute)

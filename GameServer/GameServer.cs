@@ -20,12 +20,8 @@ public class GameServer
 
     public static readonly IPAddress listenerIp = IPAddress.Any;
     public static readonly int port = 40400;
-    public static readonly string hostName = "5hos.ddns.net";
 
     public static readonly int bufferSize = 1024;
-
-    public static readonly byte[] helloRequestPacket = new byte[] { 1, 2, 3, 4 };
-    public static readonly byte[] helloResponsePacket = new byte[] { 4, 3, 2, 1 };
 
     private List<Socket> sockets;
     private bool shouldRun;
@@ -171,19 +167,6 @@ public class GameServer
 
         server.Stop();
         Console.WriteLine("Stopped Server");
-    }
-
-    private static bool IsHelloRequestPackage(byte[] bytes)
-    {
-        if (bytes == null || bytes.Length != helloRequestPacket.Length) { return false; }
-        for (int i = 0; i < bytes.Length; i++)
-        {
-            if (bytes[i] != helloRequestPacket[i])
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public class ReadStateObject

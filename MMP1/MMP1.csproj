@@ -58,6 +58,7 @@
     <Compile Include="Scripts\Game\MeepleColorClaimer.cs" />
     <Compile Include="Scripts\Game\MovingBoardElement.cs" />
     <Compile Include="Scripts\Game\NonMovingBoardElement.cs" />
+    <Compile Include="Scripts\Game\PyramidLevel.cs" />
     <Compile Include="Scripts\Game\TextureResources.cs" />
     <Compile Include="Scripts\Interfaces\IToSerializableCommand.cs" />
     <Compile Include="Scripts\Interfaces\IInputObservable.cs" />
