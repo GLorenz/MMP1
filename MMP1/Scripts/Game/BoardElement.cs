@@ -16,6 +16,7 @@ public abstract class BoardElement
         this.Position = position;
         this.texture = texture;
         this.UID = uid;
+        this.ZPosition = zPosition;
     }
 
     public abstract void OnClick();
@@ -31,5 +32,15 @@ public abstract class BoardElement
         {
             uid = value;
         }
+    }
+
+    public static int CompareByZPosition(BoardElement b1, BoardElement b2)
+    {
+        return b1.ZPosition.CompareTo(b2.ZPosition);
+    }
+
+    public void DrawDefault(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, ZPosition / Board.Instance().MaxDepth);
     }
 }

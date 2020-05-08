@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
+using System;
 
 public class TextureResources
 {
@@ -11,7 +12,27 @@ public class TextureResources
     public static List<Texture2D> textures = new List<Texture2D>();
 
     public static string imgDir = "img/";
-    public static string[] defaultNames = new string[] { "red", "green", "Background", "Board", "Play", "PlayerBlack", "PlayerGreen", "PlayerRed", "PlayerWhite", "QM", "QMLight", "Title" };
+    public static string[] defaultNames = new string[] {
+        "red",
+        "green",
+        "Board",
+        "Background",
+        "Play",
+        "PlayerBlack",
+        "PlayerGreen",
+        "PlayerRed",
+        "PlayerWhite",
+        "QM",
+        "QMLight",
+        "Title",
+        "PyramidBackgroundFloor1",
+        "PyramidBackgroundFloor2",
+        "PyramidBackgroundFloor3",
+        "PyramidBackgroundFloor4",
+        "PyramidField",
+        "PyramidFieldConnectionShort",
+        "PyramidFieldConnectionLong"
+    };
 
     public static void LoadDefault()
     {
@@ -32,7 +53,7 @@ public class TextureResources
 
     public static Texture2D Get(string textureName)
     {
-        return textures[names.IndexOf(textureName)];
+        return textures[Math.Max(0,names.IndexOf(textureName))];
     }
 
     public static string Get(Texture2D texture)

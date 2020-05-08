@@ -11,6 +11,18 @@ public class UnitConvert
     // because Point uses ints which would mess up the devision close to 1
     // an Vector2 isn't really comptible with Point
 
+    public static int ToScreenRelative(int value)
+    {
+        // multiplying first becuase no floating point division
+        return value * gameSpaceUnits / screenWidth;
+    }
+
+    public static int ToAbsolute(int value)
+    {
+        // multiplying first becuase no floating point division
+        return value * screenWidth / gameSpaceUnits;
+    }
+
     public static Point ToScreenRelative(Point absolute)
     {
         // multiplying first becuase no floating point division
@@ -33,5 +45,10 @@ public class UnitConvert
     {
         // multiplying first becuase no floating point division
         return new Rectangle(relative.X * gameSpaceUnits / screenWidth, relative.Y * gameSpaceUnits / screenHeight, relative.Width * gameSpaceUnits / screenWidth, relative.Height * gameSpaceUnits / screenHeight);
+    }
+
+    public static Point ToRectangleUnits(Rectangle orientation, Point point, bool pointIsRelative)
+    {
+        return new Point((point.X - (pointIsRelative ? 0 : orientation.X)) / orientation.Width, (point.Y - (pointIsRelative ? 0 : orientation.Y)) / orientation.Height);
     }
 }

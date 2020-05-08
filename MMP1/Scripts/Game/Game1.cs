@@ -12,8 +12,10 @@ public class Game1 : Game
     public static int playerCount = 4;
     public static int meepleCount = 2;
 
-    public int windowWidth;
-    public int windowHeight;
+    public int windowWidth { get; private set; }
+    public int windowHeight { get; private set; }
+    public Rectangle boardRect { get; private set; }
+
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     // SpriteFont oldenburgFont;
@@ -61,11 +63,25 @@ public class Game1 : Game
     protected void PlaceContent()
     {
         SetupBoard();
+        SetupBackground();
+
         CreatePlayer();
         CreateMeeples();
     }
 
     protected void SetupBoard()
+    {
+        int boardHeight = windowHeight;
+        int boardWidth = boardHeight;
+        int boardX = (windowWidth - boardWidth) / 2;
+        int boardY = (windowHeight - boardHeight) / 2;
+        boardRect = new Rectangle(boardX, boardY, boardWidth, boardHeight);
+
+        Board.Instance().space = boardRect;
+        Board.Instance().BuildPyramidInSpace();
+    }
+
+    protected void SetupBackground()
     {
         Texture2D background = TextureResources.Get("Background");
         float backgroundAspectRatio = background.Width / (float)background.Height;
@@ -73,25 +89,8 @@ public class Game1 : Game
         int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
-        FieldBoardElement backgroundBoardEl = new FieldBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, zPosition:-10);
+        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, zPosition: 0);
         Board.Instance().AddElement(backgroundBoardEl);
-
-        Texture2D boardTex = TextureResources.Get("Board");
-        float boardAspectRatio = boardTex.Width / (float)boardTex.Height;
-        int boardHeight = windowHeight;
-        int boardWidth = (int)(boardHeight * boardAspectRatio);
-        int boardX = (windowWidth - boardWidth) / 2;
-        int boardY = (windowHeight - boardHeight) / 2;
-        FieldBoardElement board = new FieldBoardElement(new Rectangle(boardX, boardY, boardWidth, boardHeight), boardTex, zPosition:-1);
-        Board.Instance().AddElement(board);
-
-        //todo: calculate level values out of board rect
-        PyramidLevel level0 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(270, 68)), UnitConvert.ToAbsolute(new Point(697, 874)), 7, true);
-        PyramidLevel level1 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(327, 170)), UnitConvert.ToAbsolute(new Point(641, 775)), 5, false, "green");
-        PyramidLevel level2 = new PyramidLevel(UnitConvert.ToAbsolute(new Point(379, 270)), UnitConvert.ToAbsolute(new Point(586, 666)), 4, false);
-        Board.Instance().AddElement(level0.elements.ToArray());
-        Board.Instance().AddElement(level1.elements.ToArray());
-        Board.Instance().AddElement(level2.elements.ToArray());
     }
 
     protected void CreatePlayer()
@@ -130,13 +129,12 @@ public class Game1 : Game
         {
             /*MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(PlayerManager.Instance().GetLocalMeeples()[0].UID), Mouse.GetState().Position);
             PlayerManager.Instance().local.HandleInput(mcmd, true);*/
-            Console.WriteLine(Mouse.GetState().Position);
             Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
+            Board.Instance().OnClick(Mouse.GetState().Position);
             pressHandled = true;
         }
         else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) {
-            Console.WriteLine(Mouse.GetState().Position);
-            Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
+            //Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
             pressHandled = false;
         }
 
@@ -146,11 +144,12 @@ public class Game1 : Game
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        spriteBatch.Begin(SpriteSortMode.BackToFront);
+        spriteBatch.Begin(SpriteSortMode.Immediate);
 
-        for (int i = 0; i < elementsHolder.boardElements.Count; i++)
+        for (int i = 0; i < elementsHolder.visibleElements.Count; i++)
         {
-            spriteBatch.Draw(elementsHolder.boardElements[i].texture, elementsHolder.boardElements[i].Position, Color.White);
+            elementsHolder.visibleElements[i].Draw(spriteBatch);
+
             //spriteBatch.DrawString(oldenburgFont, "Enemys " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
         }
         spriteBatch.End();
