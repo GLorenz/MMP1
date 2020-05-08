@@ -141,6 +141,11 @@ public class Board : GenericBoardElementHolder<BoardElement>
         }
     }
 
+    public float ToAbsolute(float value)
+    {
+        return Round(value * boardUnit);
+    }
+
     public Rectangle ToAbsolute(Vector2 posInBU, Point sizeInBU)
     {
         return new Rectangle(space.X + Round(posInBU.X * boardUnit), space.Y + Round(posInBU.Y * boardUnit), sizeInBU.X * boardUnit, sizeInBU.Y * boardUnit);

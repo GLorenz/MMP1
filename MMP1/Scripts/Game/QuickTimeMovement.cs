@@ -18,6 +18,7 @@ public class QuickTimeMovement
     private Vector2 startCenter;
 
     private Vector2 curMouseVector;
+    private ArrowAnimatable curArrow;
 
     private QuickTimeMovement() { }
 
@@ -27,6 +28,9 @@ public class QuickTimeMovement
         this.start = meeple.standingOn;
         startCenter = start.Position.Center.ToVector2();
         curSelectionIdx = 0;
+        curArrow = new ArrowAnimatable(start, start.connectedFields[0], start.ZPosition+1);
+        Board.Instance().AddElement(curArrow);
+
         start.connectedFields[curSelectionIdx].Highlight();
 
         // build direction vectors to each connected field
@@ -51,9 +55,14 @@ public class QuickTimeMovement
                 start.connectedFields[curSelectionIdx].Lowlight();
                 start.connectedFields[i].Highlight();
 
+                Board.Instance().RemoveElement(curArrow);
+                curArrow = new ArrowAnimatable(start, start.connectedFields[i], start.ZPosition+1);
+                Board.Instance().AddElement(curArrow);
+
                 curSelectionIdx = i;
             }
         }
+        curArrow.Animate((float)Math.Sin(((DateTime.Now - initiated).TotalSeconds * 10f) % (2 * Math.PI)));
     }
 
     public void OnClick()
@@ -69,6 +78,7 @@ public class QuickTimeMovement
     {
         isActive = false;
         start.connectedFields[curSelectionIdx].Lowlight();
+        Board.Instance().RemoveElement(curArrow);
     }
 
     public void Toggle(Meeple meeple)

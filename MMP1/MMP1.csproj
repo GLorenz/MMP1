@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Scripts\Foundation\IdSequence.cs" />
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
+    <Compile Include="Scripts\Game\ArrowAnimated.cs" />
     <Compile Include="Scripts\Game\QuickTimeMovement.cs" />
     <Compile Include="Scripts\Game\PyramidFloorBoardElement.cs" />
     <Compile Include="Scripts\Game\GenericBoardElementHolder.cs" />

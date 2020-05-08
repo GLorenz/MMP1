@@ -32,16 +32,26 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
     public virtual void AddElement(params T_ELEM[] elements)
     {
         boardElements.AddRange(elements);
-        boardElements.Sort(BoardElement.CompareByZPosition);
-        maxDepth = boardElements.AsQueryable().Select(e => e.ZPosition).Max();
-
-        visibleElements = boardElements.AsQueryable().OfType<IVisibleBoardElement>().ToList();
-        visibleElements.Sort((v1, v2) => v1.ZPosition.CompareTo(v2.ZPosition));
+        UpdateUtils();
     }
 
     public virtual void RemoveElement(T_ELEM element)
     {
         boardElements.Remove(element);
+        UpdateUtils();
+    }
+
+    private void UpdateUtils()
+    {
+        boardElements.Sort(BoardElement.CompareByZPosition);
+        maxDepth = boardElements.AsQueryable().Select(e => e.ZPosition).Max();
+        UpdateVisibleElements();
+    }
+
+    private void UpdateVisibleElements()
+    {
+        visibleElements = boardElements.AsQueryable().OfType<IVisibleBoardElement>().ToList();
+        visibleElements.Sort((v1, v2) => v1.ZPosition.CompareTo(v2.ZPosition));
     }
 
     public BoardElement FindByUID(int UID)

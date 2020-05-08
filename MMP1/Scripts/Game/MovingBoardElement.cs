@@ -5,7 +5,7 @@ public abstract class MovingBoardElement : BoardElement, IVisibleBoardElement
 {
     public MovingBoardElement(Rectangle position, Texture2D texture, int zPosition = 0, int UID = 0) : base(position, texture, zPosition, UID) { }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         DrawDefault(spriteBatch);
     }

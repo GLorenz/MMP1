@@ -13,6 +13,7 @@ public class TextureResources
 
     public static string imgDir = "img/";
     public static string[] defaultNames = new string[] {
+        "arrow",
         "red",
         "green",
         "Board",
