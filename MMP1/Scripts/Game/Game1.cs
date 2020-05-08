@@ -67,6 +67,7 @@ public class Game1 : Game
 
         CreatePlayer();
         CreateMeeples();
+        CreateMeeples();
     }
 
     protected void SetupBoard()
@@ -105,9 +106,11 @@ public class Game1 : Game
     protected void CreateMeeples()
     {
         MeepleColor color = MeepleColorClaimer.Next();
+        PyramidFloorBoardElement[] cornerFields = Board.Instance().CornerPointsForColor(color);
         for (int i = 0; i < meepleCount; i++)
         {
-            Meeple newMeep = new Meeple(PlayerManager.Instance().local, new Rectangle(100 * i, 100, 100, 100), color);
+            Meeple newMeep = new Meeple(PlayerManager.Instance().local, cornerFields[i].Position, color, 10);
+            newMeep.MoveTo(cornerFields[i]);
             elementsHolder.AddElement(newMeep);
 
             CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(newMeep);
@@ -125,16 +128,23 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        if(QuickTimeMovement.Instance().isActive)
+        {
+            QuickTimeMovement.Instance().ReceiveMousePos(Mouse.GetState().Position);
+        }
+
         if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
         {
-            /*MoveCommand mcmd = new MoveCommand((MovingBoardElement)Board.Instance().FindByUID(PlayerManager.Instance().GetLocalMeeples()[0].UID), Mouse.GetState().Position);
-            PlayerManager.Instance().local.HandleInput(mcmd, true);*/
-            Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
             Board.Instance().OnClick(Mouse.GetState().Position);
+
+            // do after, no time to explain
+            if (QuickTimeMovement.Instance().isActive)
+            {
+                QuickTimeMovement.Instance().OnClick();
+            }
             pressHandled = true;
         }
         else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) {
-            //Console.WriteLine(UnitConvert.ToScreenRelative(Mouse.GetState().Position));
             pressHandled = false;
         }
 

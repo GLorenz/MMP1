@@ -29,4 +29,14 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
         if(!connectedFields.Contains(field))
             connectedFields.Add(field);
     }
+
+    public void Highlight()
+    {
+        texture = TextureResources.Get("red");
+    }
+
+    public void Lowlight()
+    {
+        texture = TextureResources.Get("PyramidField");
+    }
 }

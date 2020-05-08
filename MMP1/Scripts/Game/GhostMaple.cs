@@ -6,6 +6,8 @@ public class GhostMeeple : MovingBoardElement
 {
     public GhostPlayer ghostPlayer { get; protected set; }
 
+    public PyramidFloorBoardElement standingOn { get; protected set; }
+
     private MeepleColor color;
     public MeepleColor Color
     {
@@ -30,6 +32,12 @@ public class GhostMeeple : MovingBoardElement
         this.color = Color4Texture(texture);
         this.ghostPlayer = player;
         PlayerManager.Instance().AddMeepleRef(this);
+    }
+
+    public void MoveTo(PyramidFloorBoardElement element)
+    {
+        standingOn = element;
+        MoveTo(element.Position.Location);
     }
 
     public override void OnClick()
