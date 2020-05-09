@@ -12,8 +12,8 @@ public class Game1 : Game
     public static int playerCount = 4;
     public static int meepleCount = 2;
 
-    public int windowWidth { get; private set; }
-    public int windowHeight { get; private set; }
+    public static int windowWidth { get; private set; }
+    public static int windowHeight { get; private set; }
     public Rectangle boardRect { get; private set; }
 
     GraphicsDeviceManager graphics;
@@ -122,13 +122,21 @@ public class Game1 : Game
     {
         // TODO: Unload any non ContentManager content here
     }
-    
+
+    bool lHandled = false;
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        if(QuickTimeMovement.Instance().isActive)
+        if(!lHandled && Keyboard.GetState().IsKeyDown(Keys.L))
+        {
+            lHandled = true;
+            QuestionManager.Instance().AskRandom();
+        }
+        else if (lHandled && Keyboard.GetState().IsKeyUp(Keys.L)) { lHandled = false; }
+
+        if (QuickTimeMovement.Instance().isActive)
         {
             QuickTimeMovement.Instance().ReceiveMousePos(Mouse.GetState().Position);
         }

@@ -14,11 +14,11 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
     protected override void Setup()
     {
         thickness = 0.1f;
-        origin = Vector2.Zero;
+        origin = new Vector2(0, 0.5f * texture.Height);
         Vector2 offset = Vector2.Zero;// new Vector2(Board.Instance().ToAbsolute(0.5f));
 
-        this.to = toBE.Position.Center.ToVector2() + offset;
-        this.from = fromBE.Position.Center.ToVector2() + offset;
+        this.to = toBE.Position.Center.ToVector2();
+        this.from = fromBE.Position.Center.ToVector2();
 
         direction = to - from;
         direction.Normalize();

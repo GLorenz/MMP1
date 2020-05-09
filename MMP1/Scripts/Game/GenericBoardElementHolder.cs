@@ -35,9 +35,10 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
         UpdateUtils();
     }
 
-    public virtual void RemoveElement(T_ELEM element)
+    public virtual void RemoveElement(params T_ELEM[] elements)
     {
-        boardElements.Remove(element);
+        foreach (T_ELEM element in elements) { boardElements.Remove(element); }
+        
         UpdateUtils();
     }
 
