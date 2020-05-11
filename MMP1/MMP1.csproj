@@ -46,6 +46,7 @@
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
     <Compile Include="Scripts\Game\ArrowAnimated.cs" />
     <Compile Include="Scripts\Game\Question.cs" />
+    <Compile Include="Scripts\Game\QuestionBoardElement.cs" />
     <Compile Include="Scripts\Game\QuestionKnowledge.cs" />
     <Compile Include="Scripts\Game\QuestionKnowledgeAnswer.cs" />
     <Compile Include="Scripts\Game\QuestionManager.cs" />

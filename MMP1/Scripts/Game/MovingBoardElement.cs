@@ -15,4 +15,9 @@ public abstract class MovingBoardElement : BoardElement, IVisibleBoardElement
         this.position.X = position.X;
         this.position.Y = position.Y;
     }
+
+    public virtual void MoveTo(PyramidFloorBoardElement element)
+    {
+        MoveTo(element.Position.Location);
+    }
 }

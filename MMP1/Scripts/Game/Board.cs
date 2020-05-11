@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Board : GenericBoardElementHolder<BoardElement>
 {
+    private int[][] questionMarkIndices = new int[][] { new int[] { 3, 5, 10, 17, 24 }, new int[] { 0, 4, 8, 12 }, new int[] { 1, 2, 4, 5, 7, 8, 10, 11 } };
+
     public Rectangle space { get; set; }
 
     private int boardUnitCount;
@@ -61,6 +63,19 @@ public class Board : GenericBoardElementHolder<BoardElement>
         AddElevationConnections();
         AddRegularConnections();
         MakeConnectionsVisible();
+        PlaceQuestionmarks();
+    }
+
+    private void PlaceQuestionmarks()
+    {
+        for (int x = 0; x < questionMarkIndices.GetLength(0); x++)
+        {
+            for (int y = 0; y < questionMarkIndices.GetLength(1); y++)
+            {
+                PyramidFloorBoardElement below = floors[x].elements[questionMarkIndices[x][y]];
+                Board.Instance().AddElement(new QuestionBoardElement(below));
+            }
+        }
     }
 
     public PyramidFloorBoardElement[] CornerPointsForColor(MeepleColor color)

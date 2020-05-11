@@ -5,18 +5,16 @@ public abstract class Question : StaticVisibleBoardElement
 {
     private static readonly int defaultZPosition = 30;
 
-    public delegate void QuestionAnswerdCallback(bool correct);
-    protected QuestionAnswerdCallback callback;
+    public QuestionManager.QuestionAnswerdCallback callback { get; set; }
 
     protected int margin;
     protected Rectangle contentRect;
 
     protected bool isConstructed;
 
-    public Question(QuestionAnswerdCallback callback, Rectangle position, int UID = 0) 
+    public Question(Rectangle position, int UID = 0) 
         : base(position, TextureResources.Get("QuestionBackground"), defaultZPosition, UID)
     {
-        this.callback = callback;
         isConstructed = false;
 
         margin = UnitConvert.ToAbsolute(20);
@@ -25,8 +23,8 @@ public abstract class Question : StaticVisibleBoardElement
 
     protected virtual void OnAnswered(bool correct)
     {
-        callback(correct);
         Exit();
+        callback?.Invoke(correct);
     }
 
     public virtual void Construct()

@@ -110,7 +110,8 @@ public class Game1 : Game
         for (int i = 0; i < meepleCount; i++)
         {
             Meeple newMeep = new Meeple(PlayerManager.Instance().local, cornerFields[i].Position, color, 10);
-            newMeep.MoveTo(cornerFields[i]);
+            newMeep.SetStartingElement(cornerFields[i]);
+            newMeep.BackToStart();
             elementsHolder.AddElement(newMeep);
 
             CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(newMeep);

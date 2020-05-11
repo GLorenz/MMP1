@@ -17,8 +17,8 @@ public class QuestionKnowledge : Question
     private string questionName;
     private int answerCount;
 
-    public QuestionKnowledge(QuestionAnswerdCallback callback, string questionName, int answerCount, Rectangle position, int UID = 0)
-        : base(callback, position, UID)
+    public QuestionKnowledge(string questionName, int answerCount, Rectangle position, int UID = 0)
+        : base(position, UID)
     {
         this.questionName = questionName;
         this.answerCount = answerCount;

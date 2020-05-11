@@ -7,6 +7,7 @@ public class GhostMeeple : MovingBoardElement
     public GhostPlayer ghostPlayer { get; protected set; }
 
     public PyramidFloorBoardElement standingOn { get; protected set; }
+    private PyramidFloorBoardElement startElement;
 
     private MeepleColor color;
     public MeepleColor Color
@@ -34,17 +35,27 @@ public class GhostMeeple : MovingBoardElement
         PlayerManager.Instance().AddMeepleRef(this);
     }
 
-    public void MoveTo(PyramidFloorBoardElement element)
+    public override void MoveTo(PyramidFloorBoardElement element)
     {
         standingOn = element;
         MoveTo(element.Position.Location);
+    }
+
+    public void SetStartingElement(PyramidFloorBoardElement startElement)
+    {
+        this.startElement = startElement;
+    }
+
+    public void BackToStart()
+    {
+        MoveTo(startElement);
     }
 
     public override void OnClick()
     {
         //idk, show player stats or smth
     }
-    
+
     private static Texture2D Texture4Color(MeepleColor color)
     {
         return TextureResources.Get("Player" + color.ToString());

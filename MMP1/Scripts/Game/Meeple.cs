@@ -12,6 +12,27 @@ public class Meeple : GhostMeeple
         this.player = player;
     }
 
+    public override void MoveTo(PyramidFloorBoardElement element)
+    {
+        base.MoveTo(element);
+        if(QuestionManager.Instance().HasQuestionAbove(element))
+        {
+            QuestionManager.Instance().AskRandom(OnQuestionAnswered);
+        }
+    }
+
+    private void OnQuestionAnswered(bool correct)
+    {
+        if(correct)
+        {
+
+        }
+        else
+        {
+            BackToStart();
+        }
+    }
+
     public override void OnClick()
     {
         QuickTimeMovement.Instance().Toggle(this);
