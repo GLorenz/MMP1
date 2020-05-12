@@ -5,9 +5,9 @@ public class Meeple : GhostMeeple
 {
     public Player player { get; protected set; }
 
-    public Meeple(Player player, Rectangle position, MeepleColor color, int zPosition = 0, int UID = 0) : base(player, position, color, zPosition, UID) { }
+    public Meeple(Player player, Rectangle position, MeepleColor color, string UID, int zPosition = 0) : base(player, position, color, UID, zPosition) { }
 
-    public Meeple(Player player, Rectangle position, Texture2D texture, int zPosition = 0, int UID = 0) : base(player, position, texture, zPosition, UID)
+    public Meeple(Player player, Rectangle position, Texture2D texture, string UID, int zPosition = 0) : base(player, position, texture, UID, zPosition)
     {
         this.player = player;
     }

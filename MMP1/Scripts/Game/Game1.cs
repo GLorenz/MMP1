@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class Game1 : Game
 {
     public enum NetworkType { Online, Offline, Local }
-    public static NetworkType networkType = NetworkType.Offline;
+    public static NetworkType networkType = NetworkType.Online;
 
     public static int playerCount = 4;
     public static int meepleCount = 2;
@@ -90,13 +90,13 @@ public class Game1 : Game
         int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
-        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, zPosition: 0);
+        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, "gamebackground", zPosition: 0);
         Board.Instance().AddElement(backgroundBoardEl);
     }
 
     protected void CreatePlayer()
     {
-        Player pRalph = new Player("Ralph");
+        Player pRalph = new Player("Ralph", "player_ralph");
         PlayerManager.Instance().SetLocal(pRalph);
 
         CreateGhostPlayerCommand ghostCmd = new CreateGhostPlayerCommand(pRalph);
@@ -109,7 +109,7 @@ public class Game1 : Game
         PyramidFloorBoardElement[] cornerFields = Board.Instance().CornerPointsForColor(color);
         for (int i = 0; i < meepleCount; i++)
         {
-            Meeple newMeep = new Meeple(PlayerManager.Instance().local, cornerFields[i].Position, color, 10);
+            Meeple newMeep = new Meeple(PlayerManager.Instance().local, cornerFields[i].Position, color, "player"+PlayerManager.Instance().local.name+"_meeple"+i, 10);
             newMeep.SetStartingElement(cornerFields[i]);
             newMeep.BackToStart();
             elementsHolder.AddElement(newMeep);

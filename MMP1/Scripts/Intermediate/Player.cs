@@ -4,9 +4,9 @@ public class Player : GhostPlayer, IInputObserver
 {
     public Client client { get; private set; }
 
-    public Player(string name, int hash = 0) : this(name, new Client(), hash) { }
+    public Player(string name, string UID) : this(name, new Client(), UID) { }
 
-    public Player(string name, Client client, int hash = 0) : base (name, hash)
+    public Player(string name, Client client, string UID) : base (name, UID)
     {
         this.client = client;
         ConnectClient();

@@ -17,7 +17,7 @@ public class QuestionKnowledge : Question
     private string questionName;
     private int answerCount;
 
-    public QuestionKnowledge(string questionName, int answerCount, Rectangle position, int UID = 0)
+    public QuestionKnowledge(string questionName, int answerCount, Rectangle position, string UID)
         : base(position, UID)
     {
         this.questionName = questionName;
@@ -32,7 +32,7 @@ public class QuestionKnowledge : Question
 
         Texture2D qTex = TextureResources.Get(questionName);
         Rectangle qRect = new Rectangle(contentRect.X, contentRect.Y, contentRect.Width, contentRect.Width / (qTex.Width / qTex.Height));
-        question = new StaticVisibleBoardElement(qRect, qTex, ZPosition + 1);
+        question = new StaticVisibleBoardElement(qRect, qTex, "questknow"+questionName+"title", ZPosition + 1);
 
         int gridSize = (int)Math.Sqrt(answerCount);
         Point answerSize = new Point(contentRect.Width / gridSize, contentRect.Height / (2*gridSize));
@@ -50,7 +50,7 @@ public class QuestionKnowledge : Question
                     ),
                     answerSize
                 );
-                answers.Add(new QuestionKnowledgeAnswer(OnAnswerClicked, ansRect, ansTex, zPosition + 1));
+                answers.Add(new QuestionKnowledgeAnswer(OnAnswerClicked, ansRect, ansTex, UID+ansTexName, zPosition + 1));
             }
         }
     }

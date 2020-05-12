@@ -6,7 +6,7 @@ using System.Threading;
 
 public class Client : IInputObservable
 {
-    public static readonly int bufferSize = 2048;
+    public static readonly int bufferSize = 1024;
 
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }

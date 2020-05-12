@@ -13,8 +13,8 @@ public abstract class Question : StaticVisibleBoardElement
 
     protected bool isConstructed;
 
-    public Question(Rectangle position, int UID = 0) 
-        : base(position, TextureResources.Get("QuestionBackground"), defaultZPosition, UID)
+    public Question(Rectangle position, string UID) 
+        : base(position, TextureResources.Get("QuestionBackground"), UID, defaultZPosition)
     {
         isConstructed = false;
 

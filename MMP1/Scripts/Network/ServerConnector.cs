@@ -9,7 +9,6 @@ public class ServerConnector
     // method from: https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.socket?view=netcore-3.1
     public static Socket ConnectToServerSocket()
     {
-
         if(Game1.networkType == Game1.NetworkType.Online)
         {
             return Connect(hostName);

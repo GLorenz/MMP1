@@ -1,18 +1,19 @@
 ﻿public class GhostPlayer
 {
-    protected int uid;
+    protected string uid;
     public string name { get; protected set; }
 
-    public GhostPlayer(string name, int hash = 0)
+    public GhostPlayer(string name, string UID)
     {
         this.name = name;
+        this.UID = UID;
     }
 
-    public int UID
+    public string UID
     {
         get
         {
-            if (uid == 0) { uid = this.GetHashCode(); }
+            if (uid == "") { uid = this.GetHashCode().ToString(); }
             return uid;
         }
         set

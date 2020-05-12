@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class MovingBoardElement : BoardElement, IVisibleBoardElement
 {
-    public MovingBoardElement(Rectangle position, Texture2D texture, int zPosition = 0, int UID = 0) : base(position, texture, zPosition, UID) { }
+    public MovingBoardElement(Rectangle position, Texture2D texture, string UID, int zPosition = 0) : base(position, texture, UID, zPosition) { }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {

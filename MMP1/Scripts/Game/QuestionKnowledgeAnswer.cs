@@ -5,8 +5,8 @@ public class QuestionKnowledgeAnswer : StaticVisibleBoardElement
 {
     private QuestionKnowledge.AnswerClickedCallback answerCallback;
 
-    public QuestionKnowledgeAnswer(QuestionKnowledge.AnswerClickedCallback answerCallback, Rectangle position, Texture2D texture, int zPosition, int UID = 0) 
-        : base(position, texture, zPosition, UID)
+    public QuestionKnowledgeAnswer(QuestionKnowledge.AnswerClickedCallback answerCallback, Rectangle position, Texture2D texture, string UID, int zPosition) 
+        : base(position, texture, UID, zPosition)
     {
         this.answerCallback = answerCallback;
     }

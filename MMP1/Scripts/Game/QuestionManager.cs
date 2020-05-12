@@ -27,7 +27,7 @@ public class QuestionManager
         questionRect = new Rectangle(pos, size);
 
         questions = new List<Question>();
-        questions.Add(new QuestionKnowledge("Q1", QuestionKnowledge.fourAnswers, questionRect));
+        questions.Add(new QuestionKnowledge("Q1", QuestionKnowledge.fourAnswers, questionRect, "questknow" + "Q1"));
 
         random = new Random();
 

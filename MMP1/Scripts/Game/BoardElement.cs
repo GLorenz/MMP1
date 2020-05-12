@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class BoardElement
 {
-    protected int uid;
+    protected string uid;
     protected Rectangle position;
     protected int zPosition;
 
@@ -11,21 +11,21 @@ public abstract class BoardElement
     public virtual Texture2D texture { get; protected set; }
     public virtual int ZPosition { get { return zPosition; } protected set { zPosition = value; } }
 
-    public BoardElement(Rectangle position, Texture2D texture, int zPosition = 0, int uid = 0)
+    public BoardElement(Rectangle position, Texture2D texture, string UID, int zPosition = 0)
     {
         this.Position = position;
         this.texture = texture;
-        this.UID = uid;
+        this.uid = UID;
         this.ZPosition = zPosition;
     }
 
     public abstract void OnClick();
 
-    public int UID
+    public string UID
     {
         get
         {
-            if (uid == 0) { uid = this.GetHashCode(); }
+            if (uid.Length == 0) { uid = this.GetHashCode().ToString(); }
             return uid;
         }
         set

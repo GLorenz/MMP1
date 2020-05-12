@@ -23,12 +23,12 @@ public class GhostMeeple : MovingBoardElement
         }
     }
 
-    public GhostMeeple(GhostPlayer player, Rectangle position, MeepleColor color, int zPosition = 0, int UID = 0) : this(player, position, Texture4Color(color), zPosition, UID)
+    public GhostMeeple(GhostPlayer player, Rectangle position, MeepleColor color, string UID, int zPosition = 0) : this(player, position, Texture4Color(color), UID, zPosition)
     {
         this.color = color;
     }
 
-    public GhostMeeple(GhostPlayer player, Rectangle position, Texture2D texture, int zPosition = 0, int UID = 0) : base(position, texture, zPosition, UID)
+    public GhostMeeple(GhostPlayer player, Rectangle position, Texture2D texture, string UID, int zPosition = 0) : base(position, texture, UID, zPosition)
     {
         this.color = Color4Texture(texture);
         this.ghostPlayer = player;

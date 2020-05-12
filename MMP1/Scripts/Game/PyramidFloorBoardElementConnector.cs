@@ -11,12 +11,12 @@ public class PyramidFloorBoardElementConnector : NonMovingBoardElement, IVisible
 
     protected PyramidFloorBoardElement fromBE, toBE;
 
-    public PyramidFloorBoardElementConnector(PyramidFloorBoardElement from, PyramidFloorBoardElement to, int zPosition, int UID = 0) : 
+    public PyramidFloorBoardElementConnector(PyramidFloorBoardElement from, PyramidFloorBoardElement to, string UID, int zPosition = 0) : 
         base(
             from.Position,
             TextureResources.Get("PyramidFieldConnectionShort"),
-            zPosition,
-            UID
+            UID,
+            zPosition
         )
     {
         this.fromBE = from;

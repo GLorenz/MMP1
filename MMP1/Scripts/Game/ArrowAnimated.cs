@@ -6,7 +6,7 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
 {
     Vector2 originalScale;
 
-    public ArrowAnimatable(PyramidFloorBoardElement from, PyramidFloorBoardElement to, int zPosition, int UID = 0) : base(from, to, zPosition, UID)
+    public ArrowAnimatable(PyramidFloorBoardElement from, PyramidFloorBoardElement to, string UID, int zPosition) : base(from, to, UID, zPosition)
     {
         texture = TextureResources.Get("arrow");
     }

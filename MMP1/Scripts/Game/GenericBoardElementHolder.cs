@@ -55,7 +55,7 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
         visibleElements.Sort((v1, v2) => v1.ZPosition.CompareTo(v2.ZPosition));
     }
 
-    public BoardElement FindByUID(int UID)
+    public BoardElement FindByUID(string UID)
     {
         return boardElements.Find(e => e.UID.Equals(UID));
     }

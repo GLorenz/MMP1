@@ -7,7 +7,7 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
 {
     public List<PyramidFloorBoardElement> connectedFields { get; protected set; }
 
-    public PyramidFloorBoardElement(Rectangle position, int zPosition = 0, int UID = 0) : base(position, TextureResources.Get("PyramidField"), zPosition, UID)
+    public PyramidFloorBoardElement(Rectangle position, string UID, int zPosition = 0) : base(position, TextureResources.Get("PyramidField"), UID, zPosition)
     {
         connectedFields = new List<PyramidFloorBoardElement>();
     }

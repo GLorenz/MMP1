@@ -47,14 +47,14 @@ public class Board : GenericBoardElementHolder<BoardElement>
         floors[2] = new PyramidFloor(4, floorRects[2], 6);
         foreach(PyramidFloor floor in floors) { AddElement(floor.elements.ToArray()); }
 
-        winningField = new PyramidFloorBoardElement(ToAbsolute(floorRects[3]), 1);
+        winningField = new PyramidFloorBoardElement(ToAbsolute(floorRects[3]), "winningfield", 1);
         AddElement(winningField);
 
         // setting background images
         for(int i = 1; i <= 4; i++)
         {
             string backgroundName = "PyramidBackgroundFloor" + i;
-            StaticVisibleBoardElement background = new StaticVisibleBoardElement(ToAbsolute(backgroundRects[i-1]), TextureResources.Get(backgroundName), i != 4 ? i : 8);
+            StaticVisibleBoardElement background = new StaticVisibleBoardElement(ToAbsolute(backgroundRects[i-1]), TextureResources.Get(backgroundName), backgroundName, i != 4 ? i : 8);
             AddElement(background);
         }
 
@@ -71,7 +71,7 @@ public class Board : GenericBoardElementHolder<BoardElement>
             for (int y = 0; y < questionMarkIndices[x].Length; y++)
             {
                 PyramidFloorBoardElement floorElem = floors[x].elements[questionMarkIndices[x][y]];
-                QuestionBoardElement questionElem = new QuestionBoardElement(floorElem);
+                QuestionBoardElement questionElem = new QuestionBoardElement(floorElem, "floor"+x+"_qbe"+y);
 
                 AddElement(questionElem);
                 QuestionManager.Instance().AddQuestionBoardElement(questionElem, floorElem);
@@ -136,23 +136,24 @@ public class Board : GenericBoardElementHolder<BoardElement>
 
                 to.AddConnectedField(from);
                 from.AddConnectedField(to);
-                visibleConnections.Add(new PyramidFloorBoardElementConnector(from, to, from.ZPosition - 1));
+                visibleConnections.Add(new PyramidFloorBoardElementConnector(from, to, "elevationcon_floor"+i+"_"+to.UID+"to"+from.UID, from.ZPosition - 1));
             }
         }
     }
 
     protected void AddRegularConnections()
     {
-        foreach(PyramidFloor floor in floors)
+        for(int f = 0; f < floors.Length; f++)
         {
-            for(int i = 0; i < floor.elements.Count; i++)
+            PyramidFloor floor = floors[f];
+            for (int i = 0; i < floor.elements.Count; i++)
             {
                 int next = i == floor.elements.Count - 1 ? 0 : i + 1;
                 int past = i == 0 ? floor.elements.Count - 1 : i - 1;
 
                 floor.elements[i].AddConnectedField(floor.elements[next]);
                 floor.elements[i].AddConnectedField(floor.elements[past]);
-                visibleConnections.Add(new PyramidFloorBoardElementConnector(floor.elements[i], floor.elements[next], floor.elements[i].ZPosition - 1));
+                visibleConnections.Add(new PyramidFloorBoardElementConnector(floor.elements[i], floor.elements[next], "regularcon_floor"+f.ToString()+i.ToString()+next.ToString(), floor.elements[i].ZPosition - 1));
             }
         }
     }

@@ -28,7 +28,7 @@ public class QuickTimeMovement
         this.start = meeple.standingOn;
         startCenter = start.Position.Center.ToVector2();
         curSelectionIdx = 0;
-        curArrow = new ArrowAnimatable(start, start.connectedFields[0], start.ZPosition+1);
+        curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
         Board.Instance().AddElement(curArrow);
 
         start.connectedFields[curSelectionIdx].Highlight();
@@ -56,7 +56,7 @@ public class QuickTimeMovement
                 start.connectedFields[i].Highlight();
 
                 Board.Instance().RemoveElement(curArrow);
-                curArrow = new ArrowAnimatable(start, start.connectedFields[i], start.ZPosition+1);
+                curArrow = new ArrowAnimatable(start, start.connectedFields[i], "movementarrow", start.ZPosition+1);
                 Board.Instance().AddElement(curArrow);
 
                 curSelectionIdx = i;

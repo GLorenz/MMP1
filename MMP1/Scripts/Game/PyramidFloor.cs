@@ -59,7 +59,7 @@ public class PyramidFloor
         int max = fieldElemsCount - 1;
         for (int i = 0; i < max; i++)
         {
-            PyramidFloorBoardElement newElem = new PyramidFloorBoardElement(Board.Instance().ToAbsolute(createPointFunc(i), fieldSizeInBU), elementsZPos, elements.Count);
+            PyramidFloorBoardElement newElem = new PyramidFloorBoardElement(Board.Instance().ToAbsolute(createPointFunc(i), fieldSizeInBU), "pyramidfloor"+fieldElemsCount+"_elem_"+direction.ToString()+i.ToString(), elementsZPos);
             elements.Add(newElem);
         }
     }

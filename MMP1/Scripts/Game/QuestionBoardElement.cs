@@ -1,10 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-public class QuestionBoardElement : MovingBoardElement
+﻿public class QuestionBoardElement : MovingBoardElement
 {
-    public QuestionBoardElement(PyramidFloorBoardElement below, int UID = 0) 
-        : base(below.Position, TextureResources.Get("QM"), below.ZPosition+1, UID)
+    public QuestionBoardElement(PyramidFloorBoardElement below, string UID) 
+        : base(below.Position, TextureResources.Get("QM"), UID, below.ZPosition+1)
     {
 
     }
