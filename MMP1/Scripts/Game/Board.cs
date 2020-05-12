@@ -14,7 +14,7 @@ public class Board : GenericBoardElementHolder<BoardElement>
     private PyramidFloor[] floors;
     private Rectangle[] floorRects;
     private Rectangle[] backgroundRects;
-    private PyramidFloorBoardElement winningField;
+    public PyramidFloorBoardElement winningField { get; private set; }
 
     private List<PyramidFloorBoardElementConnector> visibleConnections;
 

@@ -19,6 +19,10 @@ public class Meeple : GhostMeeple
         {
             QuestionManager.Instance().AskRandom(OnQuestionAnswered);
         }
+        if(element.Equals(Board.Instance().winningField))
+        {
+            Game1.OnGameOver();
+        }
     }
 
     private void OnQuestionAnswered(bool correct)

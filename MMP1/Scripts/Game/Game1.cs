@@ -15,7 +15,7 @@ public class Game1 : Game
     public static int windowWidth { get; private set; }
     public static int windowHeight { get; private set; }
     public Rectangle boardRect { get; private set; }
-
+    
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
     // SpriteFont oldenburgFont;
@@ -31,6 +31,7 @@ public class Game1 : Game
         Content.RootDirectory = "Content";
         elementsHolder = Board.Instance();
     }
+
     protected override void Initialize()
     {
         // setting up display size here, since graphics aren't initialized in constructor
@@ -66,7 +67,6 @@ public class Game1 : Game
         SetupBackground();
 
         CreatePlayer();
-        CreateMeeples();
         CreateMeeples();
     }
 
@@ -121,10 +121,9 @@ public class Game1 : Game
     
     protected override void UnloadContent()
     {
-        // TODO: Unload any non ContentManager content here
+        // Unload any non ContentManager content here
     }
 
-    bool lHandled = false;
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -178,6 +177,11 @@ public class Game1 : Game
     {
         using (var game = new Game1())
             game.Run();
+    }
+
+    public static void OnGameOver()
+    {
+        Console.WriteLine("game over");
     }
 
     protected override void OnExiting(object sender, EventArgs args)
