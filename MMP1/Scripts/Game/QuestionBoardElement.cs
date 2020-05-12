@@ -13,4 +13,16 @@ public class QuestionBoardElement : MovingBoardElement
     {
         
     }
+
+    public override void MoveTo(PyramidFloorBoardElement element)
+    {
+        base.MoveTo(element);
+        SetZPosition(element.ZPosition + 1);
+    }
+
+    public void SetZPosition(int z)
+    {
+        ZPosition = z;
+        Board.Instance().ResturctureElements();
+    }
 }

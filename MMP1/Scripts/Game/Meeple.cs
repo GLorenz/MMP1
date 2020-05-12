@@ -25,7 +25,7 @@ public class Meeple : GhostMeeple
     {
         if(correct)
         {
-
+            QuestionManager.Instance().InitiateQuestionBoardElementMove(standingOn);
         }
         else
         {

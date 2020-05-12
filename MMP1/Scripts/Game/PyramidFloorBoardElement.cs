@@ -19,9 +19,10 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
 
     public override void OnClick()
     {
-        string s = "";
-        foreach(var x in connectedFields) { s+=x.UID+", "; }
-        Console.WriteLine("i am idx {0}, connected to {1};",UID,s);
+        if(QuestionManager.Instance().isMovingQuestionBoardElement)
+        {
+            QuestionManager.Instance().ClickedSomePyramidBoardElement(this);
+        }
     }
 
     public void AddConnectedField(PyramidFloorBoardElement field)

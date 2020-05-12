@@ -129,13 +129,11 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
-        if(!lHandled && Keyboard.GetState().IsKeyDown(Keys.L))
+        
+        if(QuestionManager.Instance().isMovingQuestionBoardElement)
         {
-            lHandled = true;
-            QuestionManager.Instance().AskRandom();
+            QuestionManager.Instance().ReceiveMouseInput(Mouse.GetState().Position);
         }
-        else if (lHandled && Keyboard.GetState().IsKeyUp(Keys.L)) { lHandled = false; }
 
         if (QuickTimeMovement.Instance().isActive)
         {

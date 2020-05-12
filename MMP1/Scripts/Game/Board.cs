@@ -32,13 +32,11 @@ public class Board : GenericBoardElementHolder<BoardElement>
     {
         boardUnit = space.Width / boardUnitCount;
         
-        // floor rects
         floorRects[0] = new Rectangle(1, 1, 13, 13);
         floorRects[1] = new Rectangle(3, 3, 9, 9);
         floorRects[2] = new Rectangle(5, 5, 5, 5);
         floorRects[3] = new Rectangle(7, 7, 1, 1);
-
-        //winning outer & inner rect
+        
         backgroundRects[0] = new Rectangle(0, 0, 15, 15);
         backgroundRects[1] = new Rectangle(2, 2, 11, 11);
         backgroundRects[2] = new Rectangle(4, 4, 7, 7);
@@ -68,12 +66,15 @@ public class Board : GenericBoardElementHolder<BoardElement>
 
     private void PlaceQuestionmarks()
     {
-        for (int x = 0; x < questionMarkIndices.GetLength(0); x++)
+        for (int x = 0; x < questionMarkIndices.Length; x++)
         {
-            for (int y = 0; y < questionMarkIndices.GetLength(1); y++)
+            for (int y = 0; y < questionMarkIndices[x].Length; y++)
             {
-                PyramidFloorBoardElement below = floors[x].elements[questionMarkIndices[x][y]];
-                Board.Instance().AddElement(new QuestionBoardElement(below));
+                PyramidFloorBoardElement floorElem = floors[x].elements[questionMarkIndices[x][y]];
+                QuestionBoardElement questionElem = new QuestionBoardElement(floorElem);
+
+                AddElement(questionElem);
+                QuestionManager.Instance().AddQuestionBoardElement(questionElem, floorElem);
             }
         }
     }

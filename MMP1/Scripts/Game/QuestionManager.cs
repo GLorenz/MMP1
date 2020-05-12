@@ -7,16 +7,17 @@ public class QuestionManager
 {
     public delegate void QuestionAnswerdCallback(bool correct);
 
-    public Dictionary<QuestionBoardElement,PyramidFloorBoardElement> questionElements { get; private set; }
+    // again, for bi-directional linking (instaed of dictionary)
+    public List<QuestionBoardElement> questionElems { get; private set; }
+    public List<PyramidFloorBoardElement> floorElems { get; private set; }
 
     public bool isMovingQuestionBoardElement { get; private set; }
     private QuestionBoardElement movingQBE;
+    private Point movingQBEOffset;
 
     private List<Question> questions;
     private Rectangle questionRect;
     private Random random;
-
-    private KeyValuePair<QuestionBoardElement, Question> questionPair;
 
     private QuestionManager()
     {
@@ -30,7 +31,10 @@ public class QuestionManager
 
         random = new Random();
 
-        questionElements = new Dictionary<QuestionBoardElement, PyramidFloorBoardElement>();
+        questionElems = new List<QuestionBoardElement>();
+        floorElems = new List<PyramidFloorBoardElement>();
+
+        movingQBEOffset = new Point(1, 1);
     }
 
     public void AskRandom(QuestionAnswerdCallback callback)
@@ -42,34 +46,40 @@ public class QuestionManager
     
     public void AddQuestionBoardElement(QuestionBoardElement element, PyramidFloorBoardElement below)
     {
-        questionElements.Add(element, below);
+        questionElems.Add(element);
+        floorElems.Add(below);
     }
 
-    public void MoveQuestionElement(QuestionBoardElement element, PyramidFloorBoardElement to)
+    public void MoveQuestionElement(QuestionBoardElement questionElement, PyramidFloorBoardElement floorElement)
     {
-        element.MoveTo(to.Position.Location);
-        questionElements[element] = to;
+        questionElement.MoveTo(floorElement);
+
+        floorElems[questionElems.IndexOf(questionElement)] = floorElement;
     }
 
     public bool HasQuestionAbove(PyramidFloorBoardElement element)
     {
-        return questionElements.ContainsValue(element);
+        return floorElems.Contains(element);
     }
 
     public void ReceiveMouseInput(Point mousePos)
     {
-
+        movingQBE.MoveTo(mousePos + movingQBEOffset);
     }
 
-    public void InitiateQuestionBoardElementMove(QuestionBoardElement element)
+    public void InitiateQuestionBoardElementMove(PyramidFloorBoardElement floorElementBelow)
     {
         isMovingQuestionBoardElement = true;
-        // move piece with mouse
+        movingQBE = questionElems[floorElems.IndexOf(floorElementBelow)];
+        movingQBE.SetZPosition(Board.Instance().MaxDepth + 1);
     }
 
     public void ClickedSomePyramidBoardElement(PyramidFloorBoardElement element)
     {
-        // move and update stuff
+        Console.WriteLine("clicked " + element.UID);
+        isMovingQuestionBoardElement = false;
+        MoveQuestionElement(movingQBE, element);
+        movingQBE = null;
     }
 
     private static QuestionManager manager;

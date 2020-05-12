@@ -32,17 +32,17 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
     public virtual void AddElement(params T_ELEM[] elements)
     {
         boardElements.AddRange(elements);
-        UpdateUtils();
+        ResturctureElements();
     }
 
     public virtual void RemoveElement(params T_ELEM[] elements)
     {
         foreach (T_ELEM element in elements) { boardElements.Remove(element); }
         
-        UpdateUtils();
+        ResturctureElements();
     }
 
-    private void UpdateUtils()
+    public void ResturctureElements()
     {
         boardElements.Sort(BoardElement.CompareByZPosition);
         maxDepth = boardElements.AsQueryable().Select(e => e.ZPosition).Max();

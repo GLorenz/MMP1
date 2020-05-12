@@ -6,6 +6,7 @@ public abstract class Question : StaticVisibleBoardElement
     private static readonly int defaultZPosition = 30;
 
     public QuestionManager.QuestionAnswerdCallback callback { get; set; }
+    public QuestionBoardElement layingOn { get; set; }
 
     protected int margin;
     protected Rectangle contentRect;
