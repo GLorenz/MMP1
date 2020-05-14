@@ -23,16 +23,9 @@
         PlayerManager.Instance().local.HandleInput(cmd, true);
     }
 
-    /*protected override void ShareMoveTo(PyramidFloorBoardElement element)
-    {
-        MoveQBECommand cmd = new MoveQBECommand(this, element);
-        PlayerManager.Instance().local.OnlyShare(cmd);
-    }*/
-
     public void SetZPosition(int z)
     {
         ZPosition = z;
         CommandQueue.Queue(new RestructureBoardElementsCommand());
-        //Board.Instance().ResturctureElements();
     }
 }

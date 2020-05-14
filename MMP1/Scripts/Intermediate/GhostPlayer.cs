@@ -44,17 +44,8 @@ public class GhostPlayer
                 foreach (GhostMeeple gm in PlayerManager.Instance().playerMeeples[this]) { gm.Color = value; }
             }
             color = value;
-            //UID = value.ToString();
-            //name = value.ToString();
         }
     }
-
-    /*public GhostMeeple CreateGhostMeeple(Rectangle position, string UID, int zPosition = 0)
-    {
-        GhostMeeple ghostMeeple = new GhostMeeple(this, position, MeepleColor, UID, zPosition);
-        meeples.Add(ghostMeeple);
-        return ghostMeeple;
-    }*/
 
     public string UID
     {

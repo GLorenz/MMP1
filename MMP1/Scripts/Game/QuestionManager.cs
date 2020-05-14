@@ -55,7 +55,6 @@ public class QuestionManager
         questionElement.MoveTo(floorElement);
 
         CommandQueue.Queue(new UpdateFloorElemsToQuestionMove(floorElems, floorElement, questionElems.IndexOf(questionElement)));
-        //floorElems[questionElems.IndexOf(questionElement)] = floorElement;
     }
 
     public void MoveQuestionElementLocalOnly(QuestionBoardElement questionElement, PyramidFloorBoardElement floorElement)

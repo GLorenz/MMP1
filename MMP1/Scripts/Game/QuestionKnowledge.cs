@@ -64,16 +64,12 @@ public class QuestionKnowledge : Question
         base.Initiate();
         CommandQueue.Queue(new AddToBoardCommand(question));
         CommandQueue.Queue(new AddToBoardCommand(answers.ToArray()));
-        /*Board.Instance().AddElement(question);
-        Board.Instance().AddElement(answers.ToArray());*/
     }
 
     public override void Exit()
     {
         CommandQueue.Queue(new RemoveFromBoardCommand(question));
         CommandQueue.Queue(new RemoveFromBoardCommand(answers.ToArray()));
-        /*Board.Instance().RemoveElement(question);
-        Board.Instance().RemoveElement(answers.ToArray());*/
         base.Exit();
     }
 }

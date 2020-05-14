@@ -30,7 +30,6 @@ public class QuickTimeMovement
         curSelectionIdx = 0;
         curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
         CommandQueue.Queue(new AddToBoardCommand(curArrow));
-        //Board.Instance().AddElement(curArrow);
 
         start.connectedFields[curSelectionIdx].Highlight();
 
@@ -57,10 +56,8 @@ public class QuickTimeMovement
                 start.connectedFields[i].Highlight();
 
                 CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
-                //Board.Instance().RemoveElement(curArrow);
                 curArrow = new ArrowAnimatable(start, start.connectedFields[i], "movementarrow", start.ZPosition+1);
                 CommandQueue.Queue(new AddToBoardCommand(curArrow));
-                //Board.Instance().AddElement(curArrow);
 
                 curSelectionIdx = i;
             }
@@ -82,7 +79,6 @@ public class QuickTimeMovement
         isActive = false;
         start.connectedFields[curSelectionIdx].Lowlight();
         CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
-        //Board.Instance().RemoveElement(curArrow);
     }
 
     public void Toggle(Meeple meeple)

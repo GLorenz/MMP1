@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 public class Client : IInputObservable
 {
     public static readonly int bufferSize = 2048;
-    public static readonly int sendTickRateMS = 1000 / 20;
+    public static readonly int sendTickRateMS = 1000 / 50;
     public static readonly string lobbyHostString = "lobbyhost";
 
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
-    ReadStateObject readStateObj;
-    SendStateObject sendStateObj;
 
     private Queue<SerializableCommand> sendQueue;
     private bool sendQueueIsWorking;
@@ -25,8 +23,6 @@ public class Client : IInputObservable
     public Client()
     {
         observers = new List<IObserver>();
-        readStateObj = new ReadStateObject();
-        sendStateObj = new SendStateObject();
 
         sendQueue = new Queue<SerializableCommand>();
         sendQueueIsWorking = false;
@@ -42,8 +38,6 @@ public class Client : IInputObservable
             socket.ReceiveBufferSize = bufferSize;
             socket.SendBufferSize = bufferSize;
 
-            sendStateObj.socket = socket;
-
             new Task(() => ListenForNext()).Start();
         }
         return serverSock.Connected;
@@ -55,6 +49,24 @@ public class Client : IInputObservable
         {
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
+        }
+    }
+
+    public void ListenForNext()
+    {
+        while (socket != null && socket.Connected)
+        {
+            byte[] data = new byte[bufferSize];
+            try
+            {
+                Console.WriteLine("listening for next");
+                int read = socket.Receive(data);
+                if (read > 0)
+                {
+                    OnReceive(data);
+                }
+            }
+            catch(SocketException) { }
         }
     }
 
@@ -72,18 +84,11 @@ public class Client : IInputObservable
             while (sendQueue.Count > 0)
             {
                 socket.Send(Serializer.SerializeInput(sendQueue.Dequeue()));
-                //socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), sendStateObj);
                 await Task.Delay(sendTickRateMS);
             }
             sendQueueIsWorking = false;
         }
     }
-
-    /*private void SendCallback(IAsyncResult ar)
-    {
-        SendStateObject sendState = (SendStateObject)ar.AsyncState;
-        sendState.socket.EndSend(ar);
-    }*/
 
     public void OnReceive(byte[] data)
     {
@@ -105,40 +110,6 @@ public class Client : IInputObservable
                     notifyObservers(input);
                 }
             }
-        }
-    }
-
-    public void ListenForNext()
-    {
-        while (socket != null && socket.Connected)
-        {
-            /*readStateObj.Reset();
-            readStateObj.socket = socket;
-            socket.BeginReceive(readStateObj.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), readStateObj);*/
-
-            byte[] data = new byte[bufferSize];
-            try
-            {
-                Console.WriteLine("listening for next");
-                int read = socket.Receive(data);
-                if (read > 0)
-                {
-                    OnReceive(data);
-                }
-            }
-            catch(SocketException) { }
-        }
-    }
-
-    // asynchornos callback
-    private void ReceiveCallback(IAsyncResult ar)
-    {
-        ReadStateObject state = (ReadStateObject)ar.AsyncState;
-        if (socket != null && socket.Connected)
-        {
-            int read = state.socket.EndReceive(ar);
-            OnReceive(state.buffer);
-            ListenForNext();
         }
     }
     
@@ -170,21 +141,5 @@ public class Client : IInputObservable
                 o.update();
             }
         });
-    }
-
-    public class ReadStateObject
-    {
-        public Socket socket = null;
-        public byte[] buffer = new byte[bufferSize];
-
-        public void Reset()
-        {
-            socket = null;
-            buffer = new byte[bufferSize];
-        }
-    }
-    public class SendStateObject
-    {
-        public Socket socket;
     }
 }

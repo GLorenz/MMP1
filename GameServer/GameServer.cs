@@ -12,11 +12,14 @@ public class GameServer
     {
         GameServer server = new GameServer();
         server.Start();
+        
+        while (server.shouldRun)
+        {
+            string input = Console.ReadLine();
 
-        Console.Write("> ");
-        string input = Console.ReadLine();
-        if(input.ToLower().Trim().Equals("stop")) { server.Stop(); }
-        else { Console.WriteLine("unrecognised"); }
+            if (input.ToLower().Trim().Equals("stop")) { server.Stop(); }
+            else { Print("unrecognised"); }
+        }
     }
 
     public static readonly IPAddress listenerIp = IPAddress.Any;
@@ -26,10 +29,13 @@ public class GameServer
     public static readonly string lobbyHostString = "lobbyhost";
 
     private List<Socket> sockets;
-    private bool shouldRun;
+    public bool shouldRun { get; private set; }
     private bool acceptNewSockets;
 
     private List<byte[]> history;
+
+    private object socketLock = new object();
+    private object historyLock = new object();
 
     public GameServer()
     {
@@ -49,19 +55,75 @@ public class GameServer
     public void Stop()
     {
         shouldRun = false;
-        sockets.ForEach(s => { s.Shutdown(SocketShutdown.Both); s.Close(); });
+        lock (socketLock)
+        {
+            sockets.ForEach(s => { s.Shutdown(SocketShutdown.Both); s.Close(); });
+        }
+    }
+
+    private void ListenForNewSockets()
+    {
+        TcpListener server = new TcpListener(listenerIp, port);
+        server.AllowNatTraversal(true);
+        server.Start();
+        Print("Started Game Server!");
+
+        while (shouldRun && acceptNewSockets)
+        {
+            //blocking until there is a client
+            try
+            {
+                Socket sock = server.AcceptSocket();
+                Print("Accepted new Socket!");
+                // if new is accepted, add to list and listen to it
+                AddSocket(sock);
+            }
+            catch (Exception e)
+            {
+                Print("exception at listen");
+                Print(e.Message);
+            }
+        }
+
+        server.Stop();
+        Print("Stopped Server");
+    }
+
+    private void AddSocket(Socket socket)
+    {
+        lock (socketLock)
+        {
+            sockets.Add(socket);
+        }
+
+        socket.SendBufferSize = bufferSize;
+        socket.ReceiveBufferSize = bufferSize;
+        new Task(() => ListenToSocket(socket)).Start();
+        
+        // new player should get all previously sent data
+        Print(string.Format("sending {0} packets of history", history.Count));
+
+        lock (historyLock)
+        {
+            foreach (byte[] command in history)
+            {
+                socket.Send(command);
+            }
+        }
+        if (sockets.Count == 1)
+        {
+            Print("sending lobby host package");
+            socket.Send(Encoding.ASCII.GetBytes(lobbyHostString));
+        }
     }
 
     private void ListenToSocket(Socket socket)
     {
-        ReadStateObject readStateObj = new ReadStateObject(socket);
-
         while (socket != null && socket.Connected && shouldRun)
         {
-            //readStateObj.Reset();
             try
             {
-                Console.WriteLine("Listening...");
+                Print("Listening...");
                 byte[] buffer = new byte[bufferSize];
                 int read = socket.Receive(buffer);
                 if(read > 0)
@@ -73,171 +135,73 @@ public class GameServer
                 {
                     RemoveSocket(socket);
                 }
-                //socket.BeginReceive(readStateObj.buffer, 0, bufferSize, 0, new AsyncCallback(ReceiveCallback), readStateObj);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Print("exception at single socket listen");
+                Print(e.Message);
                 RemoveSocket(socket);
             }
-            /*finally
-            {
-                // hold task until event is reset (happens when some message is received)
-                readStateObj.mre.WaitOne();
-            }*/
-        }
-    }
-
-    // asynchornos callback
-    private void ReceiveCallback(IAsyncResult ar)
-    {
-        ReadStateObject state = (ReadStateObject)ar.AsyncState;
-        try
-        {
-            int read = state.socket.EndReceive(ar);
-            if (read > 0)
-            {
-                //OnSocketReceive(state.);
-                state.mre.Set();
-            }
-            else
-            {
-                RemoveSocket(state.socket);
-            }
-        }
-        catch (SocketException se)
-        {
-            Console.WriteLine(se.Message);
-            RemoveSocket(state.socket);
         }
     }
 
     private void OnSocketReceive(byte[] data, Socket socket)
     {
-        history.Add(data);
-
-        // distribute data to all other sockets
-        for (int i = sockets.Count - 1; i >= 0; i--)
+        lock (historyLock)
         {
-            try
+            history.Add(data);
+        }
+
+        lock (socketLock)
+        {
+            // distribute data to all other sockets
+            for (int i = sockets.Count - 1; i >= 0; i--)
             {
-                Socket s = sockets[i];
-                if (s.Connected && s != socket)
+                try
                 {
-                    SendStateObject sendState = new SendStateObject();
-                    sendState.socket = s;
-                    //s.BeginSend(readState.buffer, 0, readState.buffer.Length, SocketFlags.None, new AsyncCallback(SendCallback), sendState);
-                    s.Send(data);
-                    Console.WriteLine("sending bytes to another socket");
+                    Socket s = sockets[i];
+                    if (s.Connected && s != socket)
+                    {
+                        s.Send(data);
+                        Print("sending bytes to another socket");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Print("exception at onsocketreceive");
+                    Print(e.Message);
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
         }
-    }
-
-    private void AddSocket(Socket socket)
-    {
-        sockets.Add(socket);
-        socket.SendBufferSize = bufferSize;
-        socket.ReceiveBufferSize = bufferSize;
-        new Task(() => ListenToSocket(socket)).Start();
-        
-        // new player should get all previously sent data
-        Console.WriteLine("sending {0} packets of history", history.Count);
-
-        
-
-        SendStateObject sendState = new SendStateObject();
-        sendState.socket = socket;
-        foreach(byte[] command in history)
-        {
-            //sendState.data = command;
-            socket.Send(command);
-            //socket.BeginSend(sendState.data, 0, sendState.data.Length, SocketFlags.None, new AsyncCallback(SendCallback), sendState);
-        }
-        if (sockets.Count == 1)
-        {
-            Console.WriteLine("sending lobby host package");
-            socket.Send(Encoding.ASCII.GetBytes(lobbyHostString));
-        }
-    }
-
-    private void SendCallback(IAsyncResult ar)
-    {
-        SendStateObject sendState = (SendStateObject)ar.AsyncState;
-        sendState.socket.EndSend(ar);
     }
 
     private void RemoveSocket(Socket socket)
     {
         if(socket != null)
         {
-            sockets.Remove(socket);
+            lock (socketLock)
+            {
+                sockets.Remove(socket);
+            }
 
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
-            Console.WriteLine("Socket Disconnected");
+            Print("Socket Disconnected");
 
             if (sockets.Count <= 0)
             {
-                Console.WriteLine("clearing history");
-                history.Clear();
+                Print("clearing history");
+                lock (historyLock)
+                {
+                    history.Clear();
+                }
             }
         }
     }
 
-    private void ListenForNewSockets()
+    private static void Print(string s)
     {
-        TcpListener server = new TcpListener(listenerIp, port);
-        server.AllowNatTraversal(true);
-        server.Start();
-        Console.WriteLine("Started Game Server!");
-
-        while (shouldRun && acceptNewSockets)
-        {
-            //blocking until there is a client
-            try
-            {
-                Socket sock = server.AcceptSocket();
-                Console.WriteLine("Accepted new Socket!");
-                // if new is accepted, add to list and listen to it
-                AddSocket(sock);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        server.Stop();
-        Console.WriteLine("Stopped Server");
-    }
-
-    public class ReadStateObject
-    {
-        public Socket socket;
-        public ManualResetEvent mre;
-        public byte[] buffer;
-
-        public ReadStateObject(Socket socket)
-        {
-            this.socket = socket;
-            mre = new ManualResetEvent(false);
-        }
-
-        public void Reset()
-        {
-            //mre = new ManualResetEvent(false);
-            mre.Reset();
-            buffer = new byte[bufferSize];
-        }
-    }
-    public class SendStateObject
-    {
-        public Socket socket;
-        public byte[] data;
+        Console.WriteLine(s);
+        Console.Write("> ");
     }
 }

@@ -41,12 +41,10 @@ public abstract class Question : StaticVisibleBoardElement
             isConstructed = true;
         }
         CommandQueue.Queue(new AddToBoardCommand(this));
-        //Board.Instance().AddElement(this);
     }
 
     public virtual void Exit()
     {
         CommandQueue.Queue(new RemoveFromBoardCommand(this));
-        //Board.Instance().RemoveElement(this);
     }
 }

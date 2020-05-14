@@ -78,8 +78,6 @@ public class Game1 : Game
         boardRect = new Rectangle(boardX, boardY, boardWidth, boardHeight);
 
         CommandQueue.Queue(new BuildPyramidCommand(boardRect));
-        /*Board.Instance().space = boardRect;
-        Board.Instance().BuildPyramidInSpace();*/
     }
 
     protected void SetupBackground()
@@ -91,7 +89,6 @@ public class Game1 : Game
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
         StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, "gamebackground", zPosition: 0);
-        //Board.Instance().AddElement(backgroundBoardEl);
         CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
     }
 

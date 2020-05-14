@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Board : GenericBoardElementHolder<BoardElement>
 {
-    private int[][] questionMarkIndices = new int[][] { new int[] { 3, 5, 10, 17, 24 }, new int[] { 0, 4, 8, 12 }, new int[] { 1, 2, 4, 5, 7, 8, 10, 11 } };
+    private int[][] questionMarkIndices = new int[][] { new int[] { 3, 10, 17, 24 }, new int[] { 0, 4, 8, 12 }, new int[] { 1, 2, 4, 5, 7, 8, 10, 11 } };
 
     public Rectangle space { get; set; }
 
@@ -45,11 +45,10 @@ public class Board : GenericBoardElementHolder<BoardElement>
         floors[0] = new PyramidFloorDoubleCorner(7, floorRects[0], 4);
         floors[1] = new PyramidFloor(5, floorRects[1], 5);
         floors[2] = new PyramidFloor(4, floorRects[2], 6);
-        foreach(PyramidFloor floor in floors) { CommandQueue.Queue(new AddToBoardCommand(floor.elements.ToArray())); /*AddElement(floor.elements.ToArray());*/ }
+        foreach(PyramidFloor floor in floors) { CommandQueue.Queue(new AddToBoardCommand(floor.elements.ToArray())); }
 
         winningField = new PyramidFloorBoardElement(ToAbsolute(floorRects[3]), "winningfield", 1);
         CommandQueue.Queue(new AddToBoardCommand(winningField));
-        //AddElement(winningField);
 
         // setting background images
         for(int i = 1; i <= 4; i++)
@@ -57,7 +56,6 @@ public class Board : GenericBoardElementHolder<BoardElement>
             string backgroundName = "PyramidBackgroundFloor" + i;
             StaticVisibleBoardElement background = new StaticVisibleBoardElement(ToAbsolute(backgroundRects[i-1]), TextureResources.Get(backgroundName), backgroundName, i != 4 ? i : 8);
             CommandQueue.Queue(new AddToBoardCommand(background));
-            //AddElement(background);
         }
 
         AddElevationConnections();
@@ -76,7 +74,6 @@ public class Board : GenericBoardElementHolder<BoardElement>
                 QuestionBoardElement questionElem = new QuestionBoardElement(floorElem, "floor"+x+"_qbe"+y);
 
                 CommandQueue.Queue(new AddToBoardCommand(questionElem));
-                //AddElement(questionElem);
                 QuestionManager.Instance().AddQuestionBoardElement(questionElem, floorElem);
             }
         }
@@ -115,7 +112,6 @@ public class Board : GenericBoardElementHolder<BoardElement>
     protected void MakeConnectionsVisible()
     {
         CommandQueue.Queue(new AddToBoardCommand(visibleConnections.ToArray()));
-        //AddElement(visibleConnections.ToArray());
     }
 
     protected void AddElevationConnections()
