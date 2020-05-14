@@ -54,7 +54,14 @@ public class QuestionManager
     {
         questionElement.MoveTo(floorElement);
 
-        floorElems[questionElems.IndexOf(questionElement)] = floorElement;
+        CommandQueue.Queue(new UpdateFloorElemsToQuestionMove(floorElems, floorElement, questionElems.IndexOf(questionElement)));
+        //floorElems[questionElems.IndexOf(questionElement)] = floorElement;
+    }
+
+    public void MoveQuestionElementLocalOnly(QuestionBoardElement questionElement, PyramidFloorBoardElement floorElement)
+    {
+        questionElement.MoveToLocalOnly(floorElement);
+        CommandQueue.Queue(new UpdateFloorElemsToQuestionMove(floorElems, floorElement, questionElems.IndexOf(questionElement)));
     }
 
     public bool HasQuestionAbove(PyramidFloorBoardElement element)
@@ -76,7 +83,6 @@ public class QuestionManager
 
     public void ClickedSomePyramidBoardElement(PyramidFloorBoardElement element)
     {
-        Console.WriteLine("clicked " + element.UID);
         isMovingQuestionBoardElement = false;
         MoveQuestionElement(movingQBE, element);
         movingQBE = null;

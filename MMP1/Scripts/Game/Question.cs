@@ -40,11 +40,13 @@ public abstract class Question : StaticVisibleBoardElement
             Construct();
             isConstructed = true;
         }
-        Board.Instance().AddElement(this);
+        CommandQueue.Queue(new AddToBoardCommand(this));
+        //Board.Instance().AddElement(this);
     }
 
     public virtual void Exit()
     {
-        Board.Instance().RemoveElement(this);
+        CommandQueue.Queue(new RemoveFromBoardCommand(this));
+        //Board.Instance().RemoveElement(this);
     }
 }

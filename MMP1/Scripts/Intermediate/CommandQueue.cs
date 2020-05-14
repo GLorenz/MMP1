@@ -1,17 +1,14 @@
+using System;
 
 public class CommandQueue
 {
-    private static CommandQueue cmdQueue;
-    public static CommandQueue Instance()
-    {
-        if (cmdQueue == null) { cmdQueue = new CommandQueue(); }
-        return cmdQueue;
-    }
-    private CommandQueue() { }
+    private static object gameLock = new object();
 
-    public void Queue(ICommand command)
+    public static void Queue(ICommand command)
     {
-        //TODO: create Queue
-        command.execute();
+        lock (gameLock)
+        {
+            command.execute();
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,8 @@
     <AssemblyName>MMP1</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +42,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Scripts\Foundation\IdSequence.cs" />
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
@@ -60,7 +64,7 @@
     <Compile Include="Scripts\Game\Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Game\Lobby.cs" />
-    <Compile Include="Scripts\Game\GhostMaple.cs" />
+    <Compile Include="Scripts\Game\GhostMeeple.cs" />
     <Compile Include="Scripts\Game\Meeple.cs" />
     <Compile Include="Scripts\Game\MeepleColor.cs" />
     <Compile Include="Scripts\Game\MeepleColorClaimer.cs" />
@@ -77,9 +81,23 @@
     <Compile Include="Scripts\Interfaces\IVisibleBoardElement.cs" />
     <Compile Include="Scripts\Intermediate\CommandQueue.cs" />
     <Compile Include="Scripts\Interfaces\ICommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\AddGhostPlayerToPlayerManager.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\AddToBoardCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\BuildPyramidCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\ColorRequestedCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\ColorClaimedCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\CreateGhostPlayerCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\CreateGhostMeepleCommand.cs" />
-    <Compile Include="Scripts\Intermediate\Commands\MoveCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\AddGhostMeepleToPlayerManager.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\CreatePlayerCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\GameOverCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\LulzCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\MoveMBECommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\MoveGMCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\MoveQBECommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\RemoveFromBoardCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\RestructureBoardElementsCommand.cs" />
+    <Compile Include="Scripts\Intermediate\Commands\UpdateFloorElemsToQuestionMove.cs" />
     <Compile Include="Scripts\Intermediate\GhostPlayer.cs" />
     <Compile Include="Scripts\Intermediate\PlayerManager.cs" />
     <Compile Include="Scripts\Network\Client.cs" />
@@ -146,6 +164,7 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="Content\fonts\oldenburg.spritefont" />
   </ItemGroup>

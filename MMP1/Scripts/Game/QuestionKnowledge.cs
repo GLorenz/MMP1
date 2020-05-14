@@ -62,14 +62,18 @@ public class QuestionKnowledge : Question
     public override void Initiate()
     {
         base.Initiate();
-        Board.Instance().AddElement(question);
-        Board.Instance().AddElement(answers.ToArray());
+        CommandQueue.Queue(new AddToBoardCommand(question));
+        CommandQueue.Queue(new AddToBoardCommand(answers.ToArray()));
+        /*Board.Instance().AddElement(question);
+        Board.Instance().AddElement(answers.ToArray());*/
     }
 
     public override void Exit()
     {
-        Board.Instance().RemoveElement(question);
-        Board.Instance().RemoveElement(answers.ToArray());
+        CommandQueue.Queue(new RemoveFromBoardCommand(question));
+        CommandQueue.Queue(new RemoveFromBoardCommand(answers.ToArray()));
+        /*Board.Instance().RemoveElement(question);
+        Board.Instance().RemoveElement(answers.ToArray());*/
         base.Exit();
     }
 }

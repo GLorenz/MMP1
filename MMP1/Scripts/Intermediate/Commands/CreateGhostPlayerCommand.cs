@@ -3,27 +3,28 @@ using System;
 
 public class CreateGhostPlayerCommand : INetworkCommand
 {
-    public const string name = "CrGP";
-    private GhostPlayer p;
+    public const string name = "CR_GPLAYER";
+    private string playerName;
+    private string playerUID;
 
-    public CreateGhostPlayerCommand(GhostPlayer p)
+    public CreateGhostPlayerCommand(string name, string uid)
     {
-        this.p = p;
+        playerName = name;
+        playerUID = uid;
     }
 
     public void execute()
     {
-        PlayerManager.Instance().AddGhost(p);
+        new GhostPlayer(playerName, playerUID).Create();
     }
 
     public SerializableCommand ToSerializable(bool shouldShare)
     {
-        return new SerializableCommand(name, p.UID, p.name, shouldShare);
+        return new SerializableCommand(name, playerUID, playerName, shouldShare);
     }
 
     public static CreateGhostPlayerCommand FromSerializable(SerializableCommand sCommand)
     {
-        GhostPlayer ghost = new GhostPlayer(sCommand.body, sCommand.UID);
-        return new CreateGhostPlayerCommand(ghost);
+        return new CreateGhostPlayerCommand(sCommand.body, sCommand.UID);
     }
 }

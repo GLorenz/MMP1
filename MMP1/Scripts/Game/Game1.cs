@@ -67,7 +67,6 @@ public class Game1 : Game
         SetupBackground();
 
         CreatePlayer();
-        CreateMeeples();
     }
 
     protected void SetupBoard()
@@ -78,8 +77,9 @@ public class Game1 : Game
         int boardY = (windowHeight - boardHeight) / 2;
         boardRect = new Rectangle(boardX, boardY, boardWidth, boardHeight);
 
-        Board.Instance().space = boardRect;
-        Board.Instance().BuildPyramidInSpace();
+        CommandQueue.Queue(new BuildPyramidCommand(boardRect));
+        /*Board.Instance().space = boardRect;
+        Board.Instance().BuildPyramidInSpace();*/
     }
 
     protected void SetupBackground()
@@ -91,45 +91,37 @@ public class Game1 : Game
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
         StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, "gamebackground", zPosition: 0);
-        Board.Instance().AddElement(backgroundBoardEl);
+        //Board.Instance().AddElement(backgroundBoardEl);
+        CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
     }
 
     protected void CreatePlayer()
     {
-        Player pRalph = new Player("Ralph", "player_ralph");
-        PlayerManager.Instance().SetLocal(pRalph);
-
-        CreateGhostPlayerCommand ghostCmd = new CreateGhostPlayerCommand(pRalph);
-        PlayerManager.Instance().local.OnlyShare(ghostCmd);
-    }
-
-    protected void CreateMeeples()
-    {
-        MeepleColor color = MeepleColorClaimer.Next();
-        PyramidFloorBoardElement[] cornerFields = Board.Instance().CornerPointsForColor(color);
-        for (int i = 0; i < meepleCount; i++)
-        {
-            Meeple newMeep = new Meeple(PlayerManager.Instance().local, cornerFields[i].Position, color, "player"+PlayerManager.Instance().local.name+"_meeple"+i, 10);
-            newMeep.SetStartingElement(cornerFields[i]);
-            newMeep.BackToStart();
-            elementsHolder.AddElement(newMeep);
-
-            CreateGhostMeepleCommand meepCmd = new CreateGhostMeepleCommand(newMeep);
-            PlayerManager.Instance().local.OnlyShare(meepCmd);
-        }
+        string name = new Random().Next(100).ToString();
+        CommandQueue.Queue(new CreatePlayerCommand(name.ToString(), "player_" + name.ToString()));
+        //Player pRalph = new Player(name.ToString(), "player_"+name.ToString());
+        /*pRalph.ConnectClient();
+        PlayerManager.Instance().SetPlayer(pRalph);
+        pRalph.Create();*/
     }
     
     protected override void UnloadContent()
     {
         // Unload any non ContentManager content here
     }
-
+    
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        
-        if(QuestionManager.Instance().isMovingQuestionBoardElement)
+
+        if(Keyboard.GetState().IsKeyDown(Keys.L))
+        {
+            PlayerManager.Instance().local.HandleInput(new LulzCommand(),true);
+        }
+        //else if (l && Keyboard.GetState().IsKeyUp(Keys.L)) { l = false; }
+
+        if (QuestionManager.Instance().isMovingQuestionBoardElement)
         {
             QuestionManager.Instance().ReceiveMouseInput(Mouse.GetState().Position);
         }
@@ -139,7 +131,7 @@ public class Game1 : Game
             QuickTimeMovement.Instance().ReceiveMousePos(Mouse.GetState().Position);
         }
 
-        if(Mouse.GetState().LeftButton == ButtonState.Pressed && !pressHandled)
+        if(!pressHandled && Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
             Board.Instance().OnClick(Mouse.GetState().Position);
 
@@ -150,7 +142,7 @@ public class Game1 : Game
             }
             pressHandled = true;
         }
-        else if (Mouse.GetState().LeftButton == ButtonState.Released && pressHandled) {
+        else if (pressHandled && Mouse.GetState().LeftButton == ButtonState.Released) {
             pressHandled = false;
         }
 
@@ -179,9 +171,9 @@ public class Game1 : Game
             game.Run();
     }
 
-    public static void OnGameOver()
+    public static void OnGameOver(GhostMeeple winner)
     {
-        Console.WriteLine("game over");
+        Console.WriteLine("game over, "+winner.ghostPlayer.name+" won!");
     }
 
     protected override void OnExiting(object sender, EventArgs args)

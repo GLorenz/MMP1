@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class PlayerManager
 {
@@ -22,19 +23,26 @@ public class PlayerManager
 
     public bool AddMeepleRef(GhostMeeple m)
     {
-        //todo: ghost player is null -> crash
-        if (!playerMeeples.ContainsKey(m.ghostPlayer))
+        try
         {
-            playerMeeples.Add(m.ghostPlayer, new List<GhostMeeple>());
+            if (!playerMeeples.ContainsKey(m.ghostPlayer))
+            {
+                playerMeeples.Add(m.ghostPlayer, new List<GhostMeeple>());
+            }
+
+            // guaranteed to return non null
+            List<GhostMeeple> selected = playerMeeples[m.ghostPlayer];
+
+            if (selected.Count < Game1.meepleCount)
+            {
+                selected.Add(m);
+                return true;
+            }
         }
-
-        // guaranteed to return non null
-        List<GhostMeeple> selected = playerMeeples[m.ghostPlayer];
-
-        if(selected.Count < Game1.meepleCount)
+            
+        catch (NullReferenceException)
         {
-            selected.Add(m);
-            return true;
+            Console.WriteLine("null reference in playermanager for some unknown reason");
         }
         return false;
     }
@@ -49,12 +57,12 @@ public class PlayerManager
         ghostPlayers.Add(ghost);
     }
 
-    public void SetLocal(Player p)
+    public void SetPlayer(Player p)
     {
         local = p;
     }
 
-    public GhostPlayer GetByUID(int UID)
+    public GhostPlayer GetByUID(string UID)
     {
         return ghostPlayers.Find(g => g.UID.Equals(UID));
     }

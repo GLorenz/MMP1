@@ -18,6 +18,20 @@ public abstract class MovingBoardElement : BoardElement, IVisibleBoardElement
 
     public virtual void MoveTo(PyramidFloorBoardElement element)
     {
+        MoveMBECommand cmd = new MoveMBECommand(this, element);
+        PlayerManager.Instance().local.HandleInput(cmd, true);
+        /*MoveToLocalOnly(element);
+        ShareMoveTo(element);*/
+    }
+
+    public virtual void MoveToLocalOnly(PyramidFloorBoardElement element)
+    {
         MoveTo(element.Position.Location);
     }
+
+    /*protected virtual void ShareMoveTo(PyramidFloorBoardElement element)
+    {
+        MoveMBECommand cmd = new MoveMBECommand(this, element);
+        PlayerManager.Instance().local.OnlyShare(cmd);
+    }*/
 }

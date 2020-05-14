@@ -1,28 +1,38 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;
 
 public class Meeple : GhostMeeple
 {
+    public new const int defaultZPosition = 11;
     public Player player { get; protected set; }
 
-    public Meeple(Player player, Rectangle position, MeepleColor color, string UID, int zPosition = 0) : base(player, position, color, UID, zPosition) { }
-
-    public Meeple(Player player, Rectangle position, Texture2D texture, string UID, int zPosition = 0) : base(player, position, texture, UID, zPosition)
-    {
+    public Meeple(Player player, PyramidFloorBoardElement standingOn, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, standingOn, UID, zPosition, meepidx) { this.player = player; }
+    public Meeple(Player player, Rectangle position, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, position, UID, zPosition, meepidx) {
         this.player = player;
     }
 
-    public override void MoveTo(PyramidFloorBoardElement element)
+    public override void MoveToLocalOnly(PyramidFloorBoardElement element)
     {
-        base.MoveTo(element);
-        if(QuestionManager.Instance().HasQuestionAbove(element))
+        base.MoveToLocalOnly(element);
+        if (QuestionManager.Instance().HasQuestionAbove(element))
         {
             QuestionManager.Instance().AskRandom(OnQuestionAnswered);
         }
-        if(element.Equals(Board.Instance().winningField))
+        if (element.Equals(Board.Instance().winningField))
         {
-            Game1.OnGameOver();
+            GameOverCommand goc = new GameOverCommand(this);
+            PlayerManager.Instance().local.HandleInput(goc, true);
         }
+    }
+
+    public override void Create()
+    {
+        CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
+        //PlayerManager.Instance().AddMeepleRef(this);
+        CommandQueue.Queue(new AddToBoardCommand(this));
+        //Board.Instance().AddElement(this);
+        Color = player.MeepleColor;
+        Console.WriteLine("created meeple " + UID);
     }
 
     private void OnQuestionAnswered(bool correct)

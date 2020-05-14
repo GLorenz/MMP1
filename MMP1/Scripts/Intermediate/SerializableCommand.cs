@@ -1,12 +1,12 @@
 using System;
 
-[Serializable]
+[Serializable()]
 public class SerializableCommand
 {
-    public string UID { get; set; }
-    public string typeName { get; set; }
-    public string body { get; set; }
-    public bool shouldShare { get; set; }
+    public string UID;
+    public string typeName;
+    public string body;
+    public bool shouldShare;
 
     public SerializableCommand(string typeName, string UID, string body, bool shouldShare)
     {

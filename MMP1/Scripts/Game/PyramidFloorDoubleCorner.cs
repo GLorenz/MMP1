@@ -49,10 +49,13 @@ public class PyramidFloorDoubleCorner : PyramidFloor
         bool evenElems = fieldElemsCount % 2 == 0;
         for (int i = 0; i < 4; i++)
         {
-            cornerIndices.Add(i * fieldElemsCount - 1);
-            cornerIndices.Add(i * fieldElemsCount);
+            int cur = i * fieldElemsCount;
+            int prev = cur == 0 ? elements.Count - 1 : cur - 1;
 
-            elevationFromIndices.Add((i * (fieldElemsCount)) + ((fieldElemsCount - 1) / 2));
+            cornerIndices.Add(cur);
+            cornerIndices.Add(prev);
+
+            elevationFromIndices.Add((cur) + ((fieldElemsCount - 1) / 2));
         }
     }
 }

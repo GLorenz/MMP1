@@ -45,17 +45,19 @@ public class Board : GenericBoardElementHolder<BoardElement>
         floors[0] = new PyramidFloorDoubleCorner(7, floorRects[0], 4);
         floors[1] = new PyramidFloor(5, floorRects[1], 5);
         floors[2] = new PyramidFloor(4, floorRects[2], 6);
-        foreach(PyramidFloor floor in floors) { AddElement(floor.elements.ToArray()); }
+        foreach(PyramidFloor floor in floors) { CommandQueue.Queue(new AddToBoardCommand(floor.elements.ToArray())); /*AddElement(floor.elements.ToArray());*/ }
 
         winningField = new PyramidFloorBoardElement(ToAbsolute(floorRects[3]), "winningfield", 1);
-        AddElement(winningField);
+        CommandQueue.Queue(new AddToBoardCommand(winningField));
+        //AddElement(winningField);
 
         // setting background images
         for(int i = 1; i <= 4; i++)
         {
             string backgroundName = "PyramidBackgroundFloor" + i;
             StaticVisibleBoardElement background = new StaticVisibleBoardElement(ToAbsolute(backgroundRects[i-1]), TextureResources.Get(backgroundName), backgroundName, i != 4 ? i : 8);
-            AddElement(background);
+            CommandQueue.Queue(new AddToBoardCommand(background));
+            //AddElement(background);
         }
 
         AddElevationConnections();
@@ -73,7 +75,8 @@ public class Board : GenericBoardElementHolder<BoardElement>
                 PyramidFloorBoardElement floorElem = floors[x].elements[questionMarkIndices[x][y]];
                 QuestionBoardElement questionElem = new QuestionBoardElement(floorElem, "floor"+x+"_qbe"+y);
 
-                AddElement(questionElem);
+                CommandQueue.Queue(new AddToBoardCommand(questionElem));
+                //AddElement(questionElem);
                 QuestionManager.Instance().AddQuestionBoardElement(questionElem, floorElem);
             }
         }
@@ -111,7 +114,8 @@ public class Board : GenericBoardElementHolder<BoardElement>
 
     protected void MakeConnectionsVisible()
     {
-        AddElement(visibleConnections.ToArray());
+        CommandQueue.Queue(new AddToBoardCommand(visibleConnections.ToArray()));
+        //AddElement(visibleConnections.ToArray());
     }
 
     protected void AddElevationConnections()

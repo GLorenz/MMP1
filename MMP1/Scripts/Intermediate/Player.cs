@@ -1,18 +1,19 @@
+using Microsoft.Xna.Framework;
 using System;
 
 public class Player : GhostPlayer, IInputObserver
 {
     public Client client { get; private set; }
+    public bool isLobbyHost { get; private set; }
 
-    public Player(string name, string UID) : this(name, new Client(), UID) { }
+    public Player(string name, string UID = "") : this(name, new Client(), UID) { }
 
-    public Player(string name, Client client, string UID) : base (name, UID)
+    public Player(string name, Client client, string UID = "") : base (name, UID)
     {
         this.client = client;
-        ConnectClient();
     }
 
-    private void ConnectClient()
+    public void ConnectClient()
     {
         bool connected = false;
         if (Game1.networkType == Game1.NetworkType.Online)
@@ -21,6 +22,13 @@ public class Player : GhostPlayer, IInputObserver
             client.AddObserver(this);
         }
         Console.WriteLine("Connecting player {0}, Status: {1}", name, connected);
+    }
+
+    public override void Create()
+    {
+        OnlyShare(new CreateGhostPlayerCommand(name, UID));
+        HandleInput(new ColorRequestedCommand(UID), true);
+        base.Create();
     }
 
     public void DisconnectClient()
@@ -35,7 +43,7 @@ public class Player : GhostPlayer, IInputObserver
 
     public void HandleInput(SerializableCommand sCommand)
     {
-        Console.WriteLine(name + " handling input of type: " + sCommand.typeName);
+        Console.WriteLine("Handling " + sCommand.typeName);
         CommandHandler.Handle(sCommand);
         OnlyShare(sCommand);
     }
@@ -45,6 +53,15 @@ public class Player : GhostPlayer, IInputObserver
         if (Game1.networkType == Game1.NetworkType.Online && sCommand.shouldShare)
         {
             client.Share(sCommand);
+        }
+    }
+
+    protected override void CreateMeeples()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            Meeple newMeep = new Meeple(this, new Rectangle(0, 0, Board.Instance().boardUnit, Board.Instance().boardUnit), UID + "_meeple" + i, meepidx:i);
+            newMeep.Create();
         }
     }
 
@@ -60,11 +77,13 @@ public class Player : GhostPlayer, IInputObserver
 
     public void update(SerializableCommand input)
     {
+        input.shouldShare = false;
         HandleInput(input);
     }
 
     public void update()
     {
-        //dont know what to do :(
+        isLobbyHost = true;
+        Console.WriteLine(UID + " is now lobby host");
     }
 }

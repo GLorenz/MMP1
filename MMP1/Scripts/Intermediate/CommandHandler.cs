@@ -1,16 +1,22 @@
-using System;
-using Microsoft.Xna.Framework;
-
 public class CommandHandler
 {
     public delegate INetworkCommand GenerateFromInput(SerializableCommand sCommand);
+
     public static void Handle(SerializableCommand seriCommand)
     {
         GenerateFromInput inputFunc = null;
         switch (seriCommand.typeName)
         {
-            case MoveCommand.name:
-                inputFunc = MoveCommand.FromInput;
+            // have to use explicit names and functions
+            // because static members cannot be inherited or marked as abstract
+            case MoveMBECommand.name:
+                inputFunc = MoveMBECommand.FromInput;
+                break;
+            case MoveGMCommand.name:
+                inputFunc = MoveGMCommand.FromInput;
+                break;
+            case MoveQBECommand.name:
+                inputFunc = MoveQBECommand.FromInput;
                 break;
             case CreateGhostPlayerCommand.name:
                 inputFunc = CreateGhostPlayerCommand.FromSerializable;
@@ -18,10 +24,20 @@ public class CommandHandler
             case CreateGhostMeepleCommand.name:
                 inputFunc = CreateGhostMeepleCommand.FromSerializable;
                 break;
+            case ColorRequestedCommand.name:
+                inputFunc = ColorRequestedCommand.FromSerializable;
+                break;
+            case ColorClaimedCommand.name:
+                inputFunc = ColorClaimedCommand.FromSerializable;
+                break;
+            case GameOverCommand.name:
+                inputFunc = GameOverCommand.FromSerializable;
+                break;
         }
 
-        if (inputFunc != null) {
-            CommandQueue.Instance().Queue(inputFunc(seriCommand));
+        if (inputFunc != null)
+        {
+            CommandQueue.Queue(inputFunc(seriCommand));
         }
     }
 }
