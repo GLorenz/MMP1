@@ -6,9 +6,15 @@ public class Meeple : GhostMeeple
     public new const int defaultZPosition = 11;
     public Player player { get; protected set; }
 
-    public Meeple(Player player, PyramidFloorBoardElement standingOn, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, standingOn, UID, zPosition, meepidx) { this.player = player; }
-    public Meeple(Player player, Rectangle position, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, position, UID, zPosition, meepidx) {
+    public Meeple(Player player, PyramidFloorBoardElement standingOn, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, standingOn, UID, zPosition, meepidx)
+    {
         this.player = player;
+        //CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
+    }
+    public Meeple(Player player, Rectangle position, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, position, UID, zPosition, meepidx)
+    {
+        this.player = player;
+        //CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
     }
 
     public override void MoveToLocalOnly(PyramidFloorBoardElement element)
@@ -27,10 +33,7 @@ public class Meeple : GhostMeeple
 
     public override void Create()
     {
-        CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
-        //PlayerManager.Instance().AddMeepleRef(this);
         CommandQueue.Queue(new AddToBoardCommand(this));
-        //Board.Instance().AddElement(this);
         Color = player.MeepleColor;
         Console.WriteLine("created meeple " + UID);
     }

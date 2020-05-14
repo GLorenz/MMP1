@@ -97,12 +97,10 @@ public class Game1 : Game
 
     protected void CreatePlayer()
     {
-        string name = new Random().Next(100).ToString();
-        CommandQueue.Queue(new CreatePlayerCommand(name.ToString(), "player_" + name.ToString()));
-        //Player pRalph = new Player(name.ToString(), "player_"+name.ToString());
-        /*pRalph.ConnectClient();
-        PlayerManager.Instance().SetPlayer(pRalph);
-        pRalph.Create();*/
+        string name = NameList.GetRandomName();
+        string uid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        Console.WriteLine("generated {0} and {1}", name, uid);
+        CommandQueue.Queue(new CreatePlayerCommand(name, "player_" + uid));
     }
     
     protected override void UnloadContent()

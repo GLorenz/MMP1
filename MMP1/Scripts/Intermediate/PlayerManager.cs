@@ -23,26 +23,18 @@ public class PlayerManager
 
     public bool AddMeepleRef(GhostMeeple m)
     {
-        try
+        if (!playerMeeples.ContainsKey(m.ghostPlayer))
         {
-            if (!playerMeeples.ContainsKey(m.ghostPlayer))
-            {
-                playerMeeples.Add(m.ghostPlayer, new List<GhostMeeple>());
-            }
-
-            // guaranteed to return non null
-            List<GhostMeeple> selected = playerMeeples[m.ghostPlayer];
-
-            if (selected.Count < Game1.meepleCount)
-            {
-                selected.Add(m);
-                return true;
-            }
+            playerMeeples.Add(m.ghostPlayer, new List<GhostMeeple>());
         }
-            
-        catch (NullReferenceException)
+
+        // guaranteed to return non null
+        List<GhostMeeple> selected = playerMeeples[m.ghostPlayer];
+
+        if (selected.Count < Game1.meepleCount)
         {
-            Console.WriteLine("null reference in playermanager for some unknown reason");
+            selected.Add(m);
+            return true;
         }
         return false;
     }
