@@ -62,6 +62,8 @@ public class GenericBoardElementHolder<T_ELEM> where T_ELEM : BoardElement
 
     public virtual void OnClick(Point pos)
     {
-        boardElements.AsQueryable().Where(e => e.Position.Contains(pos)).Last().OnClick();
+        IQueryable<T_ELEM> underClick = boardElements.AsQueryable().Where(e => e.Position.Contains(pos));
+        if(underClick.Count() > 0)
+            underClick.Last().OnClick();
     }
 }

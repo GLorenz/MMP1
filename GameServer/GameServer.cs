@@ -105,14 +105,11 @@ public class GameServer
         // new player should get all previously sent data
         Print(string.Format("sending {0} packets of history", history.Count));
 
-        lock (historyLock)
-        {
-            SendDelayed(socket, history);
+        SendDelayed(socket, history);
             /*foreach (byte[] command in history)
             {
                 socket.Send(command);
             }*/
-        }
         if (sockets.Count == 1)
         {
             Print("sending lobby host package");
@@ -120,12 +117,15 @@ public class GameServer
         }
     }
 
-    private async void SendDelayed(Socket socket, List<byte[]> commands)
+    private void SendDelayed(Socket socket, List<byte[]> commands)
     {
-        foreach(byte[] command in commands)
+        lock (historyLock)
         {
-            socket.Send(command);
-            await Task.Delay(sendTickRateMS);
+            foreach (byte[] command in commands)
+            {
+                socket.Send(command);
+                Thread.Sleep(sendTickRateMS);
+            }
         }
     }
 

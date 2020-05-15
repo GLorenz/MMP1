@@ -15,6 +15,8 @@
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -109,8 +111,35 @@
     <Compile Include="Scripts\Network\ServerConnector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct2D1.4.0.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.0.1\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D9.4.0.1\lib\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Mathematics.4.0.1\lib\net45\SharpDX.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.MediaFoundation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.MediaFoundation.4.0.1\lib\net45\SharpDX.MediaFoundation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XAudio2, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XAudio2.4.0.1\lib\net45\SharpDX.XAudio2.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XInput.4.0.1\lib\net45\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -120,7 +149,6 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\SDL2.dll">
       <Link>x86\SDL2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -167,10 +195,128 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="Content\fonts\oldenburg.spritefont" />
+    <None Include="Content\.mgstats" />
+    <None Include="Content\bin\DesktopGL\Content\img\arrow.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Background.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Background2.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Background_old.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Board.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\green.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\LogoMixed.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\LogoVertical.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Play.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PlayerBlack.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PlayerGreen.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PlayerRed.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PlayerWhite.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidBackgroundFloor1.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidBackgroundFloor2.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidBackgroundFloor3.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidBackgroundFloor4.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidField.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidFieldConnectionLong.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidFieldConnectionShort.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\PyramidFieldHighlight.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Q1.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Q1A.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Q1B.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Q1C.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Q1D.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\QM.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\QMLight.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\QuestionBackground.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\red.xnb" />
+    <None Include="Content\bin\DesktopGL\Content\img\Title.xnb" />
+    <None Include="Content\fonts\josefin_20.spritefont" />
+    <None Include="Content\fonts\oldenburg_40.spritefont" />
+    <None Include="Content\fonts\oldenburg_80.spritefont" />
+    <None Include="Content\obj\DesktopGL\Content\.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\.mgstats" />
+    <None Include="Content\obj\DesktopGL\Content\fonts\oldenburg.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\arrow.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Background.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Background2.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Background_old.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Board.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\green.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\LogoMixed.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\LogoVertical.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Play.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PlayerBlack.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PlayerGreen.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PlayerRed.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PlayerWhite.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidBackgroundFloor1.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidBackgroundFloor2.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidBackgroundFloor3.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidBackgroundFloor4.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidField.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidFieldConnectionLong.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidFieldConnectionShort.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\PyramidFieldHighlight.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Q1.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Q1A.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Q1B.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Q1C.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Q1D.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\QM.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\QMLight.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\QuestionBackground.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\red.mgcontent" />
+    <None Include="Content\obj\DesktopGL\Content\img\Title.mgcontent" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\img\arrow.png" />
+    <Content Include="Content\img\Background.jpg" />
+    <Content Include="Content\img\Background2.png" />
+    <Content Include="Content\img\Background_old.png" />
+    <Content Include="Content\img\Board.png" />
+    <Content Include="Content\img\green.png" />
+    <Content Include="Content\img\License free.txt" />
+    <Content Include="Content\img\LogoMixed.png" />
+    <Content Include="Content\img\LogoVertical.png" />
+    <Content Include="Content\img\Play.png" />
+    <Content Include="Content\img\PlayerBlack.png" />
+    <Content Include="Content\img\PlayerGreen.png" />
+    <Content Include="Content\img\PlayerRed.png" />
+    <Content Include="Content\img\PlayerWhite.png" />
+    <Content Include="Content\img\PyramidBackgroundFloor1.png" />
+    <Content Include="Content\img\PyramidBackgroundFloor2.png" />
+    <Content Include="Content\img\PyramidBackgroundFloor3.png" />
+    <Content Include="Content\img\PyramidBackgroundFloor4.png" />
+    <Content Include="Content\img\PyramidField.png" />
+    <Content Include="Content\img\PyramidFieldConnectionLong.png" />
+    <Content Include="Content\img\PyramidFieldConnectionShort.png" />
+    <Content Include="Content\img\PyramidFieldHighlight.png" />
+    <Content Include="Content\img\Q1.png" />
+    <Content Include="Content\img\Q1A.png" />
+    <Content Include="Content\img\Q1B.png" />
+    <Content Include="Content\img\Q1C.png" />
+    <Content Include="Content\img\Q1D.png" />
+    <Content Include="Content\img\QM.png" />
+    <Content Include="Content\img\QMLight.png" />
+    <Content Include="Content\img\QuestionBackground.png" />
+    <Content Include="Content\img\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\bin\DesktopGL\Content\fonts\" />
+    <Folder Include="Content\textures\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <Import Project="..\packages\MonoGame.Framework.WindowsUniversal.3.7.1.189\build\MonoGame.Framework.WindowsUniversal.targets" Condition="Exists('..\packages\MonoGame.Framework.WindowsUniversal.3.7.1.189\build\MonoGame.Framework.WindowsUniversal.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.WindowsUniversal.3.7.1.189\build\MonoGame.Framework.WindowsUniversal.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.WindowsUniversal.3.7.1.189\build\MonoGame.Framework.WindowsUniversal.targets'))" />
+    <Error Condition="!Exists('..\packages\MonoGame.Framework.WindowsDX.3.7.1.189\build\MonoGame.Framework.WindowsDX.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.WindowsDX.3.7.1.189\build\MonoGame.Framework.WindowsDX.targets'))" />
+  </Target>
+  <Import Project="..\packages\MonoGame.Framework.WindowsDX.3.7.1.189\build\MonoGame.Framework.WindowsDX.targets" Condition="Exists('..\packages\MonoGame.Framework.WindowsDX.3.7.1.189\build\MonoGame.Framework.WindowsDX.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
