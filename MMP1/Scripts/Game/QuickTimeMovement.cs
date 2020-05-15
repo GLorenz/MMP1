@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using System;
+using System.Threading.Tasks;
 
 public class QuickTimeMovement
 {
@@ -8,6 +9,7 @@ public class QuickTimeMovement
     
     private static readonly float selectionAlpha = 0.5f;
     private static readonly long coolDownAfterInitiateMS = 250L;
+    private static readonly float moveBorder = 0.8f;
 
     private DateTime initiated;
 
@@ -31,7 +33,7 @@ public class QuickTimeMovement
         curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
         CommandQueue.Queue(new AddToBoardCommand(curArrow));
 
-        start.connectedFields[curSelectionIdx].Highlight();
+        start.connectedFields[curSelectionIdx].Hover();
 
         // build direction vectors to each connected field
         directions = new Vector2[start.connectedFields.Count];
@@ -52,8 +54,8 @@ public class QuickTimeMovement
             curMouseVector = mousePos.ToVector2() - startCenter;
             if (curSelectionIdx != i && Math.Acos(Vector2.Dot(curMouseVector, directions[i]) / curMouseVector.Length()) < selectionAlpha)
             {
-                start.connectedFields[curSelectionIdx].Lowlight();
-                start.connectedFields[i].Highlight();
+                start.connectedFields[curSelectionIdx].DeHover();
+                start.connectedFields[i].Hover();
 
                 CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
                 curArrow = new ArrowAnimatable(start, start.connectedFields[i], "movementarrow", start.ZPosition+1);
@@ -62,14 +64,22 @@ public class QuickTimeMovement
                 curSelectionIdx = i;
             }
         }
-        curArrow.Animate((float)Math.Sin(((DateTime.Now - initiated).TotalSeconds * 10f) % (2 * Math.PI)));
+        curArrow.Animate((float)Math.Sin(((DateTime.Now - initiated).TotalMilliseconds / 100f) % (Math.PI)));
     }
 
     public void OnClick()
     {
         if ((DateTime.Now - initiated).TotalMilliseconds > coolDownAfterInitiateMS)
         {
-            meeple.MoveTo(start.connectedFields[curSelectionIdx]);
+            if (curArrow.GetArrowReach() > moveBorder)
+            {
+                meeple.MoveTo(start.connectedFields[curSelectionIdx]);
+                RemoveArrowNow();
+            }
+            else
+            {
+                new Task(() => RemoveArrowDelayed()).Start();
+            }
             Quit();
         }
     }
@@ -77,7 +87,17 @@ public class QuickTimeMovement
     public void Quit()
     {
         isActive = false;
-        start.connectedFields[curSelectionIdx].Lowlight();
+        start.connectedFields[curSelectionIdx].DeHover();
+    }
+
+    private void RemoveArrowNow()
+    {
+        CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
+    }
+
+    private async void RemoveArrowDelayed()
+    {
+        await Task.Delay(500);
         CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
     }
 

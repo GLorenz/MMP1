@@ -4,7 +4,8 @@ using System;
 
 public class ArrowAnimatable : PyramidFloorBoardElementConnector
 {
-    Vector2 originalScale;
+    private Vector2 originalScale;
+    private float range;
 
     public ArrowAnimatable(PyramidFloorBoardElement from, PyramidFloorBoardElement to, string UID, int zPosition) : base(from, to, UID, zPosition)
     {
@@ -32,6 +33,13 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
 
     public void Animate(float range)
     {
-        scale.X = originalScale.X * (range*0.2f+0.5f);
+        this.range = range;
+        scale.X = originalScale.X * (range * 0.6f + 0.2f);
+    }
+
+    public float GetArrowReach()
+    {
+        Console.WriteLine(range);
+        return range;
     }
 }

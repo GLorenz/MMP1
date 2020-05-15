@@ -8,7 +8,7 @@ public class GhostMeeple : MovingBoardElement
     public GhostPlayer ghostPlayer { get; protected set; }
 
     public PyramidFloorBoardElement standingOn { get; protected set; }
-    private PyramidFloorBoardElement startElement;
+    protected PyramidFloorBoardElement startElement;
 
     private MeepleColor color;
     public int meepIdx { get; protected set; }
@@ -76,7 +76,7 @@ public class GhostMeeple : MovingBoardElement
         return color;
     }
 
-    public MeepleColor Color
+    public virtual MeepleColor Color
     {
         get
         {
@@ -86,7 +86,6 @@ public class GhostMeeple : MovingBoardElement
         {
             color = value;
             texture = Texture4Color(value);
-            //UID = ghostPlayer.UID + "_meeple" + meepIdx;
 
             SetStartingElement(Board.Instance().CornerPointsForColor(color)[meepIdx]);
             BackToStart();

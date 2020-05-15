@@ -9,12 +9,10 @@ public class Meeple : GhostMeeple
     public Meeple(Player player, PyramidFloorBoardElement standingOn, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, standingOn, UID, zPosition, meepidx)
     {
         this.player = player;
-        //CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
     }
     public Meeple(Player player, Rectangle position, string UID, int zPosition = defaultZPosition, int meepidx = 0) : base(player, position, UID, zPosition, meepidx)
     {
         this.player = player;
-        //CommandQueue.Queue(new AddGhostMeepleToPlayerManager(this));
     }
 
     public override void MoveToLocalOnly(PyramidFloorBoardElement element)
@@ -53,5 +51,19 @@ public class Meeple : GhostMeeple
     public override void OnClick()
     {
         QuickTimeMovement.Instance().Toggle(this);
+    }
+
+    public override MeepleColor Color
+    {
+        get
+        {
+            return base.Color;
+        }
+        set
+        {
+            startElement?.SetIsStartingField(false);
+            base.Color = value;
+            startElement.SetIsStartingField(true);
+        }
     }
 }

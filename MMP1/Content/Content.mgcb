@@ -82,18 +82,6 @@
 /processorParam:TextureFormat=Color
 /build:img/Background2.png
 
-#begin img/Board.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:img/Board.png
-
 #begin img/BorderBackground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -286,7 +274,7 @@
 /processorParam:TextureFormat=Color
 /build:img/PyramidFieldConnectionShort.png
 
-#begin img/PyramidFieldHighlight.png
+#begin img/PyramidFieldHover.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -296,7 +284,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/PyramidFieldHighlight.png
+/build:img/PyramidFieldHover.png
+
+#begin img/PyramidFieldStart.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/PyramidFieldStart.png
 
 #begin img/QM.png
 /importer:TextureImporter

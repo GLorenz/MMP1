@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElement
 {
     public List<PyramidFloorBoardElement> connectedFields { get; protected set; }
+    private bool isStartingField;
 
     public PyramidFloorBoardElement(Rectangle position, string UID, int zPosition = 0) : base(position, TextureResources.Get("PyramidField"), UID, zPosition)
     {
@@ -31,13 +32,24 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
             connectedFields.Add(field);
     }
 
-    public void Highlight()
+    public void SetIsStartingField(bool startingField)
     {
-        texture = TextureResources.Get("red");
+        isStartingField = startingField;
+        TextureToDefault();
     }
 
-    public void Lowlight()
+    public void Hover()
     {
-        texture = TextureResources.Get("PyramidField");
+        texture = TextureResources.Get("PyramidFieldHover");
+    }
+
+    public void DeHover()
+    {
+        TextureToDefault();
+    }
+
+    private void TextureToDefault()
+    {
+        texture = TextureResources.Get(isStartingField ? "PyramidFieldStart" : "PyramidField");
     }
 }
