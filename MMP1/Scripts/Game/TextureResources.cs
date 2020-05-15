@@ -36,8 +36,11 @@ public class TextureResources
         "PyramidBackgroundFloor3",
         "PyramidBackgroundFloor4",
         "PyramidField",
+        "PyramidFieldHighlight",
         "PyramidFieldConnectionShort",
-        "PyramidFieldConnectionLong"
+        "PyramidFieldConnectionLong",
+        "LogoMixed",
+        "LogoVertical"
     };
 
     public static void LoadDefault()

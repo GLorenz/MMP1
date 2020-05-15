@@ -21,7 +21,7 @@ public class QuestionManager
 
     private QuestionManager()
     {
-        int margin = UnitConvert.ToAbsolute(20);
+        int margin = UnitConvert.ToAbsoluteWidth(20);
         Point size = new Point(Game1.windowHeight + margin * 2, Game1.windowHeight - margin);
         Point pos = new Point((Game1.windowWidth - size.X) / 2, margin / 2);
         questionRect = new Rectangle(pos, size);

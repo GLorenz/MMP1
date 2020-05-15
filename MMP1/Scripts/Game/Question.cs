@@ -18,7 +18,7 @@ public abstract class Question : StaticVisibleBoardElement
     {
         isConstructed = false;
 
-        margin = UnitConvert.ToAbsolute(20);
+        margin = UnitConvert.ToAbsoluteWidth(20);
         contentRect = new Rectangle(position.X + margin, position.Y + margin, position.Width - margin * 2, position.Height - margin * 2);
     }
 

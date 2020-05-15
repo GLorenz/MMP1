@@ -17,10 +17,16 @@ public class UnitConvert
         return value * gameSpaceUnits / screenWidth;
     }
 
-    public static int ToAbsolute(int value)
+    public static int ToAbsoluteWidth(int value)
     {
         // multiplying first becuase no floating point division
         return value * screenWidth / gameSpaceUnits;
+    }
+
+    public static int ToAbsoluteHeight(int value)
+    {
+        // multiplying first becuase no floating point division
+        return value * screenHeight / gameSpaceUnits;
     }
 
     public static Point ToScreenRelative(Point absolute)

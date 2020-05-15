@@ -67,10 +67,40 @@ public class Game1 : Game
 
     protected void PlaceContent()
     {
+        SetupBackground("welcomebackground", 20);
+        SetupWelcomeTitle();
+        SetupPlayButton();
+
+        SetupBackground("gamebackground", 0);
         SetupBoard();
-        SetupBackground();
 
         CreatePlayer();
+    }
+
+    protected void SetupWelcomeTitle()
+    {
+        Texture2D titleTex = TextureResources.Get("LogoMixed");
+        float aspectR = titleTex.Width / (float)titleTex.Height;
+        int titleWidth = windowWidth * 3 / 4;
+        int titleHeight = (int)(titleWidth / aspectR);
+        int titleX = (windowWidth - titleWidth) / 2;
+        int titleY = (windowHeight - titleHeight) / 16;
+        StaticVisibleBoardElement title = new StaticVisibleBoardElement(new Rectangle(titleX, titleY, titleWidth, titleHeight), titleTex, "welcometitle", 21);
+
+        CommandQueue.Queue(new AddToBoardCommand(title));
+    }
+
+    protected void SetupPlayButton()
+    {
+        Texture2D btnTex = TextureResources.Get("Play");
+        float aspectR = btnTex.Width / (float)btnTex.Height;
+        int btnWidth = UnitConvert.ToAbsoluteWidth(300);
+        int btnHeight = (int)(btnWidth / aspectR);
+        int btnX = (windowWidth - btnWidth) / 2;
+        int btnY = (windowHeight - btnHeight) * 7 / 8;
+        PlayButtonBoardElement playBtn = new PlayButtonBoardElement(new Rectangle(btnX, btnY, btnWidth, btnHeight), btnTex, "btn_play", 22, "welcomebackground", "welcometitle");
+
+        CommandQueue.Queue(new AddToBoardCommand(playBtn));
     }
 
     protected void SetupBoard()
@@ -84,7 +114,7 @@ public class Game1 : Game
         CommandQueue.Queue(new BuildPyramidCommand(boardRect));
     }
 
-    protected void SetupBackground()
+    protected void SetupBackground(string uid,  int zPosition)
     {
         Texture2D background = TextureResources.Get("Background");
         float backgroundAspectRatio = background.Width / (float)background.Height;
@@ -92,7 +122,7 @@ public class Game1 : Game
         int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
-        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, "gamebackground", zPosition: 0);
+        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition);
         CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
     }
 
