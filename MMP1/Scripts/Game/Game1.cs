@@ -18,7 +18,8 @@ public class Game1 : Game
     
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
-    // SpriteFont oldenburgFont;
+
+    SpriteFont oldenburg_40, oldenburg_80, josefin_20;
 
     bool pressHandled;
 
@@ -57,7 +58,10 @@ public class Game1 : Game
 
         TextureResources.LoadDefault();
 
-        // oldenburgFont = Content.Load<SpriteFont>("fonts/arial_16_bold");
+        oldenburg_40 = Content.Load<SpriteFont>("fonts/oldenburg_40");
+        oldenburg_80 = Content.Load<SpriteFont>("fonts/oldenburg_80");
+        josefin_20 = Content.Load<SpriteFont>("fonts/josefin_20");
+
         PlaceContent();
     }
 
@@ -153,7 +157,7 @@ public class Game1 : Game
         {
             elementsHolder.visibleElements[i].Draw(spriteBatch);
 
-            //spriteBatch.DrawString(oldenburgFont, "Enemys " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
+            spriteBatch.DrawString(oldenburg_40, "Enemies " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
         }
         spriteBatch.End();
 

@@ -13,6 +13,27 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin fonts/josefin_20.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/josefin_20.spritefont
+
+#begin fonts/oldenburg_40.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/oldenburg_40.spritefont
+
+#begin fonts/oldenburg_80.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/oldenburg_80.spritefont
+
 #begin img/arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -37,6 +58,30 @@
 /processorParam:TextureFormat=Color
 /build:img/Background.jpg
 
+#begin img/Background_old.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/Background_old.png
+
+#begin img/Background2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/Background2.png
+
 #begin img/Board.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +105,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:img/green.png
+
+#begin img/LogoMixed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/LogoMixed.png
+
+#begin img/LogoVertical.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/LogoVertical.png
 
 #begin img/Play.png
 /importer:TextureImporter
@@ -205,6 +274,18 @@
 /processorParam:TextureFormat=Color
 /build:img/PyramidFieldConnectionShort.png
 
+#begin img/PyramidFieldHighlight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/PyramidFieldHighlight.png
+
 #begin img/Q1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -312,16 +393,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:img/red.png
-
-#begin img/Title.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:img/Title.png
 

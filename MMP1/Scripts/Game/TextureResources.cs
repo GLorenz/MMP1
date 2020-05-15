@@ -31,7 +31,6 @@ public class TextureResources
         "PlayerWhite",
         "QM",
         "QMLight",
-        "Title",
         "PyramidBackgroundFloor1",
         "PyramidBackgroundFloor2",
         "PyramidBackgroundFloor3",

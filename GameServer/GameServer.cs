@@ -28,6 +28,8 @@ public class GameServer
     public static readonly int bufferSize = 2048;
     public static readonly string lobbyHostString = "lobbyhost";
 
+    public static readonly int sendTickRateMS = 1000 / 50;
+
     private List<Socket> sockets;
     public bool shouldRun { get; private set; }
     private bool acceptNewSockets;
@@ -105,15 +107,25 @@ public class GameServer
 
         lock (historyLock)
         {
-            foreach (byte[] command in history)
+            SendDelayed(socket, history);
+            /*foreach (byte[] command in history)
             {
                 socket.Send(command);
-            }
+            }*/
         }
         if (sockets.Count == 1)
         {
             Print("sending lobby host package");
             socket.Send(Encoding.ASCII.GetBytes(lobbyHostString));
+        }
+    }
+
+    private async void SendDelayed(Socket socket, List<byte[]> commands)
+    {
+        foreach(byte[] command in commands)
+        {
+            socket.Send(command);
+            await Task.Delay(sendTickRateMS);
         }
     }
 
