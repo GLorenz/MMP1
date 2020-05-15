@@ -8,19 +8,20 @@ public class QuestionKnowledge : Question
     public static readonly int fourAnswers = 4;
     public static readonly int nineAnswers = 9;
 
-    StaticVisibleBoardElement question;
-    List<QuestionKnowledgeAnswer> answers;
-
     public delegate void AnswerClickedCallback(QuestionKnowledgeAnswer answer);
-    private int correctAnswerIdx;
 
-    private string questionName;
+    private QuestionKnowledgeContent content;
+
+    private TextBoardElement question;
+    private List<QuestionKnowledgeAnswer> answers;
+    private List<StaticVisibleBoardElement> backgrounds;
+
     private int answerCount;
 
-    public QuestionKnowledge(string questionName, int answerCount, Rectangle position, string UID)
+    public QuestionKnowledge(QuestionKnowledgeContent content, int answerCount, Rectangle position, string UID)
         : base(position, UID)
     {
-        this.questionName = questionName;
+        this.content = content;
         this.answerCount = answerCount;
     }
 
@@ -28,35 +29,43 @@ public class QuestionKnowledge : Question
     {
         base.Construct();
         answers = new List<QuestionKnowledgeAnswer>();
-        correctAnswerIdx = 0;
+        backgrounds = new List<StaticVisibleBoardElement>();
 
-        Texture2D qTex = TextureResources.Get(questionName);
-        Rectangle qRect = new Rectangle(contentRect.X, contentRect.Y, contentRect.Width, contentRect.Width / (qTex.Width / qTex.Height));
-        question = new StaticVisibleBoardElement(qRect, qTex, "questknow"+questionName+"title", ZPosition + 1);
+        Rectangle qRect = new Rectangle(contentRect.X, contentRect.Y, contentRect.Width, contentRect.Height / 2);
+        question = new TextBoardElement(qRect, content.question, QuestionManager.Instance().questionFont, "questknow_cur_title", ColorResources.dark, ZPosition + 2);
+        backgrounds.Add(new StaticVisibleBoardElement(qRect, TextureResources.Get("WhiteBackground"), "questknow_cur_title_background", ZPosition + 1));
 
         int gridSize = (int)Math.Sqrt(answerCount);
         Point answerSize = new Point(contentRect.Width / gridSize, contentRect.Height / (2*gridSize));
+        Point answerMargin = new Point(margin/answerCount, margin/gridSize);
+
+        int charInt = 65;
         for (int y = 0; y < gridSize; y++)
         {
             for (int x = 0; x < gridSize; x++)
             {
-                string ansTexName = questionName + ((char)(65 + x + y));
-
-                Texture2D ansTex = TextureResources.Get(ansTexName);
                 Rectangle ansRect = new Rectangle(
                     new Point(
-                        contentRect.Left + (x % gridSize) * answerSize.X,
-                        contentRect.Center.Y + (y % gridSize) * answerSize.Y
+                        contentRect.Left + (x % gridSize) * (answerSize.X + margin/answerCount),
+                        contentRect.Center.Y + (y % gridSize) * answerSize.Y + margin/gridSize
                     ),
-                    answerSize
+                    answerSize - answerMargin
                 );
-                answers.Add(new QuestionKnowledgeAnswer(OnAnswerClicked, ansRect, ansTex, UID+ansTexName, zPosition + 1));
+
+                char answerChar = (char)charInt;
+                string answerText = answerChar + ". " + content.answers[x + y];
+                string answerUID = UID + "answer" + x.ToString() + y.ToString();
+
+                answers.Add(new QuestionKnowledgeAnswer(OnAnswerClicked, ansRect, answerText, QuestionManager.Instance().answerFont, answerUID, margin*3/5, zPosition + 2));
+                backgrounds.Add(new StaticVisibleBoardElement(ansRect, TextureResources.Get("BorderBackground"), answerUID+"background", ZPosition + 1));
+
+                charInt++;
             }
         }
     }
     public void OnAnswerClicked(QuestionKnowledgeAnswer answer)
     {
-        OnAnswered(answer == answers[correctAnswerIdx]);
+        OnAnswered(answer == answers[content.correctIdx]);
     }
 
     public override void Initiate()
@@ -64,12 +73,14 @@ public class QuestionKnowledge : Question
         base.Initiate();
         CommandQueue.Queue(new AddToBoardCommand(question));
         CommandQueue.Queue(new AddToBoardCommand(answers.ToArray()));
+        CommandQueue.Queue(new AddToBoardCommand(backgrounds.ToArray()));
     }
 
     public override void Exit()
     {
         CommandQueue.Queue(new RemoveFromBoardCommand(question));
         CommandQueue.Queue(new RemoveFromBoardCommand(answers.ToArray()));
+        CommandQueue.Queue(new RemoveFromBoardCommand(backgrounds.ToArray()));
         base.Exit();
     }
 }

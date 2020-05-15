@@ -1,0 +1,38 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+
+public class TextBoardElement : BoardElement, IVisibleBoardElement
+{
+    private string text;
+    public SpriteFont font { get; protected set; }
+    private Color color;
+    private Vector2 textPosition;
+
+    public TextBoardElement(Rectangle position, string text, SpriteFont font, string UID, Color color, int zPosition = 0) : base(position, UID, zPosition)
+    {
+        this.font = font;
+        this.color = color;
+        this.Text = text;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.DrawString(font, text, textPosition, color);
+    }
+
+    public override void OnClick()
+    {
+        //nothing
+    }
+
+    public string Text
+    {
+        get { return text; }
+        set
+        {
+            text = TextWrapper.Wrap(font, value, position.Width);
+            textPosition = position.Location.ToVector2() + ((position.Size.ToVector2() - font.MeasureString(text)) * 0.5f);
+        }
+    }
+}

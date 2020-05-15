@@ -13,12 +13,12 @@ public abstract class Question : StaticVisibleBoardElement
 
     protected bool isConstructed;
 
-    public Question(Rectangle position, string UID) 
+    public Question(Rectangle position, string UID)
         : base(position, TextureResources.Get("QuestionBackground"), UID, defaultZPosition)
     {
         isConstructed = false;
 
-        margin = UnitConvert.ToAbsoluteWidth(20);
+        margin = UnitConvert.ToAbsoluteWidth(30);
         contentRect = new Rectangle(position.X + margin, position.Y + margin, position.Width - margin * 2, position.Height - margin * 2);
     }
 

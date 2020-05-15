@@ -36,13 +36,14 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // setting up display size here, since graphics aren't initialized in constructor
-        windowWidth = GraphicsDevice.DisplayMode.Width - 100;
-        windowHeight = GraphicsDevice.DisplayMode.Height - 100;
+        windowWidth = GraphicsDevice.DisplayMode.Width;// - 100;
+        windowHeight = GraphicsDevice.DisplayMode.Height;// - 100;
         Window.IsBorderless = false;
-        Window.Position = new Point(50,50);
+        //Window.Position = new Point(50,50);
         graphics.PreferredBackBufferWidth = windowWidth;
         graphics.PreferredBackBufferHeight = windowHeight;
         IsMouseVisible = true;
+        graphics.IsFullScreen = true;
         graphics.ApplyChanges();
 
         UnitConvert.screenWidth = windowWidth;
@@ -61,6 +62,9 @@ public class Game1 : Game
         oldenburg_40 = Content.Load<SpriteFont>("fonts/oldenburg_40");
         oldenburg_80 = Content.Load<SpriteFont>("fonts/oldenburg_80");
         josefin_20 = Content.Load<SpriteFont>("fonts/josefin_20");
+
+        QuestionManager.Instance().SetQuestionFont(oldenburg_80);
+        QuestionManager.Instance().SetAnswerFont(oldenburg_40);
 
         PlaceContent();
     }

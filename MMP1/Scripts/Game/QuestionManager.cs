@@ -19,6 +19,9 @@ public class QuestionManager
     private Rectangle questionRect;
     private Random random;
 
+    public SpriteFont questionFont { get; protected set; }
+    public SpriteFont answerFont { get; protected set; }
+
     private QuestionManager()
     {
         int margin = UnitConvert.ToAbsoluteWidth(20);
@@ -27,7 +30,8 @@ public class QuestionManager
         questionRect = new Rectangle(pos, size);
 
         questions = new List<Question>();
-        questions.Add(new QuestionKnowledge("Q1", QuestionKnowledge.fourAnswers, questionRect, "questknow" + "Q1"));
+        QuestionKnowledgeContent content = new QuestionKnowledgeContent("What is your favourite game?", 0, "Pyramid Paths Online", "Fortnite", "Call of Duty", "Apex Legends");
+        questions.Add(new QuestionKnowledge(content, QuestionKnowledge.fourAnswers, questionRect, "questknow_" + content.question));
 
         random = new Random();
 
@@ -85,6 +89,15 @@ public class QuestionManager
         isMovingQuestionBoardElement = false;
         MoveQuestionElement(movingQBE, element);
         movingQBE = null;
+    }
+
+    public void SetQuestionFont(SpriteFont font)
+    {
+        this.questionFont = font;
+    }
+    public void SetAnswerFont(SpriteFont font)
+    {
+        this.answerFont = font;
     }
 
     private static QuestionManager manager;
