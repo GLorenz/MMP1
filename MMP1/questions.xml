@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<questions>
+  <q correct ="1" title="Who wrote Julius Caesar, Macbeth and Hamlet?">
+    <a>Charles Dickens</a>
+    <a>William Shakespeare</a>
+    <a>Mark Twain</a>
+    <a>Oscar Wilde</a>
+  </q>
+  <q correct="0" title="Where is the smallest bone in the body?">
+    <a>Ear</a>
+    <a>Nose</a>
+    <a>Foot</a>
+    <a>Back</a>
+  </q>
+  <q correct ="3" title="Which is the only mammal that can’t jump?">
+    <a>Turtle</a>
+    <a>Giraffe</a>
+    <a>Hippo</a>
+    <a>Elephant</a>
+  </q>
+  <q correct ="1" title="What does the roman numeral C represent?">
+    <a>50</a>
+    <a>100</a>
+    <a>500</a>
+    <a>1000</a>
+  </q>
+  <q correct ="0" title="What nationality was Chopin?">
+    <a>Polish</a>
+    <a>French</a>
+    <a>Russian</a>
+    <a>Bulgarian</a>
+  </q>
+  <q correct ="2" title="How many dots are there on two dice?">
+    <a>36</a>
+    <a>40</a>
+    <a>42</a>
+    <a>48</a>
+  </q>
+  <q correct="2" title="How many players are there in a baseball team?">
+    <a>6</a>
+    <a>7</a>
+    <a>9</a>
+    <a>11</a>
+  </q>
+  <q correct="2" title="In Fahrenheit, at what temperature does water freeze?">
+    <a>0</a>
+    <a>18</a>
+    <a>32</a>
+    <a>40</a>
+  </q>
+  <q correct="3" title="How many men have walked on the moon?">
+    <a>4</a>
+    <a>6</a>
+    <a>8</a>
+    <a>12</a>
+  </q>
+  <q correct="1" title="What is the top selling spice in the world?">
+    <a>Salt</a>
+    <a>Pepper</a>
+    <a>Curry</a>
+    <a>Cinnamon</a>
+  </q>
+  <q correct="0" title="What sea creature has the largest eye in the animal kingdom?">
+    <a>Squid</a>
+    <a>Whale</a>
+    <a>Dragonfish</a>
+    <a>Jellyfish</a>
+  </q>
+  <q correct="1" title="What is the most common medical condition?">
+    <a>Diabetes</a>
+    <a>Caries</a>
+    <a>Dementia</a>
+    <a>Dyslexia</a>
+  </q>
+</questions>

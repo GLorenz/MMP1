@@ -53,7 +53,7 @@ public class QuestionKnowledge : Question
                 );
 
                 char answerChar = (char)charInt;
-                string answerText = answerChar + ". " + content.answers[x + y];
+                string answerText = answerChar + ". " + content.answers[x + y*gridSize];
                 string answerUID = UID + "answer" + x.ToString() + y.ToString();
 
                 answers.Add(new QuestionKnowledgeAnswer(OnAnswerClicked, ansRect, answerText, QuestionManager.Instance().answerFont, answerUID, margin*3/5, zPosition + 2));

@@ -2,10 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 
 public class QuestionManager
 {
     public delegate void QuestionAnswerdCallback(bool correct);
+
+    private readonly string questionsXml = MMP1.Properties.Resources.questions;
 
     // again, for bi-directional linking (instaed of dictionary)
     public List<QuestionBoardElement> questionElems { get; private set; }
@@ -30,8 +34,7 @@ public class QuestionManager
         questionRect = new Rectangle(pos, size);
 
         questions = new List<Question>();
-        QuestionKnowledgeContent content = new QuestionKnowledgeContent("What is your favourite game?", 0, "Pyramid Paths Online", "Fortnite", "Call of Duty", "Apex Legends");
-        questions.Add(new QuestionKnowledge(content, QuestionKnowledge.fourAnswers, questionRect, "questknow_" + content.question));
+        ParseQuestions();
 
         random = new Random();
 
@@ -89,6 +92,31 @@ public class QuestionManager
         isMovingQuestionBoardElement = false;
         MoveQuestionElement(movingQBE, element);
         movingQBE = null;
+    }
+
+    private void ParseQuestions()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(questionsXml);
+        Console.WriteLine(doc.FirstChild.Name);
+        int questionIdx = 0;
+        foreach (XmlNode qNode in doc.GetElementsByTagName("q"))
+        {
+            string title = "question";
+            string[] answers = new string[4];
+            int correct = 0;
+
+            int.TryParse(qNode.Attributes["correct"].InnerText, out correct);
+            title = qNode.Attributes["title"].InnerText;
+
+            for (int i = 0; i < 4; i++)
+            {
+                answers[i] = qNode.ChildNodes[i].InnerText;
+            }
+            QuestionKnowledgeContent content = new QuestionKnowledgeContent(title, correct, answers);
+            questions.Add(new QuestionKnowledge(content, QuestionKnowledge.fourAnswers, questionRect, "questknow_" + questionIdx));
+            questionIdx++;
+        }
     }
 
     public void SetQuestionFont(SpriteFont font)

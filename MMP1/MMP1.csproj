@@ -48,6 +48,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Scripts\Foundation\ColorResources.cs" />
     <Compile Include="Scripts\Foundation\IdSequence.cs" />
     <Compile Include="Scripts\Foundation\NameList.cs" />
@@ -153,6 +158,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
     <EmbeddedResource Include="Icon.bmp" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\SDL2.dll">
@@ -307,6 +316,7 @@
     <Content Include="Content\img\QMLight.png" />
     <Content Include="Content\img\QuestionBackground.png" />
     <Content Include="Content\img\red.png" />
+    <Content Include="questions.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\bin\DesktopGL\Content\fonts\" />
