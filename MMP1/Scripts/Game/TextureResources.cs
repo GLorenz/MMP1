@@ -38,7 +38,8 @@ public class TextureResources
         "LogoVertical",
         "BorderBackground",
         "WhiteBackground",
-        "NamePlateBackground"
+        "NamePlateBackground",
+        "NamePlateBackgroundSmall"
     };
 
     public static void LoadDefault()

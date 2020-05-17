@@ -59,8 +59,10 @@
     <Compile Include="Scripts\Foundation\TextWrapper.cs" />
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
     <Compile Include="Scripts\Game\ArrowAnimated.cs" />
-    <Compile Include="Scripts\Game\NamePlate.cs" />
+    <Compile Include="Scripts\Game\NamePlateLocal.cs" />
+    <Compile Include="Scripts\Game\NamePlateFoes.cs" />
     <Compile Include="Scripts\Game\QuestionKnowledgeContent.cs" />
+    <Compile Include="Scripts\Game\Setupper.cs" />
     <Compile Include="Scripts\Game\TexturedBoardElement.cs" />
     <Compile Include="Scripts\Game\PlayButtonBoardElement.cs" />
     <Compile Include="Scripts\Game\Question.cs" />

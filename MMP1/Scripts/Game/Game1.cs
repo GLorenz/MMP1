@@ -8,23 +8,21 @@ public class Game1 : Game
 {
     public enum NetworkType { Online, Offline, Local }
     public static NetworkType networkType = NetworkType.Online;
-
-    public static int playerCount = 4;
+    
     public static int meepleCount = 2;
 
     public static int windowWidth { get; private set; }
     public static int windowHeight { get; private set; }
-    public Rectangle boardRect { get; private set; }
     
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
+    private GraphicsDeviceManager graphics;
+    private SpriteBatch spriteBatch;
 
-    SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
+    private SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
 
-    bool pressHandled;
+    private bool pressHandled;
 
     // c# says no, when using class without generics, and a simple downcast isn't possible :(
-    GenericBoardElementHolder<BoardElement> elementsHolder;
+    private GenericBoardElementHolder<BoardElement> elementsHolder;
 
     public Game1()
     {
@@ -67,88 +65,8 @@ public class Game1 : Game
         QuestionManager.Instance().SetQuestionFont(oldenburg_60);
         QuestionManager.Instance().SetAnswerFont(oldenburg_30);
 
-        PlaceContent();
-    }
-
-    protected void PlaceContent()
-    {
-        SetupBackground("welcomebackground", 20);
-        SetupWelcomeTitle();
-        SetupPlayButton();
-
-        SetupBackground("gamebackground", 0);
-        SetupBoard();
-
-        CreatePlayer();
-
-        SetupNamePlate();
-    }
-
-    protected void SetupWelcomeTitle()
-    {
-        Texture2D titleTex = TextureResources.Get("LogoMixed");
-        float aspectR = titleTex.Width / (float)titleTex.Height;
-        int titleWidth = windowWidth * 3 / 4;
-        int titleHeight = (int)(titleWidth / aspectR);
-        int titleX = (windowWidth - titleWidth) / 2;
-        int titleY = (windowHeight - titleHeight) / 16;
-        StaticVisibleBoardElement title = new StaticVisibleBoardElement(new Rectangle(titleX, titleY, titleWidth, titleHeight), titleTex, "welcometitle", 21);
-
-        CommandQueue.Queue(new AddToBoardCommand(title));
-    }
-
-    protected void SetupPlayButton()
-    {
-        Texture2D btnTex = TextureResources.Get("Play");
-        float aspectR = btnTex.Width / (float)btnTex.Height;
-        int btnWidth = UnitConvert.ToAbsoluteWidth(300);
-        int btnHeight = (int)(btnWidth / aspectR);
-        int btnX = (windowWidth - btnWidth) / 2;
-        int btnY = (windowHeight - btnHeight) * 7 / 8;
-        PlayButtonBoardElement playBtn = new PlayButtonBoardElement(new Rectangle(btnX, btnY, btnWidth, btnHeight), btnTex, "btn_play", 22, "welcomebackground", "welcometitle");
-
-        CommandQueue.Queue(new AddToBoardCommand(playBtn));
-    }
-
-    protected void SetupBoard()
-    {
-        int boardHeight = windowHeight;
-        int boardWidth = boardHeight;
-        int boardX = (windowWidth - boardWidth) / 2;
-        int boardY = (windowHeight - boardHeight) / 2;
-        boardRect = new Rectangle(boardX, boardY, boardWidth, boardHeight);
-
-        CommandQueue.Queue(new BuildPyramidCommand(boardRect));
-    }
-
-    protected void SetupBackground(string uid,  int zPosition)
-    {
-        Texture2D background = TextureResources.Get("Background");
-        float backgroundAspectRatio = background.Width / (float)background.Height;
-        int backgroundWidth = windowWidth;
-        int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
-        int backgroundX = (windowWidth - backgroundWidth) / 2;
-        int backgroundY = (windowHeight - backgroundHeight) / 2;
-        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition);
-        CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
-    }
-
-    protected void CreatePlayer()
-    {
-        string name = NameList.GetRandomName();
-        string uid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        Console.WriteLine("generated {0} and {1}", name, uid);
-        CommandQueue.Queue(new CreatePlayerCommand(name, "player_" + uid));
-    }
-
-    protected void SetupNamePlate()
-    {
-        int margin = UnitConvert.ToAbsoluteWidth(20);
-        Rectangle namePlateRect = new Rectangle(boardRect.Right + margin, boardRect.Top + margin, ((windowWidth - boardRect.Width) / 2) - margin - margin, windowHeight * 2 / 3);
-        NamePlate namePlate = new NamePlate(namePlateRect, oldenburg_20, oldenburg_30, "namePlate", 1);
-        PlayerManager.Instance().AddObserver(namePlate);
-        CommandQueue.Queue(new AddToBoardCommand(namePlate));
-    }
+        new Setupper(windowWidth, windowHeight, oldenburg_20, oldenburg_30, oldenburg_60).Setup();
+    }    
     
     protected override void UnloadContent()
     {
