@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using System.IO;
 using System;
 
 public class CreateGhostPlayerCommand : INetworkCommand

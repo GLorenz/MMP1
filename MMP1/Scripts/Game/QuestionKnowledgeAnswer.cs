@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

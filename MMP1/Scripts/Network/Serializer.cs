@@ -1,3 +1,7 @@
+// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
 using System;
 using System.IO;
 using System.Net.Sockets;

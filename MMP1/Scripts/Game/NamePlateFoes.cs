@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 public class NamePlateFoes : StaticVisibleBoardElement, IObserver

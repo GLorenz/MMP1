@@ -1,4 +1,8 @@
-﻿public class AddGhostPlayerToPlayerManager : ICommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class AddGhostPlayerToPlayerManager : ICommand
 {
     private GhostPlayer player;
 

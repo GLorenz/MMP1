@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using Microsoft.Xna.Framework;
 
 public class BuildPyramidCommand : ICommand
 {

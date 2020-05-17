@@ -1,3 +1,7 @@
+// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
 public class CommandHandler
 {
     public delegate INetworkCommand GenerateFromInput(SerializableCommand sCommand);

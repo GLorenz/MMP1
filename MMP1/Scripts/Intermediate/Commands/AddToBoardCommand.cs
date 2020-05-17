@@ -1,4 +1,8 @@
-﻿public class AddToBoardCommand : ICommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class AddToBoardCommand : ICommand
 {
     private BoardElement[] elements;
 

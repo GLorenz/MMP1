@@ -1,4 +1,8 @@
-﻿public class LulzCommand : INetworkCommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class LulzCommand : INetworkCommand
 {
     public void Execute()
     {

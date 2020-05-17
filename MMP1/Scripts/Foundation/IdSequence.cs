@@ -1,4 +1,8 @@
-﻿using System.Threading;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using System.Threading;
 
 public class IdSequence
 {

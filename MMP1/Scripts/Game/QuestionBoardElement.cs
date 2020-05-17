@@ -1,4 +1,8 @@
-﻿public class QuestionBoardElement : MovingBoardElement
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class QuestionBoardElement : MovingBoardElement
 {
     public QuestionBoardElement(PyramidFloorBoardElement below, string UID) 
         : base(below.Position, TextureResources.Get("QM"), UID, below.ZPosition+1)

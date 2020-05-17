@@ -1,4 +1,8 @@
-﻿public class GameOverCommand : INetworkCommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class GameOverCommand : INetworkCommand
 {
     public const string name = "GaOv";
 

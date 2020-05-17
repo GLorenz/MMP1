@@ -1,4 +1,8 @@
-﻿public class RemoveFromBoardCommand : ICommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class RemoveFromBoardCommand : ICommand
 {
     private BoardElement[] elements;
 

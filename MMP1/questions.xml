@@ -1,4 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+-->
 <questions>
   <q correct ="1" title="Who wrote Julius Caesar, Macbeth and Hamlet?">
     <a>Charles Dickens</a>

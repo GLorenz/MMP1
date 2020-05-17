@@ -1,4 +1,8 @@
-﻿using System.Net;
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading;

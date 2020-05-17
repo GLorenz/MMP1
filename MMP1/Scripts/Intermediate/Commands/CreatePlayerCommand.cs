@@ -1,4 +1,8 @@
-﻿public class CreatePlayerCommand : ICommand
+﻿// Author: Lorenz Gonsa
+// Company: FHS-MMT
+// Project: MultiMediaProject 1
+
+public class CreatePlayerCommand : ICommand
 {
     private string playerName;
     private string playerUID;
