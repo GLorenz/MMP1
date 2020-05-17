@@ -1,6 +1,6 @@
 ﻿public class RestructureBoardElementsCommand : ICommand
 {
-    public void execute()
+    public void Execute()
     {
         Board.Instance().ResturctureElements();
     }

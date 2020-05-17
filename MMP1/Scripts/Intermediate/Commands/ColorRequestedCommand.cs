@@ -11,7 +11,7 @@ public class ColorRequestedCommand : INetworkCommand
         this.playerUID = playerUID;
     }
 
-    public virtual void execute()
+    public virtual void Execute()
     {
         Console.WriteLine("command requesting next for {0} ", playerUID);
         MeepleColorClaimer.TryClaimNext(playerUID);

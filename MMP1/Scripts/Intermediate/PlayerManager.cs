@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class PlayerManager
+public class PlayerManager : IObservable
 {
     private static PlayerManager manager;
     public static PlayerManager Instance()
@@ -14,11 +14,13 @@ public class PlayerManager
     public List<GhostPlayer> ghostPlayers{ get; private set; }
 
     public Dictionary<GhostPlayer, List<GhostMeeple>> playerMeeples { get; }
+    public List<IObserver> observers { get; set; }
 
     private PlayerManager()
     {
         ghostPlayers= new List<GhostPlayer>();
         playerMeeples = new Dictionary<GhostPlayer, List<GhostMeeple>>();
+        observers = new List<IObserver>();
     }
 
     public bool AddMeepleRef(GhostMeeple m)
@@ -47,6 +49,7 @@ public class PlayerManager
     public void AddGhost(GhostPlayer ghost)
     {
         ghostPlayers.Add(ghost);
+        NotifyObservers();
     }
 
     public void SetPlayer(Player p)
@@ -57,5 +60,20 @@ public class PlayerManager
     public GhostPlayer GetByUID(string UID)
     {
         return ghostPlayers.Find(g => g.UID.Equals(UID));
+    }
+
+    public void AddObserver(IObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void RemoveObserver(IObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach(IObserver observer in observers) { observer.Update(); }
     }
 }

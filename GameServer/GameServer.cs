@@ -25,7 +25,7 @@ public class GameServer
     public static readonly IPAddress listenerIp = IPAddress.Any;
     public static readonly int port = 40400;
 
-    public static readonly int bufferSize = 2048;
+    public static readonly int bufferSize = 512;
     public static readonly string lobbyHostString = "lobbyhost";
 
     public static readonly int sendTickRateMS = 1000 / 50;

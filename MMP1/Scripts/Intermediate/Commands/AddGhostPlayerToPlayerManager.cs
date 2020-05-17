@@ -7,7 +7,7 @@
         this.player = player;
     }
 
-    public void execute()
+    public void Execute()
     {
         PlayerManager.Instance().AddGhost(player);
     }

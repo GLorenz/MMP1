@@ -7,7 +7,7 @@
         this.elements = element;
     }
 
-    public void execute()
+    public void Execute()
     {
         Board.Instance().AddElement(elements);
     }

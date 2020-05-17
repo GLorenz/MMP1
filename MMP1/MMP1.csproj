@@ -59,6 +59,7 @@
     <Compile Include="Scripts\Foundation\TextWrapper.cs" />
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
     <Compile Include="Scripts\Game\ArrowAnimated.cs" />
+    <Compile Include="Scripts\Game\NamePlate.cs" />
     <Compile Include="Scripts\Game\QuestionKnowledgeContent.cs" />
     <Compile Include="Scripts\Game\TexturedBoardElement.cs" />
     <Compile Include="Scripts\Game\PlayButtonBoardElement.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Scripts\Game\PyramidFloor.cs" />
     <Compile Include="Scripts\Game\TextBoardElement.cs" />
     <Compile Include="Scripts\Game\TextureResources.cs" />
-    <Compile Include="Scripts\Interfaces\IToSerializableCommand.cs" />
+    <Compile Include="Scripts\Interfaces\INetworkCommand.cs" />
     <Compile Include="Scripts\Interfaces\IInputObservable.cs" />
     <Compile Include="Scripts\Interfaces\IInputObserver.cs" />
     <Compile Include="Scripts\Interfaces\IObservable.cs" />

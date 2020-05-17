@@ -19,7 +19,7 @@ public class Game1 : Game
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
 
-    SpriteFont oldenburg_40, oldenburg_80, josefin_20;
+    SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
 
     bool pressHandled;
 
@@ -43,7 +43,7 @@ public class Game1 : Game
         graphics.PreferredBackBufferWidth = windowWidth;
         graphics.PreferredBackBufferHeight = windowHeight;
         IsMouseVisible = true;
-        graphics.IsFullScreen = true;
+        //graphics.IsFullScreen = true;
         graphics.ApplyChanges();
 
         UnitConvert.screenWidth = windowWidth;
@@ -59,12 +59,13 @@ public class Game1 : Game
 
         TextureResources.LoadDefault();
 
-        oldenburg_40 = Content.Load<SpriteFont>("fonts/oldenburg_40");
-        oldenburg_80 = Content.Load<SpriteFont>("fonts/oldenburg_80");
+        oldenburg_30 = Content.Load<SpriteFont>("fonts/oldenburg_30");
+        oldenburg_60 = Content.Load<SpriteFont>("fonts/oldenburg_60");
+        oldenburg_20 = Content.Load<SpriteFont>("fonts/oldenburg_20");
         josefin_20 = Content.Load<SpriteFont>("fonts/josefin_20");
 
-        QuestionManager.Instance().SetQuestionFont(oldenburg_80);
-        QuestionManager.Instance().SetAnswerFont(oldenburg_40);
+        QuestionManager.Instance().SetQuestionFont(oldenburg_60);
+        QuestionManager.Instance().SetAnswerFont(oldenburg_30);
 
         PlaceContent();
     }
@@ -79,6 +80,8 @@ public class Game1 : Game
         SetupBoard();
 
         CreatePlayer();
+
+        SetupNamePlate();
     }
 
     protected void SetupWelcomeTitle()
@@ -137,6 +140,15 @@ public class Game1 : Game
         Console.WriteLine("generated {0} and {1}", name, uid);
         CommandQueue.Queue(new CreatePlayerCommand(name, "player_" + uid));
     }
+
+    protected void SetupNamePlate()
+    {
+        int margin = UnitConvert.ToAbsoluteWidth(20);
+        Rectangle namePlateRect = new Rectangle(boardRect.Right + margin, boardRect.Top + margin, ((windowWidth - boardRect.Width) / 2) - margin - margin, windowHeight * 2 / 3);
+        NamePlate namePlate = new NamePlate(namePlateRect, oldenburg_20, oldenburg_30, "namePlate", 1);
+        PlayerManager.Instance().AddObserver(namePlate);
+        CommandQueue.Queue(new AddToBoardCommand(namePlate));
+    }
     
     protected override void UnloadContent()
     {
@@ -190,8 +202,6 @@ public class Game1 : Game
         for (int i = 0; i < elementsHolder.visibleElements.Count; i++)
         {
             elementsHolder.visibleElements[i].Draw(spriteBatch);
-
-            spriteBatch.DrawString(oldenburg_40, "Enemies " + PlayerManager.Instance().ghostPlayers.Count, new Vector2(1500f, 100f), Color.White);
         }
         spriteBatch.End();
 

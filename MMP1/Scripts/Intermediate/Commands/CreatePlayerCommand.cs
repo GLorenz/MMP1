@@ -9,7 +9,7 @@
         playerUID = uid;
     }
 
-    public void execute()
+    public void Execute()
     {
         Player player = new Player(playerName, playerUID);
         PlayerManager.Instance().SetPlayer(player);

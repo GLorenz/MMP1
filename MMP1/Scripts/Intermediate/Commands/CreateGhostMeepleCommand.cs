@@ -12,7 +12,7 @@ public class CreateGhostMeepleCommand : INetworkCommand
         this.meeple = meeple;
     }
 
-    public void execute()
+    public void Execute()
     {
         Console.WriteLine("adding ghost meeple 1");
         meeple.Create();

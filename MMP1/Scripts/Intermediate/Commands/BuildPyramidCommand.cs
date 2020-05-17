@@ -8,7 +8,7 @@ public class BuildPyramidCommand : ICommand
         this.space = space;
     }
 
-    public void execute()
+    public void Execute()
     {
         Board.Instance().space = space;
         Board.Instance().BuildPyramidInSpace();

@@ -8,7 +8,7 @@ public class CommandQueue
     {
         lock (gameLock)
         {
-            command.execute();
+            command.Execute();
         }
     }
 }

@@ -21,6 +21,7 @@ public class QuickTimeMovement
 
     private Vector2 curMouseVector;
     private ArrowAnimatable curArrow;
+    private PyramidFloorBoardElement moveTarget;
 
     private QuickTimeMovement() { }
 
@@ -33,7 +34,8 @@ public class QuickTimeMovement
         curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
         CommandQueue.Queue(new AddToBoardCommand(curArrow));
 
-        start.connectedFields[curSelectionIdx].Hover();
+        moveTarget = start.connectedFields[curSelectionIdx];
+        moveTarget.Hover();
 
         // build direction vectors to each connected field
         directions = new Vector2[start.connectedFields.Count];
@@ -57,6 +59,8 @@ public class QuickTimeMovement
                 start.connectedFields[curSelectionIdx].DeHover();
                 start.connectedFields[i].Hover();
 
+                moveTarget = start.connectedFields[i];
+
                 CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
                 curArrow = new ArrowAnimatable(start, start.connectedFields[i], "movementarrow", start.ZPosition+1);
                 CommandQueue.Queue(new AddToBoardCommand(curArrow));
@@ -64,7 +68,17 @@ public class QuickTimeMovement
                 curSelectionIdx = i;
             }
         }
-        curArrow.Animate((float)Math.Sin(((DateTime.Now - initiated).TotalMilliseconds / 100f) % (Math.PI)));
+        float range = (float)Math.Sin(((DateTime.Now - initiated).TotalMilliseconds / 100f) % (Math.PI));
+        if (!moveTarget.isHoverTarget && range > moveBorder)
+        {
+            moveTarget.Hover();
+        }
+        else if (moveTarget.isHoverTarget && range < moveBorder)
+        {
+            moveTarget.DeHover();
+        }
+        
+        curArrow.Animate(range);
     }
 
     public void OnClick()
@@ -78,7 +92,7 @@ public class QuickTimeMovement
             }
             else
             {
-                new Task(() => RemoveArrowDelayed()).Start();
+                new Task(() => RemoveArrowDelayed(curArrow)).Start();
             }
             Quit();
         }
@@ -95,10 +109,10 @@ public class QuickTimeMovement
         CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
     }
 
-    private async void RemoveArrowDelayed()
+    private async void RemoveArrowDelayed(ArrowAnimatable arrow)
     {
         await Task.Delay(500);
-        CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
+        CommandQueue.Queue(new RemoveFromBoardCommand(arrow));
     }
 
     public void Toggle(Meeple meeple)

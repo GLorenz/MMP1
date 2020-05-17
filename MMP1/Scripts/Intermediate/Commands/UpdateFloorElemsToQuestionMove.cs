@@ -12,7 +12,7 @@ public class UpdateFloorElemsToQuestionMove : ICommand
         this.updated = updated;
         this.index = index;
     }
-    public void execute()
+    public void Execute()
     {
         floorElements[index] = updated;
     }

@@ -7,6 +7,7 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
 {
     public List<PyramidFloorBoardElement> connectedFields { get; protected set; }
     private bool isStartingField;
+    public bool isHoverTarget { get; protected set; }
 
     public PyramidFloorBoardElement(Rectangle position, string UID, int zPosition = 0) : base(position, TextureResources.Get("PyramidField"), UID, zPosition)
     {
@@ -41,10 +42,12 @@ public class PyramidFloorBoardElement : NonMovingBoardElement, IVisibleBoardElem
     public void Hover()
     {
         texture = TextureResources.Get("PyramidFieldHover");
+        isHoverTarget = true;
     }
 
     public void DeHover()
     {
+        isHoverTarget = false;
         TextureToDefault();
     }
 

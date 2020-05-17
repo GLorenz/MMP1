@@ -20,12 +20,26 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/josefin_20.spritefont
 
-#begin fonts/oldenburg_40.spritefont
+#begin fonts/oldenburg_20.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/oldenburg_40.spritefont
+/build:fonts/oldenburg_20.spritefont
+
+#begin fonts/oldenburg_30.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/oldenburg_30.spritefont
+
+#begin fonts/oldenburg_60.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/oldenburg_60.spritefont
 
 #begin fonts/oldenburg_80.spritefont
 /importer:FontDescriptionImporter
@@ -129,6 +143,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:img/LogoVertical.png
+
+#begin img/NamePlateBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/NamePlateBackground.png
 
 #begin img/Play.png
 /importer:TextureImporter

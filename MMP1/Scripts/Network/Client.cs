@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public class Client : IInputObservable
 {
-    public static readonly int bufferSize = 2048;
+    public static readonly int bufferSize = 512;
     public static readonly int sendTickRateMS = 1000 / 50;
     public static readonly string lobbyHostString = "lobbyhost";
 
@@ -97,7 +97,7 @@ public class Client : IInputObservable
             lock (gameLock)
             {
                 Console.WriteLine("received lobby host package");
-                notifyObservers();
+                NotifyObservers();
             }
         }
         else
@@ -124,9 +124,9 @@ public class Client : IInputObservable
         if (observers.Contains(observer)) { observers.Remove(observer); }
     }
 
-    public void notifyObservers()
+    public void NotifyObservers()
     {
-        observers.ForEach(o => o.update());
+        observers.ForEach(o => o.Update());
     }
 
     public void notifyObservers(SerializableCommand input)
@@ -138,7 +138,7 @@ public class Client : IInputObservable
             }
             else
             {
-                o.update();
+                o.Update();
             }
         });
     }

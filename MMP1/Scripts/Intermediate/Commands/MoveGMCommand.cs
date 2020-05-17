@@ -29,7 +29,7 @@ public class MoveGMCommand : INetworkCommand
         }
     }
 
-    public virtual void execute()
+    public virtual void Execute()
     {
         if (element != null && moveTo != null)
         {

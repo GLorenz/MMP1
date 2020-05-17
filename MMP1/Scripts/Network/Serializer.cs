@@ -12,7 +12,9 @@ public class Serializer
         using (MemoryStream stream = new MemoryStream())
         {
             new BinaryFormatter().Serialize(stream, input);
-            return stream.ToArray();
+            byte[] result = stream.ToArray();
+            Console.WriteLine(result.Length);
+            return result;
         }
     }
 

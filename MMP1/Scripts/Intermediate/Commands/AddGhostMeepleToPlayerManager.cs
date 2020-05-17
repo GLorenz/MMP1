@@ -9,7 +9,7 @@ class AddGhostMeepleToPlayerManager : ICommand
         this.meeple = meeple;
     }
 
-    public void execute()
+    public void Execute()
     {
         PlayerManager.Instance().AddMeepleRef(meeple);
     }

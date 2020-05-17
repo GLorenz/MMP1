@@ -13,7 +13,7 @@ class ColorClaimedCommand : INetworkCommand
         this.color = color;
     }
 
-    public virtual void execute()
+    public virtual void Execute()
     {
         Console.WriteLine("command execute trying to claim {0} for {1}", ((MeepleColor)color).ToString(), playerUID);
         MeepleColorClaimer.ClaimColor(playerUID, (MeepleColor)color);

@@ -13,7 +13,7 @@ public class CreateGhostPlayerCommand : INetworkCommand
         playerUID = uid;
     }
 
-    public void execute()
+    public void Execute()
     {
         new GhostPlayer(playerName, playerUID).Create();
     }

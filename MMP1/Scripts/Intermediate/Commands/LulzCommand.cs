@@ -1,6 +1,6 @@
 ﻿public class LulzCommand : INetworkCommand
 {
-    public void execute()
+    public void Execute()
     {
     }
 

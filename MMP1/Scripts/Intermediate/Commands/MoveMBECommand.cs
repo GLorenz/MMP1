@@ -13,7 +13,7 @@ public class MoveMBECommand : INetworkCommand
         this.moveTo = moveTo;
     }
 
-    public void execute()
+    public void Execute()
     {
         if (element != null && moveTo != null)
         {

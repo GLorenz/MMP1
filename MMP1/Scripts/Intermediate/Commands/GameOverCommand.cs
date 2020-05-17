@@ -8,7 +8,7 @@
         this.winner = winner;
     }
 
-    public void execute()
+    public void Execute()
     {
         Game1.OnGameOver(winner);
     }

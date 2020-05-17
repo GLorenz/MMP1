@@ -13,7 +13,7 @@ public class MoveQBECommand : INetworkCommand
         this.moveTo = moveTo;
     }
 
-    public void execute()
+    public void Execute()
     {
         QuestionManager.Instance().MoveQuestionElementLocalOnly(element, moveTo);
     }
