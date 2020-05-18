@@ -11,13 +11,12 @@ public class Setupper
 {
     private Rectangle boardRect;
     private int windowWidth, windowHeight;
-    private SpriteFont[] fonts;
 
-    public Setupper(int windowWidth, int windowHeight, params SpriteFont[] fonts)
+    // fonts are orderd from small to big
+    public Setupper(int windowWidth, int windowHeight)
     {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
-        this.fonts = fonts;
     }
 
     public void Setup()
@@ -25,6 +24,7 @@ public class Setupper
         SetupBackground("welcomebackground", 20);
         SetupWelcomeTitle();
         SetupPlayButton();
+        SetupImpressum();
 
         SetupBackground("gamebackground", 0);
         SetupBoard();
@@ -55,9 +55,20 @@ public class Setupper
         int btnHeight = (int)(btnWidth / aspectR);
         int btnX = (windowWidth - btnWidth) / 2;
         int btnY = (windowHeight - btnHeight) * 7 / 8;
-        PlayButtonBoardElement playBtn = new PlayButtonBoardElement(new Rectangle(btnX, btnY, btnWidth, btnHeight), btnTex, "btn_play", 22, "welcomebackground", "welcometitle");
+        PlayButtonBoardElement playBtn = new PlayButtonBoardElement(new Rectangle(btnX, btnY, btnWidth, btnHeight), btnTex, "btn_play", 22, "welcomebackground", "welcometitle", "impressum");
 
         CommandQueue.Queue(new AddToBoardCommand(playBtn));
+    }
+
+    protected void SetupImpressum()
+    {
+        string text = "Impressum: Developed by Lorenz Gonsa, FHS MMT for MultiMediaProject 1";
+        SpriteFont font = FontResources.oldenburg_8;
+        Vector2 textSize = font.MeasureString(text);
+        Rectangle impressRect = new Rectangle(windowWidth - (int)textSize.X, windowHeight - (int)textSize.Y, (int)textSize.X + 10, (int)textSize.Y);
+        TextBoardElement impressum = new TextBoardElement(impressRect, text, font, "impressum", ColorResources.dark, 21, TextBoardElement.Alignment.LeftTop);
+
+        CommandQueue.Queue(new AddToBoardCommand(impressum));
     }
 
     protected void SetupBoard()
@@ -95,10 +106,10 @@ public class Setupper
     {
         int margin = UnitConvert.ToAbsoluteWidth(20);
         Rectangle namePlateRectFoes = new Rectangle(boardRect.Right + margin, boardRect.Top + margin, ((windowWidth - boardRect.Width) / 2) - margin - margin, windowHeight / 2);
-        NamePlateFoes namePlateFoes = new NamePlateFoes(namePlateRectFoes, fonts[0], fonts[1], "namePlateFoes", 1);
+        NamePlateFoes namePlateFoes = new NamePlateFoes(namePlateRectFoes, FontResources.oldenburg_20, FontResources.oldenburg_30, "namePlateFoes", 1);
 
         Rectangle namePlateRectLocal = new Rectangle(margin, boardRect.Top + margin, ((windowWidth - boardRect.Width) / 2) - margin - margin, windowHeight / 4);
-        NamePlateLocal namePlateLocal = new NamePlateLocal(namePlateRectLocal, fonts[0], fonts[1], "namePlateLocal", 1);
+        NamePlateLocal namePlateLocal = new NamePlateLocal(namePlateRectLocal, FontResources.oldenburg_20, FontResources.oldenburg_30, "namePlateLocal", 1);
 
         PlayerManager.Instance().AddObserver(namePlateFoes);
         PlayerManager.Instance().AddObserver(namePlateLocal);

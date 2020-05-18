@@ -21,7 +21,7 @@ public class Game1 : Game
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
 
-    private SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
+    //private SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
 
     private bool pressHandled;
 
@@ -38,10 +38,10 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // setting up display size here, since graphics aren't initialized in constructor
-        windowWidth = GraphicsDevice.DisplayMode.Width;// - 100;
-        windowHeight = GraphicsDevice.DisplayMode.Height;// - 100;
-        Window.IsBorderless = false;
-        //Window.Position = new Point(50,50);
+        windowWidth = GraphicsDevice.DisplayMode.Width - 100;
+        windowHeight = GraphicsDevice.DisplayMode.Height - 100;
+        Window.IsBorderless = true;
+        Window.Position = new Point(50,50);
         graphics.PreferredBackBufferWidth = windowWidth;
         graphics.PreferredBackBufferHeight = windowHeight;
         IsMouseVisible = true;
@@ -61,15 +61,22 @@ public class Game1 : Game
 
         TextureResources.LoadDefault();
 
-        oldenburg_30 = Content.Load<SpriteFont>("fonts/oldenburg_30");
-        oldenburg_60 = Content.Load<SpriteFont>("fonts/oldenburg_60");
-        oldenburg_20 = Content.Load<SpriteFont>("fonts/oldenburg_20");
-        josefin_20 = Content.Load<SpriteFont>("fonts/josefin_20");
+        SpriteFont oldenburg_8 = Content.Load<SpriteFont>("fonts/oldenburg_8");
+        SpriteFont oldenburg_20 = Content.Load<SpriteFont>("fonts/oldenburg_20");
+        SpriteFont oldenburg_30 = Content.Load<SpriteFont>("fonts/oldenburg_30");
+        SpriteFont oldenburg_60 = Content.Load<SpriteFont>("fonts/oldenburg_60");
+        SpriteFont josefin_20 = Content.Load<SpriteFont>("fonts/josefin_20");
 
         QuestionManager.Instance().SetQuestionFont(oldenburg_60);
         QuestionManager.Instance().SetAnswerFont(oldenburg_30);
 
-        new Setupper(windowWidth, windowHeight, oldenburg_20, oldenburg_30, oldenburg_60).Setup();
+        FontResources.oldenburg_8 = oldenburg_8;
+        FontResources.oldenburg_20 = oldenburg_20;
+        FontResources.oldenburg_30 = oldenburg_30;
+        FontResources.oldenburg_60 = oldenburg_60;
+        FontResources.josefin_20 = josefin_20;
+
+        new Setupper(windowWidth, windowHeight).Setup();
     }    
     
     protected override void UnloadContent()

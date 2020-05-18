@@ -54,6 +54,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scripts\Foundation\ColorResources.cs" />
+    <Compile Include="Scripts\Foundation\FontResources.cs" />
     <Compile Include="Scripts\Foundation\IdSequence.cs" />
     <Compile Include="Scripts\Foundation\NameList.cs" />
     <Compile Include="Scripts\Foundation\TextWrapper.cs" />
