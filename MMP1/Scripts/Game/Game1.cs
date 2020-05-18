@@ -40,8 +40,8 @@ public class Game1 : Game
         // setting up display size here, since graphics aren't initialized in constructor
         windowWidth = GraphicsDevice.DisplayMode.Width - 100;
         windowHeight = GraphicsDevice.DisplayMode.Height - 100;
-        Window.IsBorderless = true;
-        Window.Position = new Point(50,50);
+        Window.IsBorderless = false;
+        Window.Position = new Point(50,0);
         graphics.PreferredBackBufferWidth = windowWidth;
         graphics.PreferredBackBufferHeight = windowHeight;
         IsMouseVisible = true;

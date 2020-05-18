@@ -42,7 +42,7 @@ public class Setupper
         int titleHeight = (int)(titleWidth / aspectR);
         int titleX = (windowWidth - titleWidth) / 2;
         int titleY = (windowHeight - titleHeight) / 16;
-        StaticVisibleBoardElement title = new StaticVisibleBoardElement(new Rectangle(titleX, titleY, titleWidth, titleHeight), titleTex, "welcometitle", 21);
+        AlphaAnimatedVisibleBoardElement title = new AlphaAnimatedVisibleBoardElement(new Rectangle(titleX, titleY, titleWidth, titleHeight), titleTex, "welcometitle", 21);
 
         CommandQueue.Queue(new AddToBoardCommand(title));
     }
@@ -90,7 +90,7 @@ public class Setupper
         int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
-        StaticVisibleBoardElement backgroundBoardEl = new StaticVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition);
+        AlphaAnimatedVisibleBoardElement backgroundBoardEl = new AlphaAnimatedVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition);
         CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
     }
 

@@ -12,7 +12,7 @@ public class StaticVisibleBoardElement : NonMovingBoardElement, IVisibleBoardEle
         
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
         DrawDefault(spriteBatch);
     }

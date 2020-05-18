@@ -81,7 +81,7 @@ public class QuestionManager
 
     public void ReceiveMouseInput(Point mousePos)
     {
-        movingQBE.MoveTo(mousePos + movingQBEOffset);
+        movingQBE.MoveToDirect(mousePos + movingQBEOffset);
     }
 
     public void InitiateQuestionBoardElementMove(PyramidFloorBoardElement floorElementBelow)

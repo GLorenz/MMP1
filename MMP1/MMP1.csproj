@@ -59,6 +59,7 @@
     <Compile Include="Scripts\Foundation\NameList.cs" />
     <Compile Include="Scripts\Foundation\TextWrapper.cs" />
     <Compile Include="Scripts\Foundation\UnitConvert.cs" />
+    <Compile Include="Scripts\Game\AlphaAnimatedVisibleBoardElement.cs" />
     <Compile Include="Scripts\Game\ArrowAnimated.cs" />
     <Compile Include="Scripts\Game\NamePlateLocal.cs" />
     <Compile Include="Scripts\Game\NamePlateFoes.cs" />
