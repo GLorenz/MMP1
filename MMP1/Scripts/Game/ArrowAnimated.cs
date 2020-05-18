@@ -42,7 +42,6 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
 
     public float GetArrowReach()
     {
-        Console.WriteLine(range);
         return range;
     }
 }

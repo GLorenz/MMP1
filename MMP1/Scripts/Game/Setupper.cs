@@ -5,14 +5,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Text;
 
 public class Setupper
 {
     private Rectangle boardRect;
     private int windowWidth, windowHeight;
-
-    // fonts are orderd from small to big
+    
     public Setupper(int windowWidth, int windowHeight)
     {
         this.windowWidth = windowWidth;

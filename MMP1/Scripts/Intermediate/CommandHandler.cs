@@ -25,9 +25,6 @@ public class CommandHandler
             case CreateGhostPlayerCommand.name:
                 inputFunc = CreateGhostPlayerCommand.FromSerializable;
                 break;
-            case CreateGhostMeepleCommand.name:
-                inputFunc = CreateGhostMeepleCommand.FromSerializable;
-                break;
             case ColorRequestedCommand.name:
                 inputFunc = ColorRequestedCommand.FromSerializable;
                 break;

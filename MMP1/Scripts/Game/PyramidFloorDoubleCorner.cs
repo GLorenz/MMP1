@@ -16,7 +16,6 @@ public class PyramidFloorDoubleCorner : PyramidFloor
     protected override void CalcValues()
     {
         offsetInBU = 1f;
-        // todo: figure out
         strideInBU = (spaceInBU.Width) / (fieldElemsCount + 0.5f);
     }
 

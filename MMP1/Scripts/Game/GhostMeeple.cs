@@ -48,12 +48,6 @@ public class GhostMeeple : MovingBoardElement
         PlayerManager.Instance().local.HandleInput(cmd, true);
     }
 
-    /*protected override void ShareMoveTo(PyramidFloorBoardElement element)
-    {
-        MoveGMCommand cmd = new MoveGMCommand(this, element);
-        PlayerManager.Instance().local.OnlyShare(cmd);
-    }*/
-
     private void SetStartingElement(PyramidFloorBoardElement startElement)
     {
         this.startElement = startElement;

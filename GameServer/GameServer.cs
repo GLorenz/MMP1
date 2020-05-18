@@ -110,10 +110,6 @@ public class GameServer
         Print(string.Format("sending {0} packets of history", history.Count));
 
         SendDelayed(socket, history);
-            /*foreach (byte[] command in history)
-            {
-                socket.Send(command);
-            }*/
         if (sockets.Count == 1)
         {
             Print("sending lobby host package");

@@ -21,8 +21,6 @@ public class Game1 : Game
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
 
-    //private SpriteFont oldenburg_30, oldenburg_60, oldenburg_20, josefin_20;
-
     private bool pressHandled;
 
     // c# says no, when using class without generics, and a simple downcast isn't possible :(
@@ -88,12 +86,6 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
-        if(Keyboard.GetState().IsKeyDown(Keys.L))
-        {
-            PlayerManager.Instance().local.HandleInput(new LulzCommand(),true);
-        }
-        //else if (l && Keyboard.GetState().IsKeyUp(Keys.L)) { l = false; }
 
         if (QuestionManager.Instance().isMovingQuestionBoardElement)
         {
