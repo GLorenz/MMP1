@@ -16,16 +16,23 @@ public class Client : IInputObservable
     public static readonly int sendTickRateMS = 1000 / 50;
     public static readonly string lobbyHostString = "lobbyhost";
 
+    public static readonly string upToDateString = "uptodate";
+
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
+
+    private object socketLock = new object();
 
     private Queue<SerializableCommand> sendQueue;
     private bool sendQueueIsWorking;
 
     private object gameLock = new object();
 
+    private bool upToDate;
+
     public Client()
     {
+        upToDate = false;
         observers = new List<IObserver>();
 
         sendQueue = new Queue<SerializableCommand>();
@@ -77,7 +84,15 @@ public class Client : IInputObservable
     public void Share(SerializableCommand input)
     {
         sendQueue.Enqueue(input);
-        new Task(() => WorkSendQueue()).Start();
+        StartSendQueue();
+    }
+
+    private void StartSendQueue()
+    {
+        if(upToDate)
+        {
+            new Task(() => WorkSendQueue()).Start();
+        }
     }
 
     private async void WorkSendQueue()
@@ -87,7 +102,7 @@ public class Client : IInputObservable
             sendQueueIsWorking = true;
             while (sendQueue.Count > 0)
             {
-                socket.Send(Serializer.SerializeInput(sendQueue.Dequeue()));
+                socket.Send(Serializer.SerializeInput(sendQueue.Dequeue()));   
                 await Task.Delay(sendTickRateMS);
             }
             sendQueueIsWorking = false;
@@ -103,6 +118,12 @@ public class Client : IInputObservable
                 Console.WriteLine("received lobby host package");
                 NotifyObservers();
             }
+        }
+        else if (Encoding.ASCII.GetString(data).StartsWith(upToDateString))
+        {
+            upToDate = true;
+            Console.WriteLine("im up to date");
+            StartSendQueue();
         }
         else
         {

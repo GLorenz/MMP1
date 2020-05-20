@@ -79,7 +79,7 @@
 /processorParam:TextureFormat=Color
 /build:img/Background.jpg
 
-#begin img/Background_old.png
+#begin img/Board.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -89,19 +89,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/Background_old.png
-
-#begin img/Background2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:img/Background2.png
+/build:img/Board.png
 
 #begin img/BorderBackground.png
 /importer:TextureImporter
@@ -151,7 +139,7 @@
 /processorParam:TextureFormat=Color
 /build:img/LogoVertical.png
 
-#begin img/NamePlateBackground.png
+#begin img/NamePlateBackgroundBlack.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -161,9 +149,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/NamePlateBackground.png
+/build:img/NamePlateBackgroundBlack.png
 
-#begin img/NamePlateBackgroundSmall.png
+#begin img/NamePlateBackgroundGreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -173,7 +161,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:img/NamePlateBackgroundSmall.png
+/build:img/NamePlateBackgroundGreen.png
+
+#begin img/NamePlateBackgroundRed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/NamePlateBackgroundRed.png
+
+#begin img/NamePlateBackgroundWhite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:img/NamePlateBackgroundWhite.png
 
 #begin img/Play.png
 /importer:TextureImporter

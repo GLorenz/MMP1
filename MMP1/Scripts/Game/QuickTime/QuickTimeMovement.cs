@@ -12,7 +12,7 @@ public class QuickTimeMovement
     
     private static readonly float selectionAlpha = 0.5f;
     private static readonly long coolDownAfterInitiateMS = 250L;
-    private static readonly float moveBorder = 0.8f;
+    private static readonly float moveBorder = 0.7f;
 
     private DateTime initiated;
 
@@ -91,12 +91,8 @@ public class QuickTimeMovement
             if (curArrow.GetArrowReach() > moveBorder)
             {
                 meeple.MoveTo(start.connectedFields[curSelectionIdx]);
-                RemoveArrowNow();
             }
-            else
-            {
-                new Task(() => RemoveArrowDelayed(curArrow)).Start();
-            }
+            //new Task(() => RemoveArrowDelayed(curArrow)).Start();
             Quit();
         }
     }
@@ -105,10 +101,6 @@ public class QuickTimeMovement
     {
         isActive = false;
         start.connectedFields[curSelectionIdx].DeHover();
-    }
-
-    private void RemoveArrowNow()
-    {
         CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
     }
 

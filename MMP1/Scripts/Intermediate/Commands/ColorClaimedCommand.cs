@@ -21,6 +21,9 @@ class ColorClaimedCommand : INetworkCommand
     {
         Console.WriteLine("command execute trying to claim {0} for {1}", ((MeepleColor)color).ToString(), playerUID);
         MeepleColorClaimer.ClaimColor(playerUID, (MeepleColor)color);
+
+        NamePlateLocal.current?.UpdateColor();
+        NamePlateFoes.current?.UpdateColor();
     }
 
     public SerializableCommand ToSerializable(bool shouldShare)

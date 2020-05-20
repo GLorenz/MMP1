@@ -28,8 +28,8 @@ public class Meeple : GhostMeeple
         }
         if (element.Equals(Board.Instance().winningField))
         {
-            GameOverCommand goc = new GameOverCommand(this);
-            PlayerManager.Instance().local.HandleInput(goc, true);
+            hasWon = true;
+            Game1.OnGameOver(this);
         }
     }
 
@@ -54,7 +54,10 @@ public class Meeple : GhostMeeple
 
     public override void OnClick()
     {
-        QuickTimeMovement.Instance().Toggle(this);
+        if (!hasWon)
+        {
+            QuickTimeMovement.Instance().Toggle(this);
+        }
     }
 
     public override MeepleColor Color

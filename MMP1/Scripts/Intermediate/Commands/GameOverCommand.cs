@@ -6,15 +6,15 @@ public class GameOverCommand : INetworkCommand
 {
     public const string name = "GaOv";
 
-    private GhostMeeple winner;
-    public GameOverCommand(GhostMeeple winner)
+    private GhostPlayer winner;
+    public GameOverCommand(GhostPlayer winner)
     {
         this.winner = winner;
     }
 
     public void Execute()
     {
-        Game1.OnGameOver(winner);
+        Game1.OnGameOver4Real(winner);
     }
 
     public SerializableCommand ToSerializable(bool shouldShare)
@@ -24,7 +24,7 @@ public class GameOverCommand : INetworkCommand
 
     public static GameOverCommand FromSerializable(SerializableCommand sCommand)
     {
-        GhostMeeple winner = (GhostMeeple)Board.Instance().FindByUID(sCommand.UID);
+        GhostPlayer winner = PlayerManager.Instance().GetByUID(sCommand.UID);
         return new GameOverCommand(winner);
     }
 }

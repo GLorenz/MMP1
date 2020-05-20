@@ -66,6 +66,13 @@ public class PlayerManager : IObservable
         return ghostPlayers.Find(g => g.UID.Equals(UID));
     }
 
+    public List<GhostPlayer> GetGhostPlayersOnly()
+    {
+        List<GhostPlayer> result = new List<GhostPlayer>(ghostPlayers);
+        result.Remove(local);
+        return result;
+    }
+
     public void AddObserver(IObserver observer)
     {
         observers.Add(observer);

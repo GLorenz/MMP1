@@ -30,6 +30,20 @@ public class Setupper
         CreatePlayer();
 
         SetupNamePlates();
+        NamePlateLocal.current.UpdateColor();
+    }
+
+    public void GameOver(string winnerName)
+    {
+        SetupBackground("gameoverbackground", 25, 0f).Fade(1f, null);
+        SetupGameOverText(winnerName);
+    }
+
+    protected void SetupGameOverText(string winnerName)
+    {
+        Rectangle goRect = new Rectangle(0, 0, windowWidth, windowHeight);
+        TextBoardElement go = new TextBoardElement(goRect, "Game Over! " + winnerName + " won!", FontResources.oldenburg_60, "gameovertext", ColorResources.Black, 26);
+        CommandQueue.Queue(new AddToBoardCommand(go));
     }
 
     protected void SetupWelcomeTitle()
@@ -64,7 +78,7 @@ public class Setupper
         SpriteFont font = FontResources.oldenburg_8;
         Vector2 textSize = font.MeasureString(text);
         Rectangle impressRect = new Rectangle(windowWidth - (int)textSize.X, windowHeight - (int)textSize.Y, (int)textSize.X + 10, (int)textSize.Y);
-        TextBoardElement impressum = new TextBoardElement(impressRect, text, font, "impressum", ColorResources.dark, 21, TextBoardElement.Alignment.LeftTop);
+        TextBoardElement impressum = new TextBoardElement(impressRect, text, font, "impressum", ColorResources.Black, 21, TextBoardElement.Alignment.LeftTop);
 
         CommandQueue.Queue(new AddToBoardCommand(impressum));
     }
@@ -80,7 +94,7 @@ public class Setupper
         CommandQueue.Queue(new BuildPyramidCommand(boardRect));
     }
 
-    protected void SetupBackground(string uid, int zPosition)
+    protected AlphaAnimatedVisibleBoardElement SetupBackground(string uid, int zPosition, float alpha = 1f)
     {
         Texture2D background = TextureResources.Get("Background");
         float backgroundAspectRatio = background.Width / (float)background.Height;
@@ -88,8 +102,9 @@ public class Setupper
         int backgroundHeight = (int)(backgroundWidth / backgroundAspectRatio);
         int backgroundX = (windowWidth - backgroundWidth) / 2;
         int backgroundY = (windowHeight - backgroundHeight) / 2;
-        AlphaAnimatedVisibleBoardElement backgroundBoardEl = new AlphaAnimatedVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition);
+        AlphaAnimatedVisibleBoardElement backgroundBoardEl = new AlphaAnimatedVisibleBoardElement(new Rectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight), background, uid, zPosition: zPosition, startAlpha: alpha);
         CommandQueue.Queue(new AddToBoardCommand(backgroundBoardEl));
+        return backgroundBoardEl;
     }
 
     protected void CreatePlayer()

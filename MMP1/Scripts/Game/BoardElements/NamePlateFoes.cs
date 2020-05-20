@@ -4,29 +4,38 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 public class NamePlateFoes : StaticVisibleBoardElement, IObserver
 {
     private static readonly Point margin = new Point(UnitConvert.ToAbsoluteWidth(20));
-    private TextBoardElement foes, foesNames;
+    private TextBoardElement foes;
+    private List<TextBoardElement> foesNames;
+    private SpriteFont fontBig;
     private Rectangle contentRect;
 
-    public NamePlateFoes(Rectangle position, SpriteFont fontSmall, SpriteFont fontBig, string UID, int zPosition = 0) : base(position, TextureResources.Get("NamePlateBackground"), UID, zPosition)
+    public static NamePlateFoes current { get; private set; }
+
+    public NamePlateFoes(Rectangle position, SpriteFont fontSmall, SpriteFont fontBig, string UID, int zPosition = 0) : base(position, TextureResources.Get("NamePlateBackgroundRed"), UID, zPosition)
     {
+        current = this;
+        foesNames = new List<TextBoardElement>();
+        this.fontBig = fontBig;
         contentRect = new Rectangle(position.Location + margin, position.Size - margin - margin);
 
         Rectangle foesRect = new Rectangle(contentRect.Location.X, contentRect.Location.Y, contentRect.Width, contentRect.Height / 6);
-        foes = new TextBoardElement(foesRect, "Your foes are:", fontSmall, "namePlateFoes", ColorResources.white, zPosition + 1, TextBoardElement.Alignment.LeftBottom);
+        foes = new TextBoardElement(foesRect, "Your foes are:", fontSmall, "namePlateFoes", ColorResources.White, zPosition + 1, TextBoardElement.Alignment.LeftBottom);
+        
+        CommandQueue.Queue(new AddToBoardCommand(foes));
 
-        Rectangle foesNameRect = new Rectangle(contentRect.Location.X, contentRect.Location.Y + foesRect.Height, contentRect.Width, contentRect.Height * 5 / 6);
-        foesNames = new TextBoardElement(foesNameRect, GetEnemiesNamesStr(), fontBig, "namePlateFoesNames", ColorResources.white, zPosition + 1, TextBoardElement.Alignment.LeftTop);
-
-        CommandQueue.Queue(new AddToBoardCommand(foes, foesNames));
+        BuildEnemies();
+        CommandQueue.Queue(new AddToBoardCommand(foesNames.ToArray()));
     }
 
     public void Update()
     {
-        foesNames.Text = GetEnemiesNamesStr();
+        UpdateColor();
     }
 
     private string GetLocalPlayerName()
@@ -34,13 +43,31 @@ public class NamePlateFoes : StaticVisibleBoardElement, IObserver
         return PlayerManager.Instance().local?.name ?? "You";
     }
 
-    private string GetEnemiesNamesStr()
+    public void UpdateColor()
     {
-        string foesNamesStr = "";
+        CommandQueue.Queue(new RemoveFromBoardCommand(foesNames.ToArray()));
+        BuildEnemies();
+        CommandQueue.Queue(new AddToBoardCommand(foesNames.ToArray()));
+    }
+
+    private void BuildEnemies()
+    {
+        string localClrStr = PlayerManager.Instance().local.MeepleColor.ToString();
+        texture = TextureResources.Get("NamePlateBackground" + localClrStr);
+        foes.SetColor((localClrStr.Equals("Red") || localClrStr.Equals("Black")) ? ColorResources.White : ColorResources.Black);
+
+        foesNames.Clear();
+        int totalHeight = foes.Position.Height;
         foreach (GhostPlayer enemy in PlayerManager.Instance().ghostPlayers)
         {
-            foesNamesStr += enemy.name + ",\n";
+            if (enemy.Equals(PlayerManager.Instance().local)) { continue; }
+            Rectangle nextRect = new Rectangle(contentRect.Location.X, contentRect.Location.Y + totalHeight, contentRect.Width, contentRect.Height / 4);
+
+            string colorStr = enemy.MeepleColor.ToString();
+            Color textColor = ColorResources.ForName(colorStr);
+            foesNames.Add(new TextBoardElement(nextRect, enemy.name, fontBig, "namePlateFoesNamesText"+enemy.name, textColor, zPosition + 2, TextBoardElement.Alignment.LeftMiddle));
+
+            totalHeight += nextRect.Height;
         }
-        return foesNamesStr.Replace(GetLocalPlayerName()+",\n","").TrimEnd(' ',',','\n');
     }
 }

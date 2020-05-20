@@ -28,6 +28,11 @@ public class TextBoardElement : BoardElement, IVisibleBoardElement
         spriteBatch.DrawString(font, text, textPosition, color);
     }
 
+    public void SetColor(Color color)
+    {
+        this.color = color;
+    }
+
     public override void OnClick()
     {
         //nothing

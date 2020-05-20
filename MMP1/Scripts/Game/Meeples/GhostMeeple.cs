@@ -13,6 +13,7 @@ public class GhostMeeple : MovingBoardElement
 
     public PyramidFloorBoardElement standingOn { get; protected set; }
     protected PyramidFloorBoardElement startElement;
+    public bool hasWon { get; protected set; }
 
     private MeepleColor color;
     public int meepIdx { get; protected set; }

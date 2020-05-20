@@ -23,6 +23,8 @@ public class Game1 : Game
 
     private bool pressHandled;
 
+    private static Setupper setupper;
+
     // c# says no, when using class without generics, and a simple downcast isn't possible :(
     private GenericBoardElementHolder<BoardElement> elementsHolder;
 
@@ -74,7 +76,8 @@ public class Game1 : Game
         FontResources.oldenburg_60 = oldenburg_60;
         FontResources.josefin_20 = josefin_20;
 
-        new Setupper(windowWidth, windowHeight).Setup();
+        setupper = new Setupper(windowWidth, windowHeight);
+        setupper.Setup();
     }    
     
     protected override void UnloadContent()
@@ -84,20 +87,20 @@ public class Game1 : Game
     
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (IsActive && GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        if (QuestionManager.Instance().isMovingQuestionBoardElement)
+        if (IsActive && QuestionManager.Instance().isMovingQuestionBoardElement)
         {
             QuestionManager.Instance().ReceiveMouseInput(Mouse.GetState().Position);
         }
 
-        if (QuickTimeMovement.Instance().isActive)
+        if (IsActive && QuickTimeMovement.Instance().isActive)
         {
             QuickTimeMovement.Instance().ReceiveMousePos(Mouse.GetState().Position);
         }
 
-        if(!pressHandled && Mouse.GetState().LeftButton == ButtonState.Pressed)
+        if(IsActive && !pressHandled && Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
             Board.Instance().OnClick(Mouse.GetState().Position);
 
@@ -137,7 +140,16 @@ public class Game1 : Game
 
     public static void OnGameOver(GhostMeeple winner)
     {
-        Console.WriteLine("game over, "+winner.ghostPlayer.name+" won!");
+        if(PlayerManager.Instance().GetLocalMeeples().TrueForAll(m => m.hasWon))
+        {
+            GameOverCommand go = new GameOverCommand(winner.ghostPlayer);
+            PlayerManager.Instance().local.HandleInput(go, true);
+        }
+    }
+
+    public static void OnGameOver4Real(GhostPlayer winner)
+    {
+        setupper.GameOver(winner.name);
     }
 
     protected override void OnExiting(object sender, EventArgs args)

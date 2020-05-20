@@ -36,7 +36,7 @@ public class QuestionKnowledge : Question
         backgrounds = new List<StaticVisibleBoardElement>();
 
         Rectangle qRect = new Rectangle(contentRect.X, contentRect.Y, contentRect.Width, contentRect.Height / 2);
-        question = new TextBoardElement(qRect, content.question, QuestionManager.Instance().questionFont, "questknow_cur_title", ColorResources.dark, ZPosition + 2);
+        question = new TextBoardElement(qRect, content.question, QuestionManager.Instance().questionFont, "questknow_cur_title", ColorResources.Black, ZPosition + 2);
         backgrounds.Add(new StaticVisibleBoardElement(qRect, TextureResources.Get("WhiteBackground"), "questknow_cur_title_background", ZPosition + 1));
 
         int gridSize = (int)Math.Sqrt(answerCount);

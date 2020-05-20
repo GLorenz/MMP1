@@ -48,7 +48,7 @@ public class AlphaAnimatedVisibleBoardElement : StaticVisibleBoardElement
         Alpha = alphaTowards;
         isFading = false;
 
-        callback(this);
+        callback?.Invoke(this);
     }
 
     public float Alpha
