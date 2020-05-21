@@ -45,7 +45,11 @@ public class TextureResources
         "NamePlateBackgroundBlack",
         "NamePlateBackgroundRed",
         "NamePlateBackgroundGreen",
-        "NamePlateBackgroundWhite"
+        "NamePlateBackgroundWhite",
+        "NamePlateBackgroundLongBlack",
+        "NamePlateBackgroundLongWhite",
+        "NamePlateBackgroundLongGreen",
+        "NamePlateBackgroundLongRed"
     };
 
     public static void LoadDefault()

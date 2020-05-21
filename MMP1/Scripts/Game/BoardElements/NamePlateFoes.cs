@@ -17,7 +17,7 @@ public class NamePlateFoes : StaticVisibleBoardElement, IObserver
 
     public static NamePlateFoes current { get; private set; }
 
-    public NamePlateFoes(Rectangle position, SpriteFont fontSmall, SpriteFont fontBig, string UID, int zPosition = 0) : base(position, TextureResources.Get("NamePlateBackgroundRed"), UID, zPosition)
+    public NamePlateFoes(Rectangle position, SpriteFont fontSmall, SpriteFont fontBig, string UID, int zPosition = 0) : base(position, TextureResources.Get("NamePlateBackgroundLongRed"), UID, zPosition)
     {
         current = this;
         foesNames = new List<TextBoardElement>();
@@ -52,7 +52,7 @@ public class NamePlateFoes : StaticVisibleBoardElement, IObserver
     private void BuildEnemies()
     {
         string localClrStr = PlayerManager.Instance().local.MeepleColor.ToString();
-        texture = TextureResources.Get("NamePlateBackground" + localClrStr);
+        texture = TextureResources.Get("NamePlateBackgroundLong" + localClrStr);
         foes.SetColor((localClrStr.Equals("Red") || localClrStr.Equals("Black")) ? ColorResources.White : ColorResources.Black);
 
         foesNames.Clear();

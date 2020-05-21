@@ -43,7 +43,7 @@ public class GhostMeeple : MovingBoardElement
     public virtual void Destroy()
     {
         CommandQueue.Queue(new RemoveFromBoardCommand(this));
-        CommandQueue.Queue(new RemoveGhostMeepleFromManagerCommand(this));
+        //CommandQueue.Queue(new RemoveGhostMeepleFromManagerCommand(this));
         Console.WriteLine("destroyed ghost meeple " + UID);
     }
 

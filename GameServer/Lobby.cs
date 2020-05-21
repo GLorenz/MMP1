@@ -24,6 +24,7 @@ public class Lobby
     private bool shouldRun;
 
     public static readonly string upToDateString = "uptodate";
+    public static readonly string disconnectString = "disconnect";
 
     public Lobby(int id, string lobbyHostString, int bufferSize, int sendTickRateMS)
     {
@@ -94,6 +95,7 @@ public class Lobby
                 else
                 {
                     RemoveSocket(socket);
+                    break;
                 }
             }
             catch (Exception e)
@@ -114,7 +116,6 @@ public class Lobby
 
         lock (socketLock)
         {
-
             // distribute data to all other sockets
             for (int i = sockets.Count - 1; i >= 0; i--)
             {

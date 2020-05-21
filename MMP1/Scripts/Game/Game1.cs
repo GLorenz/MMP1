@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class Game1 : Game
 {
@@ -155,7 +156,7 @@ public class Game1 : Game
     protected override void OnExiting(object sender, EventArgs args)
     {
         Player local = PlayerManager.Instance().local;
-        local.OnlyShare(new RemoveGhostPlayerCommand(local.UID));
+        local.Destroy();
         local.DisconnectClient();
         base.OnExiting(sender, args);
     }

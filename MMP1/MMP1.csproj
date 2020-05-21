@@ -114,7 +114,6 @@
     <Compile Include="Scripts\Intermediate\Commands\MoveGMCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\MoveQBECommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\RemoveFromBoardCommand.cs" />
-    <Compile Include="Scripts\Intermediate\Commands\RemoveGhostMeepleFromManagerCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\RemoveGhostPlayerCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\RemoveGhostPlayerFromManagerCommand.cs" />
     <Compile Include="Scripts\Intermediate\Commands\RestructureBoardElementsCommand.cs" />

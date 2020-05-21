@@ -34,6 +34,12 @@ public class CommandHandler
             case GameOverCommand.name:
                 inputFunc = GameOverCommand.FromSerializable;
                 break;
+            case RemoveGhostPlayerCommand.name:
+                inputFunc = RemoveGhostPlayerCommand.FromSerializable;
+                break;
+            case UnClaimColorCommand.name:
+                inputFunc = UnClaimColorCommand.FromSerializable;
+                break;
         }
 
         if (inputFunc != null)

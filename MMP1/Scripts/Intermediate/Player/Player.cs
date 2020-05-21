@@ -37,8 +37,9 @@ public class Player : GhostPlayer, IInputObserver
 
     public override void Destroy()
     {
-        HandleInput(new UnClaimColorCommand((int)MeepleColor), true);
         base.Destroy();
+        HandleInput(new UnClaimColorCommand((int)MeepleColor), true);
+        OnlyShare(new RemoveGhostPlayerCommand(UID));
     }
 
     public void DisconnectClient()

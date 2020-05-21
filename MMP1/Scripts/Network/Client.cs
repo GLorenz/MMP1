@@ -14,17 +14,19 @@ public class Client : IInputObservable
 {
     public static readonly int bufferSize = 512;
     public static readonly int sendTickRateMS = 1000 / 50;
-    public static readonly string lobbyHostString = "lobbyhost";
 
+    public static readonly string lobbyHostString = "lobbyhost";
     public static readonly string upToDateString = "uptodate";
+    public static readonly string disconnectString = "disconnect";
 
     public Socket socket { get; private set; }
     public List<IObserver> observers { get; set; }
 
     private object socketLock = new object();
 
-    private Queue<SerializableCommand> sendQueue;
+    private Queue<byte[]> sendQueue;
     private bool sendQueueIsWorking;
+    private bool disconnectMe;
 
     public bool upToDateReceived { get; private set; }
     public bool lobbyHostReceived { get; private set; }
@@ -33,8 +35,8 @@ public class Client : IInputObservable
     {
         upToDateReceived = false;
         observers = new List<IObserver>();
-
-        sendQueue = new Queue<SerializableCommand>();
+        
+        sendQueue = new Queue<byte[]>();
         sendQueueIsWorking = false;
     }
 
@@ -55,8 +57,13 @@ public class Client : IInputObservable
 
     public void Disconnect()
     {
-        if(socket != null)
+        if (socket != null)
         {
+            // activley blocking thread until sending is done
+            while(sendQueueIsWorking)
+            {
+                Thread.Sleep(sendTickRateMS);
+            }
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
         }
@@ -82,7 +89,12 @@ public class Client : IInputObservable
 
     public void Share(SerializableCommand input)
     {
-        sendQueue.Enqueue(input);
+        Share(Serializer.SerializeInput(input));
+    }
+
+    private void Share(byte[] message)
+    {
+        sendQueue.Enqueue(message);
         StartSendQueue();
     }
 
@@ -101,9 +113,7 @@ public class Client : IInputObservable
             sendQueueIsWorking = true;
             while (sendQueue.Count > 0)
             {
-                SerializableCommand cmd = sendQueue.Dequeue();
-                Console.WriteLine("sending " + cmd.typeName);
-                socket.Send(Serializer.SerializeInput(cmd));
+                socket.Send(sendQueue.Dequeue());
                 await Task.Delay(sendTickRateMS);
             }
             sendQueueIsWorking = false;
@@ -154,8 +164,12 @@ public class Client : IInputObservable
 
     public void NotifyObservers(SerializableCommand input)
     {
-        observers.ForEach(o => {
-            if(o is IInputObserver)
+        // not using foreach, since observers can remove themselves on execution
+        // and modify observers list
+        for (int i = observers.Count - 1; i >= 0; i--)
+        {
+            IObserver o = observers[i];
+            if (o is IInputObserver)
             {
                 ((IInputObserver)o).Update(input);
             }
@@ -163,6 +177,6 @@ public class Client : IInputObservable
             {
                 o.Update();
             }
-        });
+        }
     }
 }

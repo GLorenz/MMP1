@@ -38,9 +38,10 @@ public class GhostPlayer
 
     public virtual void Destroy()
     {
-        foreach(GhostMeeple meeple in PlayerManager.Instance().playerMeeples[this])
+        var meeples = PlayerManager.Instance().playerMeeples[this];
+        for (int i = meeples.Count - 1; i >= 0; i--)
         {
-            meeple.Destroy();
+            meeples[i].Destroy();
         }
         CommandQueue.Queue(new RemoveGhostPlayerFromManagerCommand(this));
     }

@@ -45,11 +45,6 @@ public class PlayerManager : IObservable
         return false;
     }
 
-    public void RemoveMeepleRef(GhostMeeple meeple)
-    {
-        playerMeeples[meeple.ghostPlayer].Remove(meeple);
-    }
-
     public List<GhostMeeple> GetLocalMeeples()
     {
         return playerMeeples[local];
