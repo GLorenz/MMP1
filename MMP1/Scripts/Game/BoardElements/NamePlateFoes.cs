@@ -29,8 +29,7 @@ public class NamePlateFoes : StaticVisibleBoardElement, IObserver
         
         CommandQueue.Queue(new AddToBoardCommand(foes));
 
-        BuildEnemies();
-        CommandQueue.Queue(new AddToBoardCommand(foesNames.ToArray()));
+        UpdateColor();
     }
 
     public void Update()
