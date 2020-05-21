@@ -44,23 +44,24 @@ public class Lobby
             sockets.Add(socket);
             socket.SendBufferSize = bufferSize;
             socket.ReceiveBufferSize = bufferSize;
-            new Task(() => ListenToSocket(socket)).Start();
         }
-
-        // new player should get all previously sent data
-        Print(string.Format("sending {0} packets of history", history.Count));
-
-        SendHistory(socket);
 
         if (sockets.Count == 1)
         {
-            Print("sending lobby host package");
-            socket.Send(Encoding.ASCII.GetBytes(lobbyHostString));
+            SendLobbyHostPackage(socket);
         }
+
+        // must be after lobby host package
+        SendHistory(socket);
+
+        new Task(() => ListenToSocket(socket)).Start();
     }
 
     private async void SendHistory(Socket socket)
     {
+        // new player should get all previously sent data
+        Print(string.Format("sending {0} packets of history", history.Count));
+
         List<byte[]> curCommands;
 
         // copy list so command list isnt locked for the whole process
@@ -74,8 +75,7 @@ public class Lobby
             socket.Send(command);
             await Task.Delay(sendTickRateMS);
         }
-
-        socket.Send(Encoding.ASCII.GetBytes(upToDateString));
+        SendUpToDatePackage(socket);
     }
 
     private void ListenToSocket(Socket socket)
@@ -88,8 +88,8 @@ public class Lobby
                 int read = socket.Receive(buffer);
                 if (read > 0)
                 {
+                    // new Task to i can quickly listen to next package
                     new Task(() => OnSocketReceive(buffer, socket)).Start();
-                    ListenToSocket(socket);
                 }
                 else
                 {
@@ -142,7 +142,12 @@ public class Lobby
         {
             lock (socketLock)
             {
+                bool needNewHost = sockets.IndexOf(socket) == 0 && sockets.Count > 1;
                 sockets.Remove(socket);
+                if(needNewHost)
+                {
+                    SendLobbyHostPackage(sockets[0]);
+                }
             }
 
             socket.Shutdown(SocketShutdown.Both);
@@ -158,6 +163,17 @@ public class Lobby
                 }
             }
         }
+    }
+
+    private void SendLobbyHostPackage(Socket socket)
+    {
+        Print("sending lobby host package");
+        socket.Send(Encoding.ASCII.GetBytes(lobbyHostString));
+    }
+
+    private void SendUpToDatePackage(Socket socket)
+    {
+        socket.Send(Encoding.ASCII.GetBytes(upToDateString));
     }
 
     public void ShutdownAll()

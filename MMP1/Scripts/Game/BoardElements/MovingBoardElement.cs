@@ -22,18 +22,10 @@ public abstract class MovingBoardElement : TexturedBoardElement, IVisibleBoardEl
         DrawDefault(spriteBatch);
     }
 
-    public void MoveTo(Point position)
+    public virtual void MoveToAndShare(PyramidFloorBoardElement element)
     {
-        moveTowards = position.ToVector2();
-        if (!isMoving)
-        {
-            new Task(() => MoveTowardsTarget()).Start();
-        }
-    }
-
-    public void MoveToDirect(Point position)
-    {
-        this.position.Location = position;
+        MoveMBECommand cmd = new MoveMBECommand(this, element);
+        PlayerManager.Instance().local.HandleInput(cmd, true);
     }
 
     protected async void MoveTowardsTarget()
@@ -52,14 +44,22 @@ public abstract class MovingBoardElement : TexturedBoardElement, IVisibleBoardEl
         isMoving = false;
     }
 
-    public virtual void MoveTo(PyramidFloorBoardElement element)
+    public void MoveToLocalOnly(Point position)
     {
-        MoveMBECommand cmd = new MoveMBECommand(this, element);
-        PlayerManager.Instance().local.HandleInput(cmd, true);
+        moveTowards = position.ToVector2();
+        if (!isMoving)
+        {
+            new Task(() => MoveTowardsTarget()).Start();
+        }
     }
 
     public virtual void MoveToLocalOnly(PyramidFloorBoardElement element)
     {
-        MoveTo(element.Position.Location);
+        MoveToLocalOnly(element.Position.Location);
+    }
+
+    public void MoveToLocalOnlyDirect(Point position)
+    {
+        this.position.Location = position;
     }
 }

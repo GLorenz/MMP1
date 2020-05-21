@@ -90,9 +90,8 @@ public class QuickTimeMovement
         {
             if (curArrow.GetArrowReach() > moveBorder)
             {
-                meeple.MoveTo(start.connectedFields[curSelectionIdx]);
+                meeple.MoveToAndShare(start.connectedFields[curSelectionIdx]);
             }
-            //new Task(() => RemoveArrowDelayed(curArrow)).Start();
             Quit();
         }
     }

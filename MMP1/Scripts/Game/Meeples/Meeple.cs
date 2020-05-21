@@ -33,10 +33,15 @@ public class Meeple : GhostMeeple
         }
     }
 
+    public override void BackToStart()
+    {
+        MoveToAndShare(startElement);
+    }
+
     public override void Create()
     {
         CommandQueue.Queue(new AddToBoardCommand(this));
-        Color = player.MeepleColor;
+        //Color = player.MeepleColor;
         Console.WriteLine("created meeple " + UID);
     }
 

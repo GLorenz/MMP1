@@ -4,5 +4,5 @@
 
 public interface IInputObserver : IObserver
 {
-    void update(SerializableCommand input);
+    void Update(SerializableCommand input);
 }

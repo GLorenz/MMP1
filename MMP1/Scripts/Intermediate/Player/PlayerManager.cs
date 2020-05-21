@@ -45,6 +45,11 @@ public class PlayerManager : IObservable
         return false;
     }
 
+    public void RemoveMeepleRef(GhostMeeple meeple)
+    {
+        playerMeeples[meeple.ghostPlayer].Remove(meeple);
+    }
+
     public List<GhostMeeple> GetLocalMeeples()
     {
         return playerMeeples[local];
@@ -53,6 +58,18 @@ public class PlayerManager : IObservable
     public void AddGhost(GhostPlayer ghost)
     {
         ghostPlayers.Add(ghost);
+        NotifyObservers();
+    }
+
+    public void RemoveGhost(string ghostUID)
+    {
+        RemoveGhost(GetByUID(ghostUID));
+    }
+
+    public void RemoveGhost(GhostPlayer ghost)
+    {
+        ghostPlayers.Remove(ghost);
+        playerMeeples.Remove(ghost);
         NotifyObservers();
     }
 

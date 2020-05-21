@@ -2,9 +2,7 @@
 // Company: FHS-MMT
 // Project: MultiMediaProject 1
 
-using Microsoft.Xna.Framework;
-
-class AddGhostMeepleToPlayerManager : ICommand
+public class AddGhostMeepleToPlayerManager : ICommand
 {
     private GhostMeeple meeple;
 

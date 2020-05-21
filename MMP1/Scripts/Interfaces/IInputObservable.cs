@@ -4,5 +4,5 @@
 
 public interface IInputObservable : IObservable
 {
-    void notifyObservers(SerializableCommand input);
+    void NotifyObservers(SerializableCommand input);
 }

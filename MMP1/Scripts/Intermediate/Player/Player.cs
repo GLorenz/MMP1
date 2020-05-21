@@ -9,6 +9,7 @@ public class Player : GhostPlayer, IInputObserver
 {
     public Client client { get; private set; }
     public bool isLobbyHost { get; private set; }
+    private bool isUpToDate { get; set; }
 
     public Player(string name, string UID = "") : this(name, new Client(), UID) { }
 
@@ -31,8 +32,13 @@ public class Player : GhostPlayer, IInputObserver
     public override void Create()
     {
         OnlyShare(new CreateGhostPlayerCommand(name, UID));
-        HandleInput(new ColorRequestedCommand(UID), true);
         base.Create();
+    }
+
+    public override void Destroy()
+    {
+        HandleInput(new UnClaimColorCommand((int)MeepleColor), true);
+        base.Destroy();
     }
 
     public void DisconnectClient()
@@ -47,9 +53,10 @@ public class Player : GhostPlayer, IInputObserver
 
     public void HandleInput(SerializableCommand sCommand)
     {
-        Console.WriteLine("Handling " + sCommand.typeName);
-        CommandHandler.Handle(sCommand);
+        // sharing before handling
+        // so that if handle generates more commands, correct order is kept
         OnlyShare(sCommand);
+        CommandHandler.Handle(sCommand);
     }
 
     public void OnlyShare(SerializableCommand sCommand)
@@ -79,7 +86,7 @@ public class Player : GhostPlayer, IInputObserver
         HandleInput(command.ToSerializable(shouldShare));
     }
 
-    public void update(SerializableCommand input)
+    public void Update(SerializableCommand input)
     {
         input.shouldShare = false;
         HandleInput(input);
@@ -87,7 +94,26 @@ public class Player : GhostPlayer, IInputObserver
 
     public void Update()
     {
-        isLobbyHost = true;
-        Console.WriteLine(UID + " is now lobby host");
+        if (client.lobbyHostReceived && !isLobbyHost)
+        {
+            isLobbyHost = true;
+            Console.WriteLine(UID + " is now lobby host");
+        }
+        if (client.upToDateReceived && !isUpToDate)
+        {
+            isUpToDate = true;
+            ColorRequestedCommand colorRequestCmd = new ColorRequestedCommand(UID);
+            if (isLobbyHost)
+            {
+                // if i'm the lobby host,
+                // do not share request, just execute it
+                CommandQueue.Queue(colorRequestCmd);
+            }
+            else
+            {
+                // if not, request color from host
+                HandleInput(colorRequestCmd, true);
+            }
+        }
     }
 }

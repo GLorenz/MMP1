@@ -154,7 +154,9 @@ public class Game1 : Game
 
     protected override void OnExiting(object sender, EventArgs args)
     {
-        PlayerManager.Instance().local.DisconnectClient();
+        Player local = PlayerManager.Instance().local;
+        local.OnlyShare(new RemoveGhostPlayerCommand(local.UID));
+        local.DisconnectClient();
         base.OnExiting(sender, args);
     }
 }

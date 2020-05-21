@@ -21,7 +21,7 @@ public class QuestionBoardElement : MovingBoardElement
         SetZPosition(element.ZPosition + 1);
     }
 
-    public override void MoveTo(PyramidFloorBoardElement element)
+    public override void MoveToAndShare(PyramidFloorBoardElement element)
     {
         MoveQBECommand cmd = new MoveQBECommand(this, element);
         PlayerManager.Instance().local.HandleInput(cmd, true);

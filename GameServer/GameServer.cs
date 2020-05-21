@@ -32,7 +32,7 @@ public class GameServer
     public static readonly int bufferSize = 512;
     public static readonly string lobbyHostString = "lobbyhost";
 
-    public static readonly int sendTickRateMS = 1000 / 50;
+    public static readonly int sendTickRateMS = 1000 / 100;
 
     private List<Lobby> lobbies;
     private Lobby nextLobby;
@@ -86,7 +86,8 @@ public class GameServer
                     nextLobby = newLobby;
                     Console.WriteLine("Created new Lobby");
                 }
-                new Task(()=>nextLobby.AddSocket(sock)).Start();
+                //new Task(()=>nextLobby.AddSocket(sock)).Start();
+                nextLobby.AddSocket(sock);
             }
             catch (Exception e)
             {

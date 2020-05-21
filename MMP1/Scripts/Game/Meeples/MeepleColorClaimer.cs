@@ -6,11 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-public class MeepleColorClaimer
+public class MeepleColorClaimer : IObservable
 {
-    private static List<MeepleColor> available = new List<MeepleColor>() { MeepleColor.Black, MeepleColor.Green, MeepleColor.Red, MeepleColor.White };
+    private List<MeepleColor> available;
+    public List<IObserver> observers { get; set; }
 
-    public static MeepleColor Next()
+    private MeepleColorClaimer()
+    {
+        observers = new List<IObserver>();
+        available = new List<MeepleColor>() { MeepleColor.Black, MeepleColor.Green, MeepleColor.Red, MeepleColor.White };
+    }
+
+    public MeepleColor Next()
     {
         if(available.Count > 0)
         {
@@ -23,37 +30,101 @@ public class MeepleColorClaimer
         }
     }
 
-    public static void ClaimColor(string playerUID, MeepleColor color)
+    /// <summary>
+    /// When color is sure to be free.
+    /// Only issued by lobby host.
+    /// Received by anyone
+    /// </summary> 
+    public void ClaimColor(string playerUID, MeepleColor color)
     {
         Console.WriteLine("claiming {0} for {1}", color.ToString(), playerUID);
-        PlayerManager.Instance().GetByUID(playerUID).MeepleColor = color;
-        available.Remove(color);
+        GhostPlayer targetPlayer = PlayerManager.Instance().GetByUID(playerUID);
+        targetPlayer.MeepleColor = color;
+        targetPlayer.colorIsClaimed = true;
+        NotifyObservers();
+
+        if (PlayerManager.Instance().local.isLobbyHost)
+        {
+            available.Remove(color);
+        }
     }
 
-    public static void TryClaimNext(string playerUID)
+    public void UnClaimColor(MeepleColor color)
     {
-        TryClaim(playerUID, Next());
+        Console.WriteLine("unclaiming {0}", color.ToString());
+
+        if (PlayerManager.Instance().local.isLobbyHost)
+        {
+            available.Add(color);
+        }
+    }
+
+    /// <summary>
+    /// Color Request.
+    /// Issued by Non-Lobby-Host, handled by Lobby-Host
+    /// </summary>
+    public void TryClaimNext(string playerUID)
+    {
+        if (PlayerManager.Instance().local.isLobbyHost)
+        {
+            TryClaim(playerUID, Next());
+        }
     }
     
-    public static void TryClaim(string playerUID, MeepleColor color)
+    /// <summary>
+    /// Handling color request.
+    /// Only for lobby host.
+    /// </summary>
+    public void TryClaim(string playerUID, MeepleColor color)
     {
-        if (!PlayerManager.Instance().local.isLobbyHost) { return; }
+        if (PlayerManager.Instance().local.isLobbyHost)
+        {
+            Console.WriteLine("i am lobby host, i have color power");
 
-        Console.WriteLine("i am lobby host, i have color power");
+            if (available.Contains(color))
+            {
+                // send word to all other players and claim color
+                ColorClaimedCommand cmd = new ColorClaimedCommand(playerUID, (int)color);
+                PlayerManager.Instance().local.HandleInput(cmd, true);
+            }
+            else if (available.Count > 0)
+            {
+                Console.WriteLine(color.ToString() + " not available, claiming next");
+                TryClaimNext(playerUID);
+            }
+            else
+            {
+                Console.WriteLine("out of colors");
+            }
+        }
+    }
 
-        if(available.Contains(color))
+    public void AddObserver(IObserver observer)
+    {
+        observers.Add(observer);
+    }
+
+    public void RemoveObserver(IObserver observer)
+    {
+        observers.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach(IObserver observer in observers)
         {
-            ColorClaimedCommand cmd = new ColorClaimedCommand(playerUID, (int)color);
-            PlayerManager.Instance().local.HandleInput(cmd, true);
+            observer.Update();
         }
-        else if (available.Count > 0)
+    }
+
+
+    private static MeepleColorClaimer instance;
+    public static MeepleColorClaimer Instance()
+    {
+        if (instance == null)
         {
-            Console.WriteLine(color.ToString() + " not available, claiming next");
-            TryClaimNext(playerUID);
+            instance = new MeepleColorClaimer();
         }
-        else
-        {
-            Console.WriteLine("out of colors");
-        }
+        return instance;
     }
 }

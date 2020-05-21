@@ -18,7 +18,7 @@ public class ColorRequestedCommand : INetworkCommand
     public virtual void Execute()
     {
         Console.WriteLine("command requesting next for {0} ", playerUID);
-        MeepleColorClaimer.TryClaimNext(playerUID);
+        MeepleColorClaimer.Instance().TryClaimNext(playerUID);
     }
 
     public SerializableCommand ToSerializable(bool shouldShare)

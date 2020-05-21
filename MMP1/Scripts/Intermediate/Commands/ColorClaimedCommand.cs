@@ -6,7 +6,7 @@ using System;
 
 class ColorClaimedCommand : INetworkCommand
 {
-    public const string name = "CLRCLAIM";
+    public const string name = "CLR_CLAIM";
 
     protected string playerUID;
     protected int color;
@@ -19,11 +19,7 @@ class ColorClaimedCommand : INetworkCommand
 
     public virtual void Execute()
     {
-        Console.WriteLine("command execute trying to claim {0} for {1}", ((MeepleColor)color).ToString(), playerUID);
-        MeepleColorClaimer.ClaimColor(playerUID, (MeepleColor)color);
-
-        NamePlateLocal.current?.UpdateColor();
-        NamePlateFoes.current?.UpdateColor();
+        MeepleColorClaimer.Instance().ClaimColor(playerUID, (MeepleColor)color);
     }
 
     public SerializableCommand ToSerializable(bool shouldShare)

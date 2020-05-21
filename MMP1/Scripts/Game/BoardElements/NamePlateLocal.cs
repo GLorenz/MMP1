@@ -32,6 +32,7 @@ public class NamePlateLocal : StaticVisibleBoardElement, IObserver
     public void Update()
     {
         playerName.Text = GetLocalPlayerName()+"!";
+        UpdateColor();
     }
 
     public void UpdateColor()

@@ -33,8 +33,18 @@ public class GhostMeeple : MovingBoardElement
     public virtual void Create()
     {
         CommandQueue.Queue(new AddToBoardCommand(this));
-        Color = ghostPlayer.MeepleColor;
+        if(ghostPlayer.colorIsClaimed)
+        {
+            Color = ghostPlayer.MeepleColor;
+        }
         Console.WriteLine("created ghost meeple "+UID);
+    }
+
+    public virtual void Destroy()
+    {
+        CommandQueue.Queue(new RemoveFromBoardCommand(this));
+        CommandQueue.Queue(new RemoveGhostMeepleFromManagerCommand(this));
+        Console.WriteLine("destroyed ghost meeple " + UID);
     }
 
     public override void MoveToLocalOnly(PyramidFloorBoardElement element)
@@ -43,7 +53,7 @@ public class GhostMeeple : MovingBoardElement
         base.MoveToLocalOnly(element);
     }
 
-    public override void MoveTo(PyramidFloorBoardElement element)
+    public override void MoveToAndShare(PyramidFloorBoardElement element)
     {
         MoveGMCommand cmd = new MoveGMCommand(this, element);
         PlayerManager.Instance().local.HandleInput(cmd, true);
@@ -54,9 +64,9 @@ public class GhostMeeple : MovingBoardElement
         this.startElement = startElement;
     }
 
-    public void BackToStart()
+    public virtual void BackToStart()
     {
-        MoveTo(startElement);
+        MoveToLocalOnly(startElement);
     }
 
     public override void OnClick()
@@ -83,6 +93,7 @@ public class GhostMeeple : MovingBoardElement
         }
         set
         {
+            Console.WriteLine("chaning color to {0} for gm {1}", value.ToString(), uid);
             color = value;
             texture = Texture4Color(value);
 

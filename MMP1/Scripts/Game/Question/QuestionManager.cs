@@ -63,7 +63,7 @@ public class QuestionManager
 
     public void MoveQuestionElement(QuestionBoardElement questionElement, PyramidFloorBoardElement floorElement)
     {
-        questionElement.MoveTo(floorElement);
+        questionElement.MoveToAndShare(floorElement);
 
         CommandQueue.Queue(new UpdateFloorElemsToQuestionMove(floorElems, floorElement, questionElems.IndexOf(questionElement)));
     }
@@ -81,7 +81,7 @@ public class QuestionManager
 
     public void ReceiveMouseInput(Point mousePos)
     {
-        movingQBE.MoveToDirect(mousePos + movingQBEOffset);
+        movingQBE.MoveToLocalOnlyDirect(mousePos + movingQBEOffset);
     }
 
     public void InitiateQuestionBoardElementMove(PyramidFloorBoardElement floorElementBelow)

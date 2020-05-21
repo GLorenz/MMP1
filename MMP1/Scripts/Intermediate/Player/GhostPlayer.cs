@@ -11,6 +11,7 @@ public class GhostPlayer
     protected string uid;
     public string name { get; protected set; }
     private MeepleColor color;
+    public bool colorIsClaimed { get; set; }
 
     public GhostPlayer(string name, string UID = "")
     {
@@ -33,6 +34,15 @@ public class GhostPlayer
             GhostMeeple newMeep = new GhostMeeple(this, new Rectangle(0, 0, Board.Instance().boardUnit, Board.Instance().boardUnit), UID + "_meeple" + i, meepIdx:i);
             newMeep.Create();
         }
+    }
+
+    public virtual void Destroy()
+    {
+        foreach(GhostMeeple meeple in PlayerManager.Instance().playerMeeples[this])
+        {
+            meeple.Destroy();
+        }
+        CommandQueue.Queue(new RemoveGhostPlayerFromManagerCommand(this));
     }
 
     public MeepleColor MeepleColor

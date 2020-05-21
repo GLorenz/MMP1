@@ -111,7 +111,6 @@ public class Setupper
     {
         string name = NameList.GetRandomName();
         string uid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        Console.WriteLine("generated {0} and {1}", name, uid);
         CommandQueue.Queue(new CreatePlayerCommand(name, "player_" + uid));
     }
 
@@ -126,6 +125,10 @@ public class Setupper
 
         PlayerManager.Instance().AddObserver(namePlateFoes);
         PlayerManager.Instance().AddObserver(namePlateLocal);
+
+        MeepleColorClaimer.Instance().AddObserver(namePlateFoes);
+        MeepleColorClaimer.Instance().AddObserver(namePlateLocal);
+
         CommandQueue.Queue(new AddToBoardCommand(namePlateFoes, namePlateLocal));
     }
 }

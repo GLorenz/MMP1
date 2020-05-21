@@ -26,13 +26,12 @@ public class Client : IInputObservable
     private Queue<SerializableCommand> sendQueue;
     private bool sendQueueIsWorking;
 
-    private object gameLock = new object();
-
-    private bool upToDate;
+    public bool upToDateReceived { get; private set; }
+    public bool lobbyHostReceived { get; private set; }
 
     public Client()
     {
-        upToDate = false;
+        upToDateReceived = false;
         observers = new List<IObserver>();
 
         sendQueue = new Queue<SerializableCommand>();
@@ -70,11 +69,11 @@ public class Client : IInputObservable
             byte[] data = new byte[bufferSize];
             try
             {
-                Console.WriteLine("listening for next");
                 int read = socket.Receive(data);
                 if (read > 0)
                 {
-                    OnReceive(data);
+                    // new Task so i can listen for next package
+                    new Task(()=>OnReceive(data)).Start();
                 }
             }
             catch(SocketException) { }
@@ -89,7 +88,7 @@ public class Client : IInputObservable
 
     private void StartSendQueue()
     {
-        if(upToDate)
+        if(upToDateReceived)
         {
             new Task(() => WorkSendQueue()).Start();
         }
@@ -102,7 +101,9 @@ public class Client : IInputObservable
             sendQueueIsWorking = true;
             while (sendQueue.Count > 0)
             {
-                socket.Send(Serializer.SerializeInput(sendQueue.Dequeue()));   
+                SerializableCommand cmd = sendQueue.Dequeue();
+                Console.WriteLine("sending " + cmd.typeName);
+                socket.Send(Serializer.SerializeInput(cmd));
                 await Task.Delay(sendTickRateMS);
             }
             sendQueueIsWorking = false;
@@ -113,27 +114,24 @@ public class Client : IInputObservable
     {
         if (Encoding.ASCII.GetString(data).StartsWith(lobbyHostString))
         {
-            lock (gameLock)
-            {
-                Console.WriteLine("received lobby host package");
-                NotifyObservers();
-            }
+            lobbyHostReceived = true;
+            Console.WriteLine("received lobby host package");
+            NotifyObservers();
         }
         else if (Encoding.ASCII.GetString(data).StartsWith(upToDateString))
         {
-            upToDate = true;
+            upToDateReceived = true;
             Console.WriteLine("im up to date");
             StartSendQueue();
+            NotifyObservers();
         }
         else
         {
             SerializableCommand input = Serializer.Deserialize(data);
             if (input != null)
             {
-                lock (gameLock)
-                {
-                    notifyObservers(input);
-                }
+                Console.WriteLine("received " + input.typeName);
+                NotifyObservers(input);
             }
         }
     }
@@ -154,12 +152,12 @@ public class Client : IInputObservable
         observers.ForEach(o => o.Update());
     }
 
-    public void notifyObservers(SerializableCommand input)
+    public void NotifyObservers(SerializableCommand input)
     {
         observers.ForEach(o => {
             if(o is IInputObserver)
             {
-                ((IInputObserver)o).update(input);
+                ((IInputObserver)o).Update(input);
             }
             else
             {
