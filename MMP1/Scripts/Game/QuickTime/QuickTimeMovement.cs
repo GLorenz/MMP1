@@ -10,9 +10,9 @@ public class QuickTimeMovement
 {
     public bool isActive { get; private set; }
     
-    private static readonly float selectionAlpha = 0.5f;
+    private static readonly float selectionAlpha = 0.4f;
     private static readonly long coolDownAfterInitiateMS = 250L;
-    private static readonly float arrowSpeed = 8f;
+    private static readonly float arrowSpeed = 10f;
 
     private DateTime initiated;
 
@@ -29,12 +29,12 @@ public class QuickTimeMovement
 
     private QuickTimeMovement() { }
 
-    public void Initiate(Meeple meeple)
+    private void Initiate(Meeple meeple)
     {
         this.meeple = meeple;
         this.start = meeple.standingOn;
         startCenter = start.Position.Center.ToVector2();
-        curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
+        curArrow = new ArrowAnimatable(start.Position, "movementarrow", start.ZPosition+1);
         CommandQueue.Queue(new AddToBoardCommand(curArrow));
 
         // build direction vectors to each connected field
@@ -119,10 +119,12 @@ public class QuickTimeMovement
         CommandQueue.Queue(new RemoveFromBoardCommand(arrow));
     }
 
-    public void Toggle(Meeple meeple)
+    public void Activate(Meeple meeple)
     {
-        if (isActive) Quit();
-        else Initiate(meeple);
+        if(!isActive)
+        {
+            Initiate(meeple);
+        }
     }
 
     private static QuickTimeMovement qtm;

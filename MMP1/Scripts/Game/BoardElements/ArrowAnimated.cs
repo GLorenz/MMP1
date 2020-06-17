@@ -3,43 +3,26 @@
 // Project: MultiMediaProject 1
 
 using Microsoft.Xna.Framework;
-using System;
+using Microsoft.Xna.Framework.Graphics;
 
-public class ArrowAnimatable : PyramidFloorBoardElementConnector
+public class ArrowAnimatable : NonMovingBoardElement, IVisibleBoardElement
 {
-    private Vector2 originalScale;
-    private float range;
-    private static readonly float defaultDistance = 80;
+    private static readonly float defaultDistance = 200;
 
-    public ArrowAnimatable(PyramidFloorBoardElement from, PyramidFloorBoardElement to, string UID, int zPosition) : base(from, to, UID, zPosition)
+    private float angle, thickness, distance;
+    private Vector2 origin, scale;
+
+    public ArrowAnimatable(Rectangle position, string UID, int zPosition) : base(position, TextureResources.Get("arrow"), UID, zPosition)
     {
-        texture = TextureResources.Get("arrow");
+        distance = defaultDistance;
+        Setup();
     }
 
-    protected override void Setup()
+    protected void Setup()
     {
         thickness = 0.1f;
         origin = new Vector2(0, 0.5f * texture.Height);
-        Vector2 offset = Vector2.Zero;// new Vector2(Board.Instance().ToAbsolute(0.5f));
-
-        this.to = toBE.Position.Center.ToVector2();
-        this.from = fromBE.Position.Center.ToVector2();
-
-        direction = to - from;
-        direction.Normalize();
-
-        distance = defaultDistance;
-        //distance = (to - from).Length();
-        angle = (float)Math.Atan2(direction.Y, direction.X);
-
         scale = new Vector2(distance / texture.Width / 2, thickness);
-        originalScale = new Vector2(scale.X, scale.Y);
-    }
-
-    public void AnimateScale(float range)
-    {
-        this.range = range;
-        scale.X = originalScale.X * (range * 0.6f + 0.2f);
     }
 
     public void AnimateAngle(float angle)
@@ -47,13 +30,18 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
         this.angle = angle;
     }
 
-    public float GetArrowReach()
-    {
-        return range;
-    }
-
     public float GetAngle()
     {
         return angle;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(texture, position.Center.ToVector2(), null, Color.White, angle, origin, scale, SpriteEffects.None, ZPosition / Board.Instance().MaxDepth);
+    }
+
+    public override void OnClick()
+    {
+
     }
 }

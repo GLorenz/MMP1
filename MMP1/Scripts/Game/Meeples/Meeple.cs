@@ -61,7 +61,7 @@ public class Meeple : GhostMeeple
     {
         if (!hasWon)
         {
-            QuickTimeMovement.Instance().Toggle(this);
+            QuickTimeMovement.Instance().Activate(this);
         }
     }
 
