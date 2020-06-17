@@ -9,6 +9,7 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
 {
     private Vector2 originalScale;
     private float range;
+    private static readonly float defaultDistance = 80;
 
     public ArrowAnimatable(PyramidFloorBoardElement from, PyramidFloorBoardElement to, string UID, int zPosition) : base(from, to, UID, zPosition)
     {
@@ -27,21 +28,32 @@ public class ArrowAnimatable : PyramidFloorBoardElementConnector
         direction = to - from;
         direction.Normalize();
 
-        distance = (to - from).Length();
+        distance = defaultDistance;
+        //distance = (to - from).Length();
         angle = (float)Math.Atan2(direction.Y, direction.X);
 
         scale = new Vector2(distance / texture.Width / 2, thickness);
         originalScale = new Vector2(scale.X, scale.Y);
     }
 
-    public void Animate(float range)
+    public void AnimateScale(float range)
     {
         this.range = range;
         scale.X = originalScale.X * (range * 0.6f + 0.2f);
     }
 
+    public void AnimateAngle(float angle)
+    {
+        this.angle = angle;
+    }
+
     public float GetArrowReach()
     {
         return range;
+    }
+
+    public float GetAngle()
+    {
+        return angle;
     }
 }

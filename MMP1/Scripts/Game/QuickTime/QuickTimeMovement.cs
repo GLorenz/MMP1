@@ -12,19 +12,20 @@ public class QuickTimeMovement
     
     private static readonly float selectionAlpha = 0.5f;
     private static readonly long coolDownAfterInitiateMS = 250L;
-    private static readonly float moveBorder = 0.7f;
+    private static readonly float arrowSpeed = 8f;
 
     private DateTime initiated;
 
     private Vector2[] directions;
     private Meeple meeple;
     private PyramidFloorBoardElement start;
-    private int curSelectionIdx;
     private Vector2 startCenter;
 
-    private Vector2 curMouseVector;
+    private int curSelectionIdx;
+    private Vector2 curArrowDirection;
     private ArrowAnimatable curArrow;
-    private PyramidFloorBoardElement moveTarget;
+
+    private delegate void LoopedAction(int i);
 
     private QuickTimeMovement() { }
 
@@ -33,12 +34,8 @@ public class QuickTimeMovement
         this.meeple = meeple;
         this.start = meeple.standingOn;
         startCenter = start.Position.Center.ToVector2();
-        curSelectionIdx = 0;
         curArrow = new ArrowAnimatable(start, start.connectedFields[0], "movementarrow", start.ZPosition+1);
         CommandQueue.Queue(new AddToBoardCommand(curArrow));
-
-        moveTarget = start.connectedFields[curSelectionIdx];
-        moveTarget.Hover();
 
         // build direction vectors to each connected field
         directions = new Vector2[start.connectedFields.Count];
@@ -54,46 +51,59 @@ public class QuickTimeMovement
 
     public void ReceiveMousePos(Point mousePos)
     {
-        for (int i = 0; i < directions.Length; i++)
-        {
-            curMouseVector = mousePos.ToVector2() - startCenter;
-            if (curSelectionIdx != i && Math.Acos(Vector2.Dot(curMouseVector, directions[i]) / curMouseVector.Length()) < selectionAlpha)
+        AnimateRotation(mousePos);
+    }
+
+    public void AnimateRotation(Point mousePos)
+    {
+        curArrowDirection.X = (float)Math.Cos(curArrow.GetAngle());
+        curArrowDirection.Y = (float)Math.Sin(curArrow.GetAngle());
+
+        DoActionIfHoverOrNot(curArrowDirection,
+            // if hover
+            (i) =>
             {
-                start.connectedFields[curSelectionIdx].DeHover();
                 start.connectedFields[i].Hover();
-
-                moveTarget = start.connectedFields[i];
-
-                CommandQueue.Queue(new RemoveFromBoardCommand(curArrow));
-                curArrow = new ArrowAnimatable(start, start.connectedFields[i], "movementarrow", start.ZPosition+1);
-                CommandQueue.Queue(new AddToBoardCommand(curArrow));
-
-                curSelectionIdx = i;
+            },
+            // if not hover
+            (i) =>
+            {
+                start.connectedFields[i].DeHover();
             }
-        }
-        float range = (float)Math.Sin(((DateTime.Now - initiated).TotalMilliseconds / 100f) % (Math.PI));
-        if (!moveTarget.isHoverTarget && range > moveBorder)
-        {
-            moveTarget.Hover();
-        }
-        else if (moveTarget.isHoverTarget && range < moveBorder)
-        {
-            moveTarget.DeHover();
-        }
+        );
         
-        curArrow.Animate(range);
+        curArrow.AnimateAngle((float)(DateTime.Now - initiated).TotalSeconds * arrowSpeed);
     }
 
     public void OnClick()
     {
         if ((DateTime.Now - initiated).TotalMilliseconds > coolDownAfterInitiateMS)
         {
-            if (curArrow.GetArrowReach() > moveBorder)
+            if (DoActionIfHoverOrNot(curArrowDirection, null, null))
             {
                 meeple.MoveToAndShare(start.connectedFields[curSelectionIdx]);
             }
             Quit();
         }
+    }
+
+    private bool DoActionIfHoverOrNot(Vector2 dir, LoopedAction hoverAction, LoopedAction nonHoverAction)
+    {
+        bool hoverAny = false;
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (Math.Acos(Vector2.Dot(dir, directions[i]) / dir.Length()) < selectionAlpha)
+            {
+                hoverAny = true;
+                hoverAction?.Invoke(i);
+                curSelectionIdx = i;
+            }
+            else
+            {
+                nonHoverAction?.Invoke(i);
+            }
+        }
+        return hoverAny;
     }
 
     public void Quit()
