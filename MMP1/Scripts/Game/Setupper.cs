@@ -74,10 +74,11 @@ public class Setupper
 
     protected void SetupImpressum()
     {
-        string text = "Impressum: Developed by Lorenz Gonsa, FHS MMT for MultiMediaProject 1";
+        string text = "Impressum: Developed by Lorenz Gonsa, FHS MMT for MultiMediaProject 1. The great background illustration is designed by vectorpouch / Freepik   ";
         SpriteFont font = FontResources.oldenburg_8;
         Vector2 textSize = font.MeasureString(text);
-        Rectangle impressRect = new Rectangle(windowWidth - (int)textSize.X, windowHeight - (int)textSize.Y, (int)textSize.X + 10, (int)textSize.Y);
+        int margin = UnitConvert.ToAbsoluteWidth(5);
+        Rectangle impressRect = new Rectangle(windowWidth - (int)textSize.X - margin, windowHeight - (int)textSize.Y - margin, (int)textSize.X + margin, (int)textSize.Y + margin);
         TextBoardElement impressum = new TextBoardElement(impressRect, text, font, "impressum", ColorResources.Black, 21, TextBoardElement.Alignment.LeftTop);
 
         CommandQueue.Queue(new AddToBoardCommand(impressum));
