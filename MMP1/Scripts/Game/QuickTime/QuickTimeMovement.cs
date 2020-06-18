@@ -49,12 +49,12 @@ public class QuickTimeMovement
         initiated = DateTime.Now;
     }
 
-    public void ReceiveMousePos(Point mousePos)
+    public void Update()
     {
-        AnimateRotation(mousePos);
+        AnimateRotation();
     }
 
-    public void AnimateRotation(Point mousePos)
+    public void AnimateRotation()
     {
         curArrowDirection.X = (float)Math.Cos(curArrow.GetAngle());
         curArrowDirection.Y = (float)Math.Sin(curArrow.GetAngle());

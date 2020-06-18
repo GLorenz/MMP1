@@ -98,7 +98,7 @@ public class Game1 : Game
 
         if (IsActive && QuickTimeMovement.Instance().isActive)
         {
-            QuickTimeMovement.Instance().ReceiveMousePos(Mouse.GetState().Position);
+            QuickTimeMovement.Instance().Update();
         }
 
         if(IsActive && !pressHandled && Mouse.GetState().LeftButton == ButtonState.Pressed)
